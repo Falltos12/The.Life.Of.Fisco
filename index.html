@@ -20269,7 +20269,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "121";
+const VERSION_JEU = "122";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -20318,7 +20318,7 @@ function capStreams(next) {
 // Le plafond de streams, le plafond de célébrité, le palier du cercle et la
 // réparation des couples s'appliquent d'eux-mêmes à chaque geste du joueur.
 // Reste une correction rétroactive, qui n'a de sens qu'une seule fois.
-const VERSION_EQUILIBRE = 3;
+const VERSION_EQUILIBRE = 4;
 // Où se trouve réellement un morceau : on cherche dans toute la discographie.
 function projetDuMorceau(titre, disco) {
     if (!titre || !Array.isArray(disco))
@@ -20368,6 +20368,33 @@ function reprendrePartie(next) {
     // eux étaient mal rattachés, et la liste vit dans la sauvegarde : on répare
     // les parties déjà commencées au lieu de ne corriger que les neuves.
     repris.clipography = recalerClips(repris.clipography, repris.discography);
+    // Younes ne se débloquait qu'au bout des premiers pas. Une partie déjà bien
+    // engagée les a forcément dépassés : on le lui rend plutôt que de la priver
+    // de son agent pour une case jamais cochée.
+    if (!repris.sofFini &&
+        (repris.tutorialDone || (repris.currentDate || 0) > GAME_START_DATE + 14 * 86400000)) {
+        repris.sofFini = true;
+        repris.tutorialDone = true;
+        const deja = CONSEILS_SOF.filter(c => { try {
+            return c.quand(repris);
+        }
+        catch (e) {
+            return false;
+        } }).map(c => c.id);
+        repris.conseilsVus = [...new Set([...(repris.conseilsVus || []), ...deja])];
+    }
+    // Les champs nés après ta sauvegarde : on les installe au lieu de les
+    // laisser indéfinis, pour que tout se comporte comme dans une partie neuve.
+    // Un boycott hérité d'une ancienne partie démarre à pleine intensité : la
+    // valeur par défaut valait zéro, ce qui l'aurait levé dès la semaine suivante.
+    if (repris.boycott) {
+        if (!(repris.boycottLevel > 0))
+            repris.boycottLevel = 100;
+    }
+    else
+        repris.boycottLevel = 0;
+    if (!Array.isArray(repris.questionsVues))
+        repris.questionsVues = [];
     return repris;
 }
 function gameReducer(state, action) {
