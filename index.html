@@ -8408,198 +8408,699 @@ const BAHASCO_BRANDS = [
 ];
 // ─── UNUHU RECORDS : roster fictif signable ─────────────────────────────────
 const UNUHU_TALENT_POOL = [
-    { id: "ft_lya_vega_0", name: "Lya Vega", emoji: "🎛️", genre: "Boom Bap", cost: 5200000, potential: 47 },
-    { id: "ft_rico_diallo_1", name: "Rico Diallo", emoji: "🌀", genre: "Rap Conscient", cost: 21000000, potential: 65 },
-    { id: "ft_baye_duval_2", name: "Baye Duval", emoji: "🎹", genre: "Phonk", cost: 21800000, potential: 66 },
-    { id: "ft_sarah_chen_3", name: "Sarah Chen", emoji: "🌙", genre: "Indie Rap", cost: 9600000, potential: 52 },
-    { id: "ft_sami_faye_4", name: "Sami Faye", emoji: "💎", genre: "Reggaeton", cost: 5200000, potential: 47 },
-    { id: "ft_tayo_hale_5", name: "Tayo Hale", emoji: "⚡", genre: "R&B", cost: 12000000, potential: 55 },
-    { id: "ft_louna_meziane_6", name: "Louna Meziane", emoji: "🌀", genre: "Indie Rap", cost: 8800000, potential: 51 },
-    { id: "ft_remy_marchetti_7", name: "Remy Marchetti", emoji: "💫", genre: "R&B", cost: 5200000, potential: 47 },
-    { id: "ft_isla_oduya_8", name: "Isla Oduya", emoji: "🌵", genre: "Neo-Soul", cost: 21800000, potential: 66 },
-    { id: "ft_nesrine_zeroual_9", name: "Nesrine Zeroual", emoji: "💫", genre: "Afrobeat", cost: 21800000, potential: 66 },
-    { id: "ft_kai_kacem_10", name: "Kai Kacem", emoji: "⭐", genre: "R&B", cost: 12800000, potential: 56 },
-    { id: "ft_sena_weber_11", name: "Sena Weber", emoji: "🧿", genre: "R&B", cost: 20200000, potential: 64 },
-    { id: "ft_assia_kane_12", name: "Assia Kane", emoji: "🌸", genre: "Dancehall", cost: 9600000, potential: 52 },
-    { id: "ft_louna_okada_13", name: "Louna Okada", emoji: "🕯️", genre: "Plugg", cost: 13600000, potential: 57 },
-    { id: "ft_ren_ciss_14", name: "Ren Cissé", emoji: "🐉", genre: "Pop Urbain", cost: 17000000, potential: 60 },
-    { id: "ft_farid_ngoma_15", name: "Farid Ngoma", emoji: "🎛️", genre: "Pop Urbain", cost: 8000000, potential: 50 },
-    { id: "ft_tibo_ashari_16", name: "Tibo Ashari", emoji: "🌴", genre: "Slam", cost: 21800000, potential: 66 },
-    { id: "ft_zora_chen_17", name: "Zora Chen", emoji: "🔥", genre: "Indie Rap", cost: 800000, potential: 37 },
-    { id: "ft_th_o_kacem_18", name: "Théo Kacem", emoji: "🐉", genre: "Grime", cost: 13600000, potential: 57 },
-    { id: "ft_milo_belhadj_19", name: "Milo Belhadj", emoji: "🌵", genre: "Pop Urbain", cost: 21800000, potential: 66 },
-    { id: "ft_oc_ane_vos_20", name: "Océane Vos", emoji: "🦋", genre: "Emo Rap", cost: 21800000, potential: 66 },
-    { id: "ft_sena_duval_21", name: "Sena Duval", emoji: "💎", genre: "R&B", cost: 11200000, potential: 54 },
-    { id: "ft_mika_ciss_22", name: "Mika Cissé", emoji: "🕯️", genre: "Electro", cost: 21800000, potential: 66 },
-    { id: "ft_kian_weber_23", name: "Kian Weber", emoji: "🔥", genre: "Indie Rap", cost: 700000, potential: 35 },
-    { id: "ft_kesh_soltani_24", name: "Kesh Soltani", emoji: "🌟", genre: "Trap", cost: 800000, potential: 36 },
-    { id: "ft_baye_lariss_25", name: "Baye Lariss", emoji: "🕯️", genre: "Neo-Soul", cost: 21800000, potential: 66 },
-    { id: "ft_rico_konat_26", name: "Rico Konaté", emoji: "🦋", genre: "Afrobeat", cost: 15200000, potential: 59 },
-    { id: "ft_nael_owens_27", name: "Nael Owens", emoji: "🖤", genre: "Slam", cost: 8800000, potential: 51 },
-    { id: "ft_kito_adjei_28", name: "Kito Adjei", emoji: "🌴", genre: "Trap", cost: 4000000, potential: 45 },
-    { id: "ft_sable_konat_29", name: "Sable Konaté", emoji: "📻", genre: "Plugg", cost: 6400000, potential: 49 },
-    { id: "ft_taro_weber_30", name: "Taro Weber", emoji: "🪩", genre: "Rap Conscient", cost: 21800000, potential: 66 },
-    { id: "ft_kian_lund_31", name: "Kian Lund", emoji: "🌊", genre: "Rap Conscient", cost: 21800000, potential: 66 },
-    { id: "ft_amaya_keita_32", name: "Amaya Keita", emoji: "🎸", genre: "Soul", cost: 21800000, potential: 66 },
-    { id: "ft_kamil_nakamura_33", name: "Kamil Nakamura", emoji: "🌸", genre: "Boom Bap", cost: 10400000, potential: 53 },
-    { id: "ft_mika_cruz_34", name: "Mika Cruz", emoji: "💫", genre: "Drill", cost: 21800000, potential: 66 },
-    { id: "ft_mika_kacem_35", name: "Mika Kacem", emoji: "🌙", genre: "R&B", cost: 3400000, potential: 44 },
-    { id: "ft_amaya_verdi_36", name: "Amaya Verdi", emoji: "📻", genre: "R&B", cost: 5800000, potential: 48 },
-    { id: "ft_enzo_adjei_37", name: "Enzo Adjei", emoji: "📻", genre: "Reggaeton", cost: 1600000, potential: 41 },
-    { id: "ft_vahn_bane_38", name: "Vahn Bane", emoji: "🌀", genre: "Emo Rap", cost: 21800000, potential: 66 },
-    { id: "ft_neo_ferrer_39", name: "Neo Ferrer", emoji: "🎸", genre: "Amapiano", cost: 21800000, potential: 66 },
-    { id: "ft_vahn_konat_40", name: "Vahn Konaté", emoji: "⭐", genre: "Plugg", cost: 1000000, potential: 40 },
-    { id: "ft_neyla_vega_41", name: "Neyla Vega", emoji: "🐉", genre: "Amapiano", cost: 5200000, potential: 47 },
-    { id: "ft_lina_soltani_42", name: "Lina Soltani", emoji: "📻", genre: "Indie Rap", cost: 21800000, potential: 66 },
-    { id: "ft_jibril_ashari_43", name: "Jibril Ashari", emoji: "🌀", genre: "Reggaeton", cost: 21800000, potential: 66 },
-    { id: "ft_lya_bloom_44", name: "Lya Bloom", emoji: "🌵", genre: "Funk", cost: 21800000, potential: 66 },
-    { id: "ft_cyrus_sanogo_45", name: "Cyrus Sanogo", emoji: "🌊", genre: "Phonk", cost: 1000000, potential: 40 },
-    { id: "ft_amaya_duval_46", name: "Amaya Duval", emoji: "🎧", genre: "Emo Rap", cost: 2800000, potential: 43 },
-    { id: "ft_sable_blaise_47", name: "Sable Blaise", emoji: "🛸", genre: "Funk", cost: 21800000, potential: 66 },
-    { id: "ft_farid_nyman_48", name: "Farid Nyman", emoji: "🔥", genre: "Plugg", cost: 21800000, potential: 66 },
-    { id: "ft_mika_sylla_49", name: "Mika Sylla", emoji: "🔮", genre: "Afrobeat", cost: 21800000, potential: 66 },
-    { id: "ft_ayo_nakamura_50", name: "Ayo Nakamura", emoji: "🎹", genre: "Jazz Rap", cost: 4000000, potential: 45 },
-    { id: "ft_ren_nyman_51", name: "Ren Nyman", emoji: "🪩", genre: "Rap Conscient", cost: 21800000, potential: 66 },
-    { id: "ft_zack_bloom_52", name: "Zack Bloom", emoji: "🌵", genre: "Emo Rap", cost: 1000000, potential: 40 },
-    { id: "ft_mala_lariss_53", name: "Mala Lariss", emoji: "🌸", genre: "Dancehall", cost: 14400000, potential: 58 },
-    { id: "ft_mehdi_kacem_54", name: "Mehdi Kacem", emoji: "🔥", genre: "Neo-Soul", cost: 700000, potential: 35 },
-    { id: "ft_vera_lund_55", name: "Vera Lund", emoji: "🎯", genre: "Funk", cost: 17000000, potential: 60 },
-    { id: "ft_lior_dumont_56", name: "Lior Dumont", emoji: "⚡", genre: "Drill", cost: 700000, potential: 35 },
-    { id: "ft_taro_meziane_57", name: "Taro Meziane", emoji: "🔥", genre: "Dancehall", cost: 2800000, potential: 43 },
-    { id: "ft_orso_barry_58", name: "Orso Barry", emoji: "🕯️", genre: "Amapiano", cost: 21800000, potential: 66 },
-    { id: "ft_sami_salas_59", name: "Sami Salas", emoji: "💫", genre: "R&B", cost: 21800000, potential: 66 },
-    { id: "ft_th_o_aubry_60", name: "Théo Aubry", emoji: "🥁", genre: "Plugg", cost: 21800000, potential: 66 },
-    { id: "ft_lior_novak_61", name: "Lior Novak", emoji: "🦋", genre: "Boom Bap", cost: 21800000, potential: 66 },
-    { id: "ft_kamil_weber_62", name: "Kamil Weber", emoji: "🪐", genre: "Jazz Rap", cost: 21800000, potential: 66 },
-    { id: "ft_tibo_marchetti_63", name: "Tibo Marchetti", emoji: "🦋", genre: "Pop Urbain", cost: 5200000, potential: 47 },
-    { id: "ft_sacha_weber_64", name: "Sacha Weber", emoji: "🪩", genre: "Phonk", cost: 15200000, potential: 59 },
-    { id: "ft_rayane_faye_65", name: "Rayane Faye", emoji: "🥁", genre: "Emo Rap", cost: 5200000, potential: 47 },
-    { id: "ft_sena_blaise_66", name: "Sena Blaise", emoji: "🎹", genre: "Dancehall", cost: 21800000, potential: 66 },
-    { id: "ft_cyrus_haddad_67", name: "Cyrus Haddad", emoji: "🪐", genre: "Jazz Rap", cost: 21800000, potential: 66 },
-    { id: "ft_enzo_ferrer_68", name: "Enzo Ferrer", emoji: "💎", genre: "Electro", cost: 21800000, potential: 66 },
-    { id: "ft_kai_belhadj_69", name: "Kai Belhadj", emoji: "🎯", genre: "Hyperpop", cost: 13600000, potential: 57 },
-    { id: "ft_otis_sow_70", name: "Otis Sow", emoji: "🌴", genre: "Amapiano", cost: 21800000, potential: 66 },
-    { id: "ft_jibril_ozturk_71", name: "Jibril Ozturk", emoji: "✨", genre: "Indie Rap", cost: 10400000, potential: 53 },
-    { id: "ft_baye_oduya_72", name: "Baye Oduya", emoji: "🦋", genre: "Pop Urbain", cost: 1600000, potential: 41 },
-    { id: "ft_zayn_nakamura_73", name: "Zayn Nakamura", emoji: "☁️", genre: "Trap", cost: 10400000, potential: 53 },
-    { id: "ft_jae_cruz_74", name: "Jae Cruz", emoji: "🎸", genre: "Plugg", cost: 17800000, potential: 61 },
-    { id: "ft_jibril_sinclair_75", name: "Jibril Sinclair", emoji: "🌟", genre: "Reggaeton", cost: 18600000, potential: 62 },
-    { id: "ft_amaya_nyman_76", name: "Amaya Nyman", emoji: "🎯", genre: "Funk", cost: 19400000, potential: 63 },
-    { id: "ft_maya_keita_77", name: "Maya Keita", emoji: "🕯️", genre: "Reggaeton", cost: 21800000, potential: 66 },
-    { id: "ft_lena_bloom_78", name: "Lena Bloom", emoji: "⭐", genre: "Funk", cost: 15200000, potential: 59 },
-    { id: "ft_enzo_sinclair_79", name: "Enzo Sinclair", emoji: "🌙", genre: "Rap Conscient", cost: 8800000, potential: 51 },
-    { id: "ft_cyrus_diallo_80", name: "Cyrus Diallo", emoji: "💎", genre: "Neo-Soul", cost: 19400000, potential: 63 },
-    { id: "ft_selim_solace_81", name: "Selim Solace", emoji: "💫", genre: "Reggaeton", cost: 21800000, potential: 66 },
-    { id: "ft_soren_toure_82", name: "Soren Toure", emoji: "📻", genre: "Amapiano", cost: 14400000, potential: 58 },
-    { id: "ft_nesrine_konat_83", name: "Nesrine Konaté", emoji: "🎧", genre: "Electro", cost: 2200000, potential: 42 },
-    { id: "ft_kesh_okada_84", name: "Kesh Okada", emoji: "🌟", genre: "Cloud Rap", cost: 19400000, potential: 63 },
-    { id: "ft_lena_vos_85", name: "Lena Vos", emoji: "🔮", genre: "Soul", cost: 21800000, potential: 66 },
-    { id: "ft_iris_sow_86", name: "Iris Sow", emoji: "🌵", genre: "Phonk", cost: 1000000, potential: 40 },
-    { id: "ft_lya_meziane_87", name: "Lya Meziane", emoji: "☁️", genre: "Jazz Rap", cost: 2800000, potential: 43 },
-    { id: "ft_enzo_oduya_88", name: "Enzo Oduya", emoji: "🦋", genre: "Pop Urbain", cost: 800000, potential: 36 },
-    { id: "ft_sena_verdi_89", name: "Sena Verdi", emoji: "🎸", genre: "Hyperpop", cost: 21800000, potential: 66 },
-    { id: "ft_isla_benali_90", name: "Isla Benali", emoji: "🔮", genre: "Drill", cost: 21800000, potential: 66 },
-    { id: "ft_manon_kane_91", name: "Manon Kane", emoji: "🎸", genre: "Trap", cost: 21800000, potential: 66 },
-    { id: "ft_kito_solace_92", name: "Kito Solace", emoji: "🪩", genre: "Electro", cost: 900000, potential: 38 },
-    { id: "ft_oc_ane_bane_93", name: "Océane Bane", emoji: "🥁", genre: "Funk", cost: 9600000, potential: 52 },
-    { id: "ft_lior_konat_94", name: "Lior Konaté", emoji: "💎", genre: "Electro", cost: 5200000, potential: 47 },
-    { id: "ft_in_s_marchetti_95", name: "Inès Marchetti", emoji: "🌵", genre: "Emo Rap", cost: 21800000, potential: 66 },
-    { id: "ft_bree_frost_96", name: "Bree Frost", emoji: "🎯", genre: "Pop Urbain", cost: 21800000, potential: 66 },
-    { id: "ft_lena_novak_97", name: "Lena Novak", emoji: "🎯", genre: "Boom Bap", cost: 21800000, potential: 66 },
-    { id: "ft_tess_sow_98", name: "Tess Sow", emoji: "🔥", genre: "Afro-Trap", cost: 11200000, potential: 54 },
-    { id: "ft_kamil_salas_99", name: "Kamil Salas", emoji: "💎", genre: "Boom Bap", cost: 1000000, potential: 40 },
-    { id: "ua_falltos", charId: "falltos", name: "Falltos", emoji: "✝️", genre: "Rap / Urbain", cost: 2200000, potential: 42 },
-    { id: "ua_gringe", charId: "gringe", name: "Gringe", emoji: "🔊", genre: "Rap / Urbain", cost: 3400000, potential: 44 },
-    { id: "ua_roi_heenok", charId: "roi_heenok", name: "Roi Heenok", emoji: "📻", genre: "Rap / Urbain", cost: 1000000, potential: 40 },
-    { id: "ua_angele", charId: "angele", name: "Angèle", emoji: "🪩", genre: "Rap / Urbain", cost: 24200000, potential: 69 },
-    { id: "ua_asap_rocky", charId: "asap_rocky", name: "A$AP Rocky", emoji: "✍️", genre: "Rap / Urbain", cost: 52400000, potential: 86 },
-    { id: "ua_pharrell", charId: "pharrell", name: "Pharrell Williams", emoji: "💼", genre: "Rap / Urbain", cost: 35800000, potential: 77 },
-    { id: "ua_kaine_dubois", charId: "kaine_dubois", name: "Kaine Dubois", emoji: "💿", genre: "Rap / Urbain", cost: 37200000, potential: 78 },
-    { id: "ua_camille_roy", charId: "camille_roy", name: "Camille Roy", emoji: "📀", genre: "Rap / Urbain", cost: 35800000, potential: 77 },
-    { id: "ua_lorenzo", charId: "lorenzo", name: "Lorenzo", emoji: "🕶️", genre: "Rap / Urbain", cost: 13600000, potential: 57 },
-    { id: "ua_vladimir_cauchemar", charId: "vladimir_cauchemar", name: "Vladimir Cauchemar", emoji: "💀", genre: "Rap / Urbain", cost: 9600000, potential: 52 },
-    { id: "ua_naps", charId: "naps", name: "Naps", emoji: "🕶️", genre: "Rap / Urbain", cost: 21800000, potential: 66 },
-    { id: "ua_dinos", charId: "dinos", name: "Dinos", emoji: "🎙️", genre: "Rap / Urbain", cost: 18600000, potential: 62 },
-    { id: "ua_alonzo", charId: "alonzo", name: "Alonzo", emoji: "🎧", genre: "Rap / Urbain", cost: 14400000, potential: 58 },
-    { id: "ua_soso_maness", charId: "soso_maness", name: "Soso Maness", emoji: "🎶", genre: "Rap / Urbain", cost: 12800000, potential: 56 },
-    { id: "ua_tiakola", charId: "tiakola", name: "Tiakola", emoji: "🔈", genre: "Rap / Urbain", cost: 23400000, potential: 68 },
-    { id: "ua_heuss", charId: "heuss", name: "Heuss l'Enfoiré", emoji: "🎵", genre: "Rap / Urbain", cost: 14400000, potential: 58 },
-    { id: "ua_koba_lad", charId: "koba_lad", name: "Koba LaD", emoji: "🔊", genre: "Rap / Urbain", cost: 17000000, potential: 60 },
-    { id: "ua_josman", charId: "josman", name: "Josman", emoji: "📻", genre: "Rap / Urbain", cost: 18600000, potential: 62 },
-    { id: "ua_hamza", charId: "hamza", name: "Hamza", emoji: "💿", genre: "Rap / Urbain", cost: 20200000, potential: 64 },
-    { id: "ua_laylow", charId: "laylow", name: "Laylow", emoji: "📀", genre: "Rap / Urbain", cost: 20200000, potential: 64 },
-    { id: "ua_lomepal", charId: "lomepal", name: "Lomepal", emoji: "🔉", genre: "Rap / Urbain", cost: 17800000, potential: 61 },
-    { id: "ua_bigflo_oli", charId: "bigflo_oli", name: "Bigflo & Oli", emoji: "🎚️", genre: "Rap / Urbain", cost: 14400000, potential: 58 },
-    { id: "ua_maes", charId: "maes", name: "Maes", emoji: "🎼", genre: "Rap / Urbain", cost: 15200000, potential: 59 },
-    { id: "ua_rimk", charId: "rimk", name: "Rim'K", emoji: "📝", genre: "Rap / Urbain", cost: 11200000, potential: 54 },
-    { id: "ua_sofiane", charId: "sofiane", name: "Sofiane", emoji: "✍️", genre: "Rap / Urbain", cost: 11200000, potential: 54 },
-    { id: "ua_dadju", charId: "dadju", name: "Dadju", emoji: "💯", genre: "Rap / Urbain", cost: 20200000, potential: 64 },
-    { id: "ua_franglish", charId: "franglish", name: "Franglish", emoji: "💰", genre: "Rap / Urbain", cost: 14400000, potential: 58 },
-    { id: "ua_youssoupha", charId: "youssoupha", name: "Youssoupha", emoji: "💵", genre: "Rap / Urbain", cost: 12800000, potential: 56 },
-    { id: "ua_kalash_criminel", charId: "kalash_criminel", name: "Kalash Criminel", emoji: "💎", genre: "Rap / Urbain", cost: 12800000, potential: 56 },
-    { id: "ua_kekra", charId: "kekra", name: "Kekra", emoji: "👑", genre: "Rap / Urbain", cost: 11200000, potential: 54 },
-    { id: "ua_alpha_wann", charId: "alpha_wann", name: "Alpha Wann", emoji: "🕶️", genre: "Rap / Urbain", cost: 12800000, potential: 56 },
-    { id: "ua_mhd", charId: "mhd", name: "MHD", emoji: "⚡", genre: "Rap / Urbain", cost: 13600000, potential: 57 },
-    { id: "ua_fally_ipupa", charId: "fally_ipupa", name: "Fally Ipupa", emoji: "🔉", genre: "Rap / Urbain", cost: 17000000, potential: 60 },
-    { id: "ua_kery_james", charId: "kery_james", name: "Kery James", emoji: "💥", genre: "Rap / Urbain", cost: 11200000, potential: 54 },
-    { id: "ua_georgio", charId: "georgio", name: "Georgio", emoji: "🎫", genre: "Rap / Urbain", cost: 5200000, potential: 47 },
-    { id: "ua_chilla", charId: "chilla", name: "Chilla", emoji: "📝", genre: "Rap / Urbain", cost: 4000000, potential: 45 },
-    { id: "ua_clara_luciani", charId: "clara_luciani", name: "Clara Luciani", emoji: "✍️", genre: "Rap / Urbain", cost: 12000000, potential: 55 },
-    { id: "ua_camelia_jordana", charId: "camelia_jordana", name: "Camélia Jordana", emoji: "🪩", genre: "Rap / Urbain", cost: 4000000, potential: 45 },
-    { id: "ua_amel_bent", charId: "amel_bent", name: "Amel Bent", emoji: "✨", genre: "Rap / Urbain", cost: 8800000, potential: 51 },
-    { id: "ua_central_cee", charId: "central_cee", name: "Central Cee", emoji: "🌟", genre: "Rap / Urbain", cost: 54300000, potential: 87 },
-    { id: "ua_dave_uk", charId: "dave_uk", name: "Dave", emoji: "⭐️", genre: "Rap / Urbain", cost: 44800000, potential: 82 },
-    { id: "ua_stormzy", charId: "stormzy", name: "Stormzy", emoji: "💫", genre: "Rap / Urbain", cost: 44800000, potential: 82 },
-    { id: "ua_kodak_black", charId: "kodak_black", name: "Kodak Black", emoji: "📀", genre: "Rap / Urbain", cost: 41000000, potential: 80 },
-    { id: "ua_dababy", charId: "dababy", name: "DaBaby", emoji: "🎛️", genre: "Rap / Urbain", cost: 33000000, potential: 75 },
-    { id: "ua_polo_g", charId: "polo_g", name: "Polo G", emoji: "🎼", genre: "Rap / Urbain", cost: 41000000, potential: 80 },
-    { id: "ua_roddy_ricch", charId: "roddy_ricch", name: "Roddy Ricch", emoji: "📝", genre: "Rap / Urbain", cost: 41000000, potential: 80 },
-    { id: "ua_rod_wave", charId: "rod_wave", name: "Rod Wave", emoji: "✍️", genre: "Rap / Urbain", cost: 44800000, potential: 82 },
-    { id: "ua_moneybagg_yo", charId: "moneybagg_yo", name: "Moneybagg Yo", emoji: "🔥", genre: "Rap / Urbain", cost: 37200000, potential: 78 },
-    { id: "ua_key_glock", charId: "key_glock", name: "Key Glock", emoji: "💯", genre: "Rap / Urbain", cost: 34400000, potential: 76 },
-    { id: "ua_ice_spice", charId: "ice_spice", name: "Ice Spice", emoji: "💰", genre: "Rap / Urbain", cost: 41000000, potential: 80 },
-    { id: "ua_latto", charId: "latto", name: "Latto", emoji: "💵", genre: "Rap / Urbain", cost: 35800000, potential: 77 },
-    { id: "ua_glorilla", charId: "glorilla", name: "GloRilla", emoji: "💎", genre: "Rap / Urbain", cost: 35800000, potential: 77 },
-    { id: "ua_sexyy_red", charId: "sexyy_red", name: "Sexyy Red", emoji: "👑", genre: "Rap / Urbain", cost: 33000000, potential: 75 },
-    { id: "ua_flo_milli", charId: "flo_milli", name: "Flo Milli", emoji: "🕶️", genre: "Rap / Urbain", cost: 28800000, potential: 72 },
-    { id: "ua_denzel_curry", charId: "denzel_curry", name: "Denzel Curry", emoji: "⚡", genre: "Rap / Urbain", cost: 34400000, potential: 76 },
-    { id: "ua_jid", charId: "jid", name: "JID", emoji: "💥", genre: "Rap / Urbain", cost: 34400000, potential: 76 },
-    { id: "ua_vince_staples", charId: "vince_staples", name: "Vince Staples", emoji: "🎫", genre: "Rap / Urbain", cost: 31600000, potential: 74 },
-    { id: "ua_freddie_gibbs", charId: "freddie_gibbs", name: "Freddie Gibbs", emoji: "🎤", genre: "Rap / Urbain", cost: 31600000, potential: 74 },
-    { id: "ua_miguel", charId: "miguel", name: "Miguel", emoji: "🎙️", genre: "Rap / Urbain", cost: 31600000, potential: 74 },
-    { id: "ua_khalid", charId: "khalid", name: "Khalid", emoji: "📻", genre: "Rap / Urbain", cost: 41000000, potential: 80 },
-    { id: "ua_her_singer", charId: "her_singer", name: "H.E.R.", emoji: "💿", genre: "Rap / Urbain", cost: 37200000, potential: 78 },
-    { id: "ua_summer_walker", charId: "summer_walker", name: "Summer Walker", emoji: "📀", genre: "Rap / Urbain", cost: 41000000, potential: 80 },
-    { id: "ua_jhene_aiko", charId: "jhene_aiko", name: "Jhené Aiko", emoji: "🎚️", genre: "Rap / Urbain", cost: 37200000, potential: 78 },
-    { id: "ua_kehlani", charId: "kehlani", name: "Kehlani", emoji: "🎛️", genre: "Rap / Urbain", cost: 38600000, potential: 79 },
-    { id: "ua_normani", charId: "normani", name: "Normani", emoji: "🔊", genre: "Rap / Urbain", cost: 33000000, potential: 75 },
-    { id: "ua_ari_lennox", charId: "ari_lennox", name: "Ari Lennox", emoji: "📢", genre: "Rap / Urbain", cost: 30200000, potential: 73 },
-    { id: "ua_victoria_monet", charId: "victoria_monet", name: "Victoria Monét", emoji: "🔈", genre: "Rap / Urbain", cost: 34400000, potential: 76 },
-    { id: "ua_coco_jones", charId: "coco_jones", name: "Coco Jones", emoji: "🔉", genre: "Rap / Urbain", cost: 30200000, potential: 73 },
-    { id: "ua_lucky_daye", charId: "lucky_daye", name: "Lucky Daye", emoji: "📝", genre: "Rap / Urbain", cost: 30200000, potential: 73 },
-    { id: "ua_giveon", charId: "giveon", name: "Giveon", emoji: "✍️", genre: "Rap / Urbain", cost: 41000000, potential: 80 },
-    { id: "ua_brent_faiyaz", charId: "brent_faiyaz", name: "Brent Faiyaz", emoji: "🪩", genre: "Rap / Urbain", cost: 44800000, potential: 82 },
-    { id: "ua_sixlack", charId: "sixlack", name: "6LACK", emoji: "✨", genre: "Rap / Urbain", cost: 31600000, potential: 74 },
-    { id: "ua_kacey_musgraves", charId: "kacey_musgraves", name: "Kacey Musgraves", emoji: "🎶", genre: "Rap / Urbain", cost: 31600000, potential: 74 },
-    { id: "ua_sabrina_carpenter", charId: "sabrina_carpenter", name: "Sabrina Carpenter", emoji: "🎼", genre: "Rap / Urbain", cost: 54300000, potential: 87 },
-    { id: "ua_tate_mcrae", charId: "tate_mcrae", name: "Tate McRae", emoji: "📻", genre: "Rap / Urbain", cost: 42900000, potential: 81 },
-    { id: "ua_charli_xcx", charId: "charli_xcx", name: "Charli XCX", emoji: "💿", genre: "Rap / Urbain", cost: 41000000, potential: 80 },
-    { id: "ua_katseye", charId: "katseye", name: "KATSEYE", emoji: "👯", genre: "Rap / Urbain", cost: 34400000, potential: 76 },
-    { id: "ua_aespa", charId: "aespa", name: "aespa", emoji: "🫰🏻", genre: "Rap / Urbain", cost: 44800000, potential: 82 },
-    { id: "ua_jennie", charId: "jennie", name: "JENNIE", emoji: "🎼", genre: "Rap / Urbain", cost: 48600000, potential: 84 },
-    { id: "ua_cortis", charId: "cortis", name: "CORTIS", emoji: "🎧", genre: "Rap / Urbain", cost: 28800000, potential: 72 },
-    { id: "ua_babymonster", charId: "babymonster", name: "BABYMONSTER", emoji: "💿", genre: "Rap / Urbain", cost: 31600000, potential: 74 },
-    { id: "ua_twice", charId: "twice", name: "TWICE", emoji: "📀", genre: "Rap / Urbain", cost: 44800000, potential: 82 },
-    { id: "ua_newjeans", charId: "newjeans", name: "NewJeans", emoji: "🎚️", genre: "Rap / Urbain", cost: 48600000, potential: 84 },
-    { id: "ua_caballero", charId: "caballero", name: "Caballero", emoji: "💿", genre: "Rap / Urbain", cost: 8000000, potential: 50 },
-    { id: "ua_jeanjass", charId: "jeanjass", name: "JeanJass", emoji: "📀", genre: "Rap / Urbain", cost: 6400000, potential: 49 },
-    { id: "ua_kid_cudi", charId: "kid_cudi", name: "Kid Cudi", emoji: "🌚", genre: "Rap / Urbain", cost: 44800000, potential: 82 },
-    { id: "ua_pusha_t", charId: "pusha_t", name: "Pusha T", emoji: "📻", genre: "Rap / Urbain", cost: 37200000, potential: 78 },
-    { id: "ua_yung_miami", charId: "yung_miami", name: "Yung Miami", emoji: "🎤", genre: "Rap / Urbain", cost: 28800000, potential: 72 },
-    { id: "ua_north_west", charId: "north_west", name: "North West", emoji: "👩‍🎤", genre: "Rap / Urbain", cost: 27400000, potential: 71 },
-    { id: "ua_teyana_taylor", charId: "teyana_taylor", name: "Teyana Taylor", emoji: "🏋🏿‍♀️", genre: "Rap / Urbain", cost: 30200000, potential: 73 },
-    { id: "ua_jorja_smith", charId: "jorja_smith", name: "Jorja Smith", emoji: "🪽", genre: "Rap / Urbain", cost: 33000000, potential: 75 },
+    { id: "ua_angele", charId: "angele", name: "Angèle", emoji: "✨", genre: "Pop", zone: "FR", rang: "fr", cost: 16700000, potential: 69 },
+    { id: "ua_camelia_jordana", charId: "camelia_jordana", name: "Camélia Jordana", emoji: "🎼", genre: "Variété", zone: "FR", rang: "fr", cost: 2100000, potential: 45 },
+    { id: "ua_amel_bent", charId: "amel_bent", name: "Amel Bent", emoji: "🌟", genre: "Pop", zone: "FR", rang: "fr", cost: 4550000, potential: 51 },
+    { id: "ua_aya_nakamura", charId: "aya_nakamura", name: "Aya Nakamura", emoji: "💫", genre: "Pop Urbaine", zone: "FR", rang: "fr", cost: 15000000, potential: 67 },
+    { id: "ua_tiakola", charId: "tiakola", name: "Tiakola", emoji: "🎶", genre: "Pop Urbaine", zone: "FR", rang: "fr", cost: 15800000, potential: 68 },
+    { id: "ua_hamza", charId: "hamza", name: "Hamza", emoji: "🎧", genre: "R&B", zone: "FR", rang: "fr", cost: 12600000, potential: 64 },
+    { id: "ua_dadju", charId: "dadju", name: "Dadju", emoji: "🎵", genre: "R&B", zone: "FR", rang: "fr", cost: 12600000, potential: 64 },
+    { id: "ua_franglish", charId: "franglish", name: "Franglish", emoji: "🎹", genre: "R&B", zone: "FR", rang: "fr", cost: 8450000, potential: 58 },
+    { id: "ua_laylow", charId: "laylow", name: "Laylow", emoji: "🎚️", genre: "Pop Urbaine", zone: "FR", rang: "fr", cost: 12600000, potential: 64 },
+    { id: "ua_vladimir_cauchemar", charId: "vladimir_cauchemar", name: "Vladimir Cauchemar", emoji: "🎛️", genre: "Électro", zone: "FR", rang: "fr", cost: 5050000, potential: 52 },
+    { id: "ua_dinos", charId: "dinos", name: "Dinos", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "fr", cost: 11200000, potential: 62 },
+    { id: "ua_josman", charId: "josman", name: "Josman", emoji: "🎤", genre: "Rap", zone: "FR", rang: "fr", cost: 11200000, potential: 62 },
+    { id: "ua_lomepal", charId: "lomepal", name: "Lomepal", emoji: "✍️", genre: "Rap", zone: "FR", rang: "fr", cost: 10400000, potential: 61 },
+    { id: "ua_koba_lad", charId: "koba_lad", name: "Koba LaD", emoji: "💥", genre: "Trap", zone: "FR", rang: "fr", cost: 9750000, potential: 60 },
+    { id: "ua_maes", charId: "maes", name: "Maes", emoji: "💰", genre: "Trap", zone: "FR", rang: "fr", cost: 9100000, potential: 59 },
+    { id: "ua_heuss_l_enfoire", charId: "heuss", name: "Heuss l'Enfoiré", emoji: "🕶️", genre: "Rap", zone: "FR", rang: "fr", cost: 8450000, potential: 58 },
+    { id: "ua_mhd", charId: "mhd", name: "MHD", emoji: "🔥", genre: "Afro-Trap", zone: "FR", rang: "fr", cost: 7850000, potential: 57 },
+    { id: "ua_soso_maness", charId: "soso_maness", name: "Soso Maness", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "fr", cost: 7250000, potential: 56 },
+    { id: "ua_kalash_criminel", charId: "kalash_criminel", name: "Kalash Criminel", emoji: "💯", genre: "Rap", zone: "FR", rang: "fr", cost: 7250000, potential: 56 },
+    { id: "ua_kekra", charId: "kekra", name: "Kekra", emoji: "⚡", genre: "Trap", zone: "FR", rang: "fr", cost: 6100000, potential: 54 },
+    { id: "ua_caballero", charId: "caballero", name: "Caballero", emoji: "🎧", genre: "Rap", zone: "FR", rang: "fr", cost: 4050000, potential: 50 },
+    { id: "ua_jeanjass", charId: "jeanjass", name: "JeanJass", emoji: "🎶", genre: "Rap", zone: "FR", rang: "fr", cost: 3650000, potential: 49 },
+    { id: "ua_georgio", charId: "georgio", name: "Georgio", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "fr", cost: 2800000, potential: 47 },
+    { id: "ua_chilla", charId: "chilla", name: "Chilla", emoji: "🎤", genre: "Rap", zone: "FR", rang: "fr", cost: 2100000, potential: 45 },
+    { id: "ua_gringe", charId: "gringe", name: "Gringe", emoji: "✍️", genre: "Rap", zone: "FR", rang: "fr", cost: 1750000, potential: 44 },
+    { id: "ua_falltos", charId: "falltos", name: "Falltos", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "fr", cost: 1150000, potential: 42 },
+    { id: "ua_roi_heenok", charId: "roi_heenok", name: "Roi Heenok", emoji: "👑", genre: "Rap", zone: "FR", rang: "fr", cost: 700000, potential: 40 },
+    { id: "ua_kaine_dubois", charId: "kaine_dubois", name: "Kaine Dubois", emoji: "🎤", genre: "Rap", zone: "FR", rang: "fr", cost: 16700000, potential: 78 },
+    { id: "ua_gazo", charId: "gazo", name: "Gazo", emoji: "🔥", genre: "Drill", zone: "FR", rang: "fr", cost: 14200000, potential: 66 },
+    { id: "ua_niska", charId: "niska", name: "Niska", emoji: "💎", genre: "Rap", zone: "FR", rang: "fr", cost: 12600000, potential: 64 },
+    { id: "ua_kaaris", charId: "kaaris", name: "Kaaris", emoji: "💥", genre: "Trap", zone: "FR", rang: "fr", cost: 8450000, potential: 58 },
+    { id: "ua_romeo_elvis", charId: "romeo_elvis", name: "Roméo Elvis", emoji: "🎧", genre: "Rap", zone: "FR", rang: "fr", cost: 6650000, potential: 55 },
+    { id: "ua_luidji", name: "Luidji", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "fr", cost: 7850000, potential: 57 },
+    { id: "ua_zola", name: "Zola", emoji: "⚡", genre: "Trap", zone: "FR", rang: "fr", cost: 7250000, potential: 56 },
+    { id: "ua_hatik", name: "Hatik", emoji: "🎶", genre: "Pop Urbaine", zone: "FR", rang: "fr", cost: 6650000, potential: 55 },
+    { id: "ua_lujipeka", name: "Lujipeka", emoji: "📝", genre: "Rap", zone: "FR", rang: "fr", cost: 5550000, potential: 53 },
+    { id: "ua_ziak", name: "Ziak", emoji: "🕶️", genre: "Drill", zone: "FR", rang: "fr", cost: 8450000, potential: 58 },
+    { id: "ua_timal", name: "Timal", emoji: "💵", genre: "Rap", zone: "FR", rang: "fr", cost: 6100000, potential: 54 },
+    { id: "ua_leto", name: "Leto", emoji: "💰", genre: "Trap", zone: "FR", rang: "fr", cost: 7250000, potential: 56 },
+    { id: "ua_landy", name: "Landy", emoji: "🎤", genre: "Rap", zone: "FR", rang: "fr", cost: 4050000, potential: 50 },
+    { id: "ua_hornet_la_frappe", name: "Hornet La Frappe", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "fr", cost: 3650000, potential: 49 },
+    { id: "ua_guy2bezbar", name: "Guy2Bezbar", emoji: "🎧", genre: "Rap Mélo", zone: "FR", rang: "fr", cost: 4550000, potential: 51 },
+    { id: "ua_rsko", name: "Rsko", emoji: "🔊", genre: "Rap", zone: "FR", rang: "fr", cost: 5050000, potential: 52 },
+    { id: "ua_13_block", name: "13 Block", emoji: "💥", genre: "Trap", zone: "FR", rang: "fr", cost: 5550000, potential: 53 },
+    { id: "ua_stavo", name: "Stavo", emoji: "📻", genre: "Rap", zone: "FR", rang: "fr", cost: 3200000, potential: 48 },
+    { id: "ua_houdi", name: "Houdi", emoji: "🎫", genre: "Rap", zone: "FR", rang: "fr", cost: 2450000, potential: 46 },
+    { id: "ua_so_la_lune", name: "So La Lune", emoji: "🌟", genre: "Cloud Rap", zone: "FR", rang: "fr", cost: 4050000, potential: 50 },
+    { id: "ua_winnterzuko", name: "Winnterzuko", emoji: "💫", genre: "Cloud Rap", zone: "FR", rang: "fr", cost: 2800000, potential: 47 },
+    { id: "ua_khali", name: "Khali", emoji: "🎶", genre: "Rap Mélo", zone: "FR", rang: "fr", cost: 2100000, potential: 45 },
+    { id: "ua_jwles", name: "Jwles", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "fr", cost: 1750000, potential: 44 },
+    { id: "ua_yame", name: "Yamê", emoji: "✨", genre: "Pop Urbaine", zone: "FR", rang: "fr", cost: 7250000, potential: 56 },
+    { id: "ua_theodora", name: "Théodora", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "fr", cost: 5050000, potential: 52 },
+    { id: "ua_le_juiice", name: "Le Juiice", emoji: "💯", genre: "Rap", zone: "FR", rang: "fr", cost: 2450000, potential: 46 },
+    { id: "ua_doria", name: "Doria", emoji: "🎤", genre: "Rap", zone: "FR", rang: "fr", cost: 2100000, potential: 45 },
+    { id: "ua_lala_ce", name: "Lala &ce", emoji: "🎛️", genre: "Cloud Rap", zone: "FR", rang: "fr", cost: 1750000, potential: 44 },
+    { id: "ua_bianca_costa", name: "Bianca Costa", emoji: "🪩", genre: "Reggaeton", zone: "FR", rang: "fr", cost: 3200000, potential: 48 },
+    { id: "ua_tsew_the_kid", name: "Tsew the Kid", emoji: "🎹", genre: "R&B", zone: "FR", rang: "fr", cost: 2800000, potential: 47 },
+    { id: "ua_ichon", name: "Ichon", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "fr", cost: 2450000, potential: 46 },
+    { id: "ua_myth_syzer", name: "Myth Syzer", emoji: "🎛️", genre: "Électro", zone: "FR", rang: "fr", cost: 2100000, potential: 45 },
+    { id: "ua_prelud", name: "Prelud", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "fr", cost: 1450000, potential: 43 },
+    { id: "ua_rounhaa", name: "Rounhaa", emoji: "⚡", genre: "Rap", zone: "FR", rang: "fr", cost: 2800000, potential: 47 },
+    { id: "ua_jolagreen23", name: "Jolagreen23", emoji: "🎧", genre: "Rap", zone: "FR", rang: "fr", cost: 1150000, potential: 42 },
+    { id: "ua_lesram", name: "Lesram", emoji: "🔉", genre: "Rap", zone: "FR", rang: "fr", cost: 1750000, potential: 44 },
+    { id: "ua_gracy_hopkins", name: "Gracy Hopkins", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "fr", cost: 920000, potential: 41 },
+    { id: "ua_eddy_de_pretto", name: "Eddy de Pretto", emoji: "🎼", genre: "Variété", zone: "FR", rang: "fr", cost: 6100000, potential: 54 },
+    { id: "ua_pomme", name: "Pomme", emoji: "🎵", genre: "Folk", zone: "FR", rang: "fr", cost: 4050000, potential: 50 },
+    { id: "ua_juliette_armanet", name: "Juliette Armanet", emoji: "🪩", genre: "Pop", zone: "FR", rang: "fr", cost: 5550000, potential: 53 },
+    { id: "ua_hoshi", name: "Hoshi", emoji: "⭐️", genre: "Pop", zone: "FR", rang: "fr", cost: 3650000, potential: 49 },
+    { id: "ua_terrenoire", name: "Terrenoire", emoji: "✨", genre: "Pop", zone: "FR", rang: "fr", cost: 1750000, potential: 44 },
+    { id: "ua_lous_and_the_yakuza", name: "Lous and the Yakuza", emoji: "💫", genre: "Pop Urbaine", zone: "FR", rang: "fr", cost: 4550000, potential: 51 },
+    { id: "ua_vendredi_sur_mer", name: "Vendredi sur Mer", emoji: "🎛️", genre: "Électro", zone: "FR", rang: "fr", cost: 2450000, potential: 46 },
+    { id: "ua_flavia_coelho", name: "Flavia Coelho", emoji: "🌟", genre: "Afrobeat", zone: "FR", rang: "fr", cost: 1450000, potential: 43 },
+    { id: "ua_sofiane_pamart", name: "Sofiane Pamart", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "fr", cost: 6650000, potential: 55 },
+    { id: "ua_jok_air", name: "Jok'Air", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "fr", cost: 2100000, potential: 45 },
+    { id: "ua_dabs", name: "Dabs", emoji: "💿", genre: "Rap", zone: "FR", rang: "fr", cost: 3200000, potential: 48 },
+    { id: "ua_vegedream", name: "Vegedream", emoji: "🔥", genre: "Afro-Trap", zone: "FR", rang: "fr", cost: 4050000, potential: 50 },
+    { id: "ua_h_magnum", name: "H Magnum", emoji: "📀", genre: "Rap", zone: "FR", rang: "fr", cost: 1450000, potential: 43 },
+    { id: "ua_zed", name: "Zed", emoji: "💥", genre: "Trap", zone: "FR", rang: "fr", cost: 1150000, potential: 42 },
+    { id: "ua_central_cee", charId: "central_cee", name: "Central Cee", emoji: "🔥", genre: "Drill", zone: "US", rang: "us", cost: 66700000, potential: 87 },
+    { id: "ua_sabrina_carpenter", charId: "sabrina_carpenter", name: "Sabrina Carpenter", emoji: "✨", genre: "Pop", zone: "US", rang: "us", cost: 66700000, potential: 87 },
+    { id: "ua_dave", charId: "dave_uk", name: "Dave", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "us", cost: 53300000, potential: 82 },
+    { id: "ua_rod_wave", charId: "rod_wave", name: "Rod Wave", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "us", cost: 53300000, potential: 82 },
+    { id: "ua_brent_faiyaz", charId: "brent_faiyaz", name: "Brent Faiyaz", emoji: "🎧", genre: "R&B", zone: "US", rang: "us", cost: 53300000, potential: 82 },
+    { id: "ua_tate_mcrae", charId: "tate_mcrae", name: "Tate McRae", emoji: "💃", genre: "Pop", zone: "US", rang: "us", cost: 50800000, potential: 81 },
+    { id: "ua_kodak_black", charId: "kodak_black", name: "Kodak Black", emoji: "💥", genre: "Trap", zone: "US", rang: "us", cost: 48300000, potential: 80 },
+    { id: "ua_polo_g", charId: "polo_g", name: "Polo G", emoji: "🎶", genre: "Rap Mélo", zone: "US", rang: "us", cost: 48300000, potential: 80 },
+    { id: "ua_roddy_ricch", charId: "roddy_ricch", name: "Roddy Ricch", emoji: "💎", genre: "Rap", zone: "US", rang: "us", cost: 48300000, potential: 80 },
+    { id: "ua_ice_spice", charId: "ice_spice", name: "Ice Spice", emoji: "👑", genre: "Drill", zone: "US", rang: "us", cost: 48300000, potential: 80 },
+    { id: "ua_khalid", charId: "khalid", name: "Khalid", emoji: "🎙️", genre: "R&B", zone: "US", rang: "us", cost: 48300000, potential: 80 },
+    { id: "ua_summer_walker", charId: "summer_walker", name: "Summer Walker", emoji: "🌟", genre: "R&B", zone: "US", rang: "us", cost: 48300000, potential: 80 },
+    { id: "ua_giveon", charId: "giveon", name: "Giveon", emoji: "🎼", genre: "R&B", zone: "US", rang: "us", cost: 48300000, potential: 80 },
+    { id: "ua_charli_xcx", charId: "charli_xcx", name: "Charli XCX", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "us", cost: 48300000, potential: 80 },
+    { id: "ua_kehlani", charId: "kehlani", name: "Kehlani", emoji: "💫", genre: "R&B", zone: "US", rang: "us", cost: 46000000, potential: 79 },
+    { id: "ua_jhene_aiko", charId: "jhene_aiko", name: "Jhené Aiko", emoji: "🎹", genre: "R&B", zone: "US", rang: "us", cost: 43600000, potential: 78 },
+    { id: "ua_h_e_r", charId: "her_singer", name: "H.E.R.", emoji: "🎵", genre: "R&B", zone: "US", rang: "us", cost: 43600000, potential: 78 },
+    { id: "ua_moneybagg_yo", charId: "moneybagg_yo", name: "Moneybagg Yo", emoji: "💰", genre: "Trap", zone: "US", rang: "us", cost: 43600000, potential: 78 },
+    { id: "ua_latto", charId: "latto", name: "Latto", emoji: "💯", genre: "Rap", zone: "US", rang: "us", cost: 41400000, potential: 77 },
+    { id: "ua_glorilla", charId: "glorilla", name: "GloRilla", emoji: "🔊", genre: "Rap", zone: "US", rang: "us", cost: 41400000, potential: 77 },
+    { id: "ua_victoria_monet", charId: "victoria_monet", name: "Victoria Monét", emoji: "⭐️", genre: "R&B", zone: "US", rang: "us", cost: 39100000, potential: 76 },
+    { id: "ua_denzel_curry", charId: "denzel_curry", name: "Denzel Curry", emoji: "⚡", genre: "Rap", zone: "US", rang: "us", cost: 39100000, potential: 76 },
+    { id: "ua_jid", charId: "jid", name: "JID", emoji: "✍️", genre: "Rap Conscient", zone: "US", rang: "us", cost: 39100000, potential: 76 },
+    { id: "ua_key_glock", charId: "key_glock", name: "Key Glock", emoji: "💵", genre: "Trap", zone: "US", rang: "us", cost: 39100000, potential: 76 },
+    { id: "ua_dababy", charId: "dababy", name: "DaBaby", emoji: "🎤", genre: "Rap", zone: "US", rang: "us", cost: 37000000, potential: 75 },
+    { id: "ua_sexyy_red", charId: "sexyy_red", name: "Sexyy Red", emoji: "🕶️", genre: "Rap", zone: "US", rang: "us", cost: 37000000, potential: 75 },
+    { id: "ua_normani", charId: "normani", name: "Normani", emoji: "🕺", genre: "Pop", zone: "US", rang: "us", cost: 37000000, potential: 75 },
+    { id: "ua_jorja_smith", charId: "jorja_smith", name: "Jorja Smith", emoji: "🎶", genre: "R&B", zone: "US", rang: "us", cost: 37000000, potential: 75 },
+    { id: "ua_vince_staples", charId: "vince_staples", name: "Vince Staples", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "us", cost: 34900000, potential: 74 },
+    { id: "ua_freddie_gibbs", charId: "freddie_gibbs", name: "Freddie Gibbs", emoji: "🎙️", genre: "Boom Bap", zone: "US", rang: "us", cost: 34900000, potential: 74 },
+    { id: "ua_miguel", charId: "miguel", name: "Miguel", emoji: "🎼", genre: "R&B", zone: "US", rang: "us", cost: 34900000, potential: 74 },
+    { id: "ua_6lack", charId: "sixlack", name: "6LACK", emoji: "🎧", genre: "R&B", zone: "US", rang: "us", cost: 34900000, potential: 74 },
+    { id: "ua_kacey_musgraves", charId: "kacey_musgraves", name: "Kacey Musgraves", emoji: "🎵", genre: "Country", zone: "US", rang: "us", cost: 34900000, potential: 74 },
+    { id: "ua_ari_lennox", charId: "ari_lennox", name: "Ari Lennox", emoji: "🎹", genre: "Néo-Soul", zone: "US", rang: "us", cost: 32800000, potential: 73 },
+    { id: "ua_coco_jones", charId: "coco_jones", name: "Coco Jones", emoji: "✨", genre: "R&B", zone: "US", rang: "us", cost: 32800000, potential: 73 },
+    { id: "ua_lucky_daye", charId: "lucky_daye", name: "Lucky Daye", emoji: "💫", genre: "Néo-Soul", zone: "US", rang: "us", cost: 32800000, potential: 73 },
+    { id: "ua_teyana_taylor", charId: "teyana_taylor", name: "Teyana Taylor", emoji: "💃", genre: "R&B", zone: "US", rang: "us", cost: 32800000, potential: 73 },
+    { id: "ua_flo_milli", charId: "flo_milli", name: "Flo Milli", emoji: "💎", genre: "Rap", zone: "US", rang: "us", cost: 30900000, potential: 72 },
+    { id: "ua_yung_miami", charId: "yung_miami", name: "Yung Miami", emoji: "👑", genre: "Rap", zone: "US", rang: "us", cost: 30900000, potential: 72 },
+    { id: "ua_baby_keem", charId: "r_baby_keem", name: "Baby Keem", emoji: "🔥", genre: "Rap", zone: "US", rang: "us", cost: 46000000, potential: 79 },
+    { id: "ua_don_toliver", charId: "r_don_toliver", name: "Don Toliver", emoji: "🎶", genre: "Rap Mélo", zone: "US", rang: "us", cost: 48300000, potential: 80 },
+    { id: "ua_jack_harlow", charId: "jack_harlow_c", name: "Jack Harlow", emoji: "🕶️", genre: "Rap", zone: "US", rang: "us", cost: 43600000, potential: 78 },
+    { id: "ua_coi_leray", charId: "r_coi_leray", name: "Coi Leray", emoji: "💯", genre: "Rap", zone: "US", rang: "us", cost: 30900000, potential: 72 },
+    { id: "ua_doechii", charId: "r_doechii", name: "Doechii", emoji: "⚡", genre: "Rap", zone: "US", rang: "us", cost: 34900000, potential: 74 },
+    { id: "ua_saweetie", charId: "r_saweetie", name: "Saweetie", emoji: "💰", genre: "Rap", zone: "US", rang: "us", cost: 28900000, potential: 71 },
+    { id: "ua_rico_nasty", charId: "r_rico_nasty", name: "Rico Nasty", emoji: "💥", genre: "Rap", zone: "US", rang: "us", cost: 23500000, potential: 68 },
+    { id: "ua_tierra_whack", charId: "r_tierra_whack", name: "Tierra Whack", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "us", cost: 21800000, potential: 67 },
+    { id: "ua_earl_sweatshirt", charId: "r_earl_sweatshirt", name: "Earl Sweatshirt", emoji: "🎧", genre: "Boom Bap", zone: "US", rang: "us", cost: 25300000, potential: 69 },
+    { id: "ua_smino", charId: "r_smino", name: "Smino", emoji: "🎵", genre: "Néo-Soul", zone: "US", rang: "us", cost: 23500000, potential: 68 },
+    { id: "ua_saba", charId: "r_saba", name: "Saba", emoji: "✍️", genre: "Rap Conscient", zone: "US", rang: "us", cost: 20200000, potential: 66 },
+    { id: "ua_mick_jenkins", charId: "r_mick_jenkins", name: "Mick Jenkins", emoji: "📻", genre: "Rap Conscient", zone: "US", rang: "us", cost: 15700000, potential: 63 },
+    { id: "ua_noname", charId: "r_noname", name: "Noname", emoji: "🎙️", genre: "Rap Conscient", zone: "US", rang: "us", cost: 17100000, potential: 64 },
+    { id: "ua_amine", charId: "r_amin", name: "Aminé", emoji: "🎤", genre: "Rap", zone: "US", rang: "us", cost: 23500000, potential: 68 },
+    { id: "ua_cordae", charId: "r_cordae", name: "Cordae", emoji: "💿", genre: "Rap", zone: "US", rang: "us", cost: 25300000, potential: 69 },
+    { id: "ua_isaiah_rashad", charId: "r_isaiah_rashad", name: "Isaiah Rashad", emoji: "🎚️", genre: "Rap", zone: "US", rang: "us", cost: 23500000, potential: 68 },
+    { id: "ua_ab_soul", charId: "r_ab_soul", name: "Ab-Soul", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "us", cost: 20200000, potential: 66 },
+    { id: "ua_jay_rock", charId: "r_jay_rock", name: "Jay Rock", emoji: "💥", genre: "Rap", zone: "US", rang: "us", cost: 21800000, potential: 67 },
+    { id: "ua_bas", charId: "r_bas", name: "Bas", emoji: "🎶", genre: "Rap", zone: "US", rang: "us", cost: 17100000, potential: 64 },
+    { id: "ua_larry_june", charId: "r_larry_june", name: "Larry June", emoji: "💵", genre: "Rap", zone: "US", rang: "us", cost: 18600000, potential: 65 },
+    { id: "ua_curren_y", charId: "r_curren_y", name: "Curren$y", emoji: "💰", genre: "Rap", zone: "US", rang: "us", cost: 17100000, potential: 64 },
+    { id: "ua_conway_the_machine", charId: "r_conway_the_machine", name: "Conway the Machine", emoji: "🎙️", genre: "Boom Bap", zone: "US", rang: "us", cost: 21800000, potential: 67 },
+    { id: "ua_westside_gunn", charId: "r_westside_gunn", name: "Westside Gunn", emoji: "👑", genre: "Boom Bap", zone: "US", rang: "us", cost: 23500000, potential: 68 },
+    { id: "ua_benny_the_butcher", charId: "r_benny_the_butcher", name: "Benny the Butcher", emoji: "🔥", genre: "Boom Bap", zone: "US", rang: "us", cost: 23500000, potential: 68 },
+    { id: "ua_boldy_james", charId: "r_boldy_james", name: "Boldy James", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "us", cost: 14300000, potential: 62 },
+    { id: "ua_maxo_kream", charId: "r_maxo_kream", name: "Maxo Kream", emoji: "⚡", genre: "Rap", zone: "US", rang: "us", cost: 15700000, potential: 63 },
+    { id: "ua_lil_yachty", charId: "r_lil_yachty", name: "Lil Yachty", emoji: "🕶️", genre: "Rap", zone: "US", rang: "us", cost: 34900000, potential: 74 },
+    { id: "ua_yeat", charId: "r_yeat", name: "Yeat", emoji: "💥", genre: "Rap", zone: "US", rang: "us", cost: 43600000, potential: 78 },
+    { id: "ua_ken_carson", charId: "r_ken_carson", name: "Ken Carson", emoji: "🔊", genre: "Rap", zone: "US", rang: "us", cost: 30900000, potential: 72 },
+    { id: "ua_lucki", charId: "r_lucki", name: "Lucki", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "us", cost: 20200000, potential: 66 },
+    { id: "ua_lil_tecca", charId: "r_lil_tecca", name: "Lil Tecca", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "us", cost: 28900000, potential: 71 },
+    { id: "ua_fivio_foreign", charId: "r_fivio_foreign", name: "Fivio Foreign", emoji: "💯", genre: "Drill", zone: "US", rang: "us", cost: 27100000, potential: 70 },
+    { id: "ua_sleepy_hallow", charId: "r_sleepy_hallow", name: "Sleepy Hallow", emoji: "🎧", genre: "Drill", zone: "US", rang: "us", cost: 21800000, potential: 67 },
+    { id: "ua_sheff_g", charId: "r_sheff_g", name: "Sheff G", emoji: "💎", genre: "Drill", zone: "US", rang: "us", cost: 17100000, potential: 64 },
+    { id: "ua_42_dugg", charId: "r_42_dugg", name: "42 Dugg", emoji: "💵", genre: "Trap", zone: "US", rang: "us", cost: 20200000, potential: 66 },
+    { id: "ua_est_gee", charId: "r_est_gee", name: "EST Gee", emoji: "💥", genre: "Trap", zone: "US", rang: "us", cost: 18600000, potential: 65 },
+    { id: "ua_babyface_ray", charId: "r_babyface_ray", name: "Babyface Ray", emoji: "💰", genre: "Trap", zone: "US", rang: "us", cost: 17100000, potential: 64 },
+    { id: "ua_veeze", charId: "r_veeze", name: "Veeze", emoji: "🕶️", genre: "Trap", zone: "US", rang: "us", cost: 15700000, potential: 63 },
+    { id: "ua_skilla_baby", charId: "r_skilla_baby", name: "Skilla Baby", emoji: "⚡", genre: "Trap", zone: "US", rang: "us", cost: 13000000, potential: 61 },
+    { id: "ua_kali_uchis", charId: "s_kali_uchis", name: "Kali Uchis", emoji: "💫", genre: "Néo-Soul", zone: "US", rang: "us", cost: 43600000, potential: 78 },
+    { id: "ua_tems", charId: "s_tems", name: "Tems", emoji: "🌟", genre: "Afrobeat", zone: "US", rang: "us", cost: 46000000, potential: 79 },
+    { id: "ua_ayra_starr", charId: "s_ayra_starr", name: "Ayra Starr", emoji: "✨", genre: "Afrobeat", zone: "US", rang: "us", cost: 34900000, potential: 74 },
+    { id: "ua_tyla", charId: "s_tyla", name: "Tyla", emoji: "💃", genre: "Amapiano", zone: "US", rang: "us", cost: 39100000, potential: 76 },
+    { id: "ua_amaarae", charId: "s_amaarae", name: "Amaarae", emoji: "🪩", genre: "Afrobeat", zone: "US", rang: "us", cost: 23500000, potential: 68 },
+    { id: "ua_arlo_parks", charId: "s_arlo_parks", name: "Arlo Parks", emoji: "🎼", genre: "Indie Pop", zone: "US", rang: "us", cost: 20200000, potential: 66 },
+    { id: "ua_cleo_sol", charId: "s_cleo_sol", name: "Cleo Sol", emoji: "🎹", genre: "Soul", zone: "US", rang: "us", cost: 21800000, potential: 67 },
+    { id: "ua_sampha", charId: "s_sampha", name: "Sampha", emoji: "🎵", genre: "Soul", zone: "US", rang: "us", cost: 27100000, potential: 70 },
+    { id: "ua_michael_kiwanuka", charId: "s_michael_kiwanuka", name: "Michael Kiwanuka", emoji: "🎶", genre: "Soul", zone: "US", rang: "us", cost: 28900000, potential: 71 },
+    { id: "ua_leon_bridges", charId: "s_leon_bridges", name: "Leon Bridges", emoji: "⭐️", genre: "Soul", zone: "US", rang: "us", cost: 30900000, potential: 72 },
+    { id: "ua_daniel_caesar", charId: "s_daniel_caesar", name: "Daniel Caesar", emoji: "🎧", genre: "R&B", zone: "US", rang: "us", cost: 39100000, potential: 76 },
+    { id: "ua_steve_lacy", charId: "s_steve_lacy", name: "Steve Lacy", emoji: "🎛️", genre: "Funk", zone: "US", rang: "us", cost: 41400000, potential: 77 },
+    { id: "ua_omar_apollo", charId: "s_omar_apollo", name: "Omar Apollo", emoji: "✨", genre: "R&B", zone: "US", rang: "us", cost: 30900000, potential: 72 },
+    { id: "ua_snoh_aalegra", charId: "s_snoh_aalegra", name: "Snoh Aalegra", emoji: "💫", genre: "R&B", zone: "US", rang: "us", cost: 28900000, potential: 71 },
+    { id: "ua_ella_mai", charId: "s_ella_mai", name: "Ella Mai", emoji: "🌟", genre: "R&B", zone: "US", rang: "us", cost: 30900000, potential: 72 },
+    { id: "ua_bryson_tiller", charId: "s_bryson_tiller", name: "Bryson Tiller", emoji: "🎙️", genre: "R&B", zone: "US", rang: "us", cost: 37000000, potential: 75 },
+    { id: "ua_kiana_lede", charId: "s_kiana_led", name: "Kiana Ledé", emoji: "🎼", genre: "R&B", zone: "US", rang: "us", cost: 21800000, potential: 67 },
+    { id: "ua_mahalia", charId: "s_mahalia", name: "Mahalia", emoji: "🎵", genre: "R&B", zone: "US", rang: "us", cost: 20200000, potential: 66 },
+    { id: "ua_masego", charId: "s_masego", name: "Masego", emoji: "🎹", genre: "Jazz Rap", zone: "US", rang: "us", cost: 23500000, potential: 68 },
+    { id: "ua_anderson_paak", name: "Anderson .Paak", emoji: "🎶", genre: "Funk", zone: "US", rang: "us", cost: 46000000, potential: 79 },
+    { id: "ua_thundercat", charId: "s_thundercat", name: "Thundercat", emoji: "🎛️", genre: "Funk", zone: "US", rang: "us", cost: 27100000, potential: 70 },
+    { id: "ua_kaytranada", charId: "r_kaytranada", name: "Kaytranada", emoji: "🎚️", genre: "Électro", zone: "US", rang: "us", cost: 39100000, potential: 76 },
+    { id: "ua_pinkpantheress", charId: "s_pinkpantheress", name: "PinkPantheress", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "us", cost: 34900000, potential: 74 },
+    { id: "ua_raye", charId: "s_raye", name: "Raye", emoji: "⭐️", genre: "Pop", zone: "US", rang: "us", cost: 39100000, potential: 76 },
+    { id: "ua_clairo", charId: "s_clairo", name: "Clairo", emoji: "🎼", genre: "Indie Pop", zone: "US", rang: "us", cost: 27100000, potential: 70 },
+    { id: "ua_chappell_roan", charId: "s_chappell_roan", name: "Chappell Roan", emoji: "✨", genre: "Pop", zone: "US", rang: "us", cost: 46000000, potential: 79 },
+    { id: "ua_gracie_abrams", charId: "s_gracie_abrams", name: "Gracie Abrams", emoji: "💫", genre: "Indie Pop", zone: "US", rang: "us", cost: 32800000, potential: 73 },
+    { id: "ua_laufey", charId: "s_laufey", name: "Laufey", emoji: "🎹", genre: "Pop", zone: "US", rang: "us", cost: 27100000, potential: 70 },
+    { id: "ua_zara_larsson", charId: "s_zara_larsson", name: "Zara Larsson", emoji: "💃", genre: "Pop", zone: "US", rang: "us", cost: 28900000, potential: 71 },
+    { id: "ua_tove_lo", charId: "s_tove_lo", name: "Tove Lo", emoji: "🪩", genre: "Électro", zone: "US", rang: "us", cost: 25300000, potential: 69 },
+    { id: "ua_teddy_swims", charId: "s_teddy_swims", name: "Teddy Swims", emoji: "🎤", genre: "Soul", zone: "US", rang: "us", cost: 37000000, potential: 75 },
+    { id: "ua_benson_boone", charId: "s_benson_boone", name: "Benson Boone", emoji: "🌟", genre: "Pop", zone: "US", rang: "us", cost: 39100000, potential: 76 },
+    { id: "ua_noah_kahan", charId: "s_noah_kahan", name: "Noah Kahan", emoji: "🎵", genre: "Folk", zone: "US", rang: "us", cost: 34900000, potential: 74 },
+    { id: "ua_mitski", charId: "s_mitski", name: "Mitski", emoji: "🎼", genre: "Indie Pop", zone: "US", rang: "us", cost: 23500000, potential: 68 },
+    { id: "ua_muni_long", charId: "s_muni_long", name: "Muni Long", emoji: "🎶", genre: "R&B", zone: "US", rang: "us", cost: 25300000, potential: 69 },
+    { id: "ua_tinashe", charId: "s_tinashe", name: "Tinashe", emoji: "💫", genre: "Pop Urbaine", zone: "US", rang: "us", cost: 27100000, potential: 70 },
+    { id: "ua_sabrina_claudio", charId: "s_sabrina_claudio", name: "Sabrina Claudio", emoji: "✨", genre: "R&B", zone: "US", rang: "us", cost: 18600000, potential: 65 },
+    { id: "ua_ravyn_lenae", charId: "s_ravyn_lenae", name: "Ravyn Lenae", emoji: "🎹", genre: "Néo-Soul", zone: "US", rang: "us", cost: 20200000, potential: 66 },
+    { id: "ua_alex_isley", charId: "s_alex_isley", name: "Alex Isley", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "us", cost: 14300000, potential: 62 },
+    { id: "ua_joyce_wrice", charId: "s_joyce_wrice", name: "Joyce Wrice", emoji: "🎵", genre: "R&B", zone: "US", rang: "us", cost: 13000000, potential: 61 },
+    { id: "ua_destin_conrad", charId: "s_destin_conrad", name: "Destin Conrad", emoji: "🎧", genre: "R&B", zone: "US", rang: "us", cost: 11700000, potential: 60 },
+    { id: "ua_baby_rose", charId: "s_baby_rose", name: "Baby Rose", emoji: "🎙️", genre: "Soul", zone: "US", rang: "us", cost: 10500000, potential: 59 },
+    { id: "ua_fana_hues", charId: "s_fana_hues", name: "Fana Hues", emoji: "💫", genre: "Néo-Soul", zone: "US", rang: "us", cost: 9350000, potential: 58 },
+    { id: "ua_elmiene", charId: "s_elmiene", name: "Elmiene", emoji: "🌟", genre: "Soul", zone: "US", rang: "us", cost: 11700000, potential: 60 },
+    { id: "ua_redveil", charId: "r_redveil", name: "Redveil", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "us", cost: 9350000, potential: 58 },
+    { id: "ua_mike", charId: "r_mike", name: "MIKE", emoji: "🎚️", genre: "Boom Bap", zone: "US", rang: "us", cost: 8250000, potential: 57 },
+    { id: "ua_navy_blue", charId: "r_navy_blue", name: "Navy Blue", emoji: "📻", genre: "Boom Bap", zone: "US", rang: "us", cost: 7250000, potential: 56 },
+    { id: "ua_pink_siifu", charId: "r_pink_siifu", name: "Pink Siifu", emoji: "🎛️", genre: "Boom Bap", zone: "US", rang: "us", cost: 6300000, potential: 55 },
+    { id: "ua_rome_streetz", charId: "r_rome_streetz", name: "Rome Streetz", emoji: "🔥", genre: "Boom Bap", zone: "US", rang: "us", cost: 10500000, potential: 59 },
+    { id: "ua_monaleo", charId: "r_monaleo", name: "Monaleo", emoji: "💯", genre: "Rap", zone: "US", rang: "us", cost: 8250000, potential: 57 },
+    { id: "ua_dreezy", charId: "r_dreezy", name: "Dreezy", emoji: "💎", genre: "Rap", zone: "US", rang: "us", cost: 9350000, potential: 58 },
+    { id: "ua_lakeyah", charId: "r_lakeyah", name: "Lakeyah", emoji: "⚡", genre: "Rap", zone: "US", rang: "us", cost: 7250000, potential: 56 },
+    { id: "ua_erica_banks", charId: "r_erica_banks", name: "Erica Banks", emoji: "💰", genre: "Rap", zone: "US", rang: "us", cost: 6300000, potential: 55 },
+    { id: "ua_armani_white", charId: "r_armani_white", name: "Armani White", emoji: "🎤", genre: "Rap", zone: "US", rang: "us", cost: 11700000, potential: 60 },
+    { id: "ua_that_mexican_ot", charId: "r_that_mexican_ot", name: "That Mexican OT", emoji: "🕶️", genre: "Rap", zone: "US", rang: "us", cost: 14300000, potential: 62 },
+    { id: "ua_rob49", charId: "r_rob49", name: "Rob49", emoji: "💥", genre: "Trap", zone: "US", rang: "us", cost: 15700000, potential: 63 },
+    { id: "ua_bossman_dlow", charId: "r_bossman_dlow", name: "BossMan Dlow", emoji: "💵", genre: "Trap", zone: "US", rang: "us", cost: 17100000, potential: 64 },
+    { id: "ua_luh_tyler", charId: "r_luh_tyler", name: "Luh Tyler", emoji: "🎧", genre: "Rap", zone: "US", rang: "us", cost: 13000000, potential: 61 },
+    { id: "ua_cash_cobain", charId: "r_cash_cobain", name: "Cash Cobain", emoji: "🔊", genre: "Drill", zone: "US", rang: "us", cost: 18600000, potential: 65 },
+    { id: "ua_bktherula", charId: "r_bktherula", name: "Bktherula", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "us", cost: 10500000, potential: 59 },
+    { id: "ua_sofaygo", charId: "r_sofaygo", name: "SoFaygo", emoji: "💫", genre: "Cloud Rap", zone: "US", rang: "us", cost: 14300000, potential: 62 },
+    { id: "ua_genesis_owusu", charId: "s_genesis_owusu", name: "Genesis Owusu", emoji: "🎶", genre: "Funk", zone: "US", rang: "us", cost: 9350000, potential: 58 },
+    { id: "ua_berhana", charId: "s_berhana", name: "Berhana", emoji: "🎹", genre: "Néo-Soul", zone: "US", rang: "us", cost: 5400000, potential: 54 },
+    { id: "ua_duckwrth", charId: "r_duckwrth", name: "Duckwrth", emoji: "🕺", genre: "Funk", zone: "US", rang: "us", cost: 8250000, potential: 57 },
+    { id: "ua_buddy", charId: "r_buddy", name: "Buddy", emoji: "🎙️", genre: "Rap", zone: "US", rang: "us", cost: 10500000, potential: 59 },
+    { id: "ua_lute", charId: "r_lute", name: "Lute", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "us", cost: 5400000, potential: 54 },
+    { id: "fu_0", name: "Nayel Brunet", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_1", name: "Sofia Terras", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 150000, potential: 28 },
+    { id: "fu_2", name: "Tako Vidal", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 330000, potential: 34 },
+    { id: "fu_3", name: "Malo Rives", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_4", name: "Jina Beclair", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_5", name: "Elyas Noor", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 560000, potential: 39 },
+    { id: "fu_6", name: "Lina Verdier", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_7", name: "Wassim Daher", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 130000, potential: 27 },
+    { id: "fu_8", name: "Noé Taillandier", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_9", name: "Sarah Mounir", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_10", name: "Idriss Belkacem", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 420000, potential: 36 },
+    { id: "fu_11", name: "Maya Roussel", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_12", name: "Oscar Pellegrin", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 260000, potential: 32 },
+    { id: "fu_13", name: "Lenny Boucher", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 510000, potential: 38 },
+    { id: "fu_14", name: "Fara Samaké", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_15", name: "Tom Vasseur", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 150000, potential: 28 },
+    { id: "fu_16", name: "Inès Ferrand", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_17", name: "Kenzo Mariani", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_18", name: "Awa Sissoko", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_19", name: "Milan Dubreuil", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_20", name: "Rayan Benali", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 300000, potential: 33 },
+    { id: "fu_21", name: "Clémence Loiseau", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 370000, potential: 35 },
+    { id: "fu_22", name: "Diego Fontanel", emoji: "🎫", genre: "Reggaeton", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_23", name: "Nour Hadji", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "under", cost: 180000, potential: 29 },
+    { id: "fu_24", name: "Basile Rochefort", emoji: "🎧", genre: "R&B", zone: "FR", rang: "under", cost: 620000, potential: 40 },
+    { id: "fu_25", name: "Alya Bensalem", emoji: "⭐️", genre: "Indie Pop", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_26", name: "Noham Prévost", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 260000, potential: 32 },
+    { id: "fu_27", name: "Louka Grimaldi", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_28", name: "Ismaël Cissoko", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 130000, potential: 27 },
+    { id: "fu_29", name: "Jeanne Darmon", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 460000, potential: 37 },
+    { id: "fu_30", name: "Maël Cordier", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_31", name: "Lisa Pereira", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 200000, potential: 30 },
+    { id: "fu_32", name: "Yanis Toumi", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 620000, potential: 40 },
+    { id: "fu_33", name: "Chloé Vanden", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_34", name: "Ruben Castel", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 300000, potential: 33 },
+    { id: "fu_35", name: "Sonia Trabelsi", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_36", name: "Esteban Marchal", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_37", name: "Nina Lafitte", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 330000, potential: 34 },
+    { id: "fu_38", name: "Adil Zerrouki", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_39", name: "Timéo Bourgeois", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_40", name: "Kenza Ouali", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 420000, potential: 36 },
+    { id: "fu_41", name: "Hugo Delaunay", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_42", name: "Sirine Mejri", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 130000, potential: 27 },
+    { id: "fu_43", name: "Loris Bonnard", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_44", name: "Djibril Fofana", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_45", name: "Manon Esteve", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 200000, potential: 30 },
+    { id: "fu_46", name: "Ayoub Nasri", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_47", name: "Alice Carpentier", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 260000, potential: 32 },
+    { id: "fu_48", name: "Enzo Rinaldi", emoji: "🎫", genre: "Reggaeton", zone: "FR", rang: "under", cost: 510000, potential: 38 },
+    { id: "fu_49", name: "Nawel Bouchard", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_50", name: "Soan Ferrero", emoji: "🎧", genre: "R&B", zone: "FR", rang: "under", cost: 150000, potential: 28 },
+    { id: "fu_51", name: "Camille Dervaux", emoji: "⭐️", genre: "Indie Pop", zone: "FR", rang: "under", cost: 560000, potential: 39 },
+    { id: "fu_52", name: "Bilal Tazi", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_53", name: "Jade Marinho", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_54", name: "Théo Lassalle", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_55", name: "Fatou Diarra", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 300000, potential: 33 },
+    { id: "fu_56", name: "Arthur Vauclair", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 370000, potential: 35 },
+    { id: "fu_57", name: "Lou Berthelot", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_58", name: "Samir Khelifi", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 180000, potential: 29 },
+    { id: "fu_59", name: "Agathe Mounier", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 460000, potential: 37 },
+    { id: "fu_60", name: "Nolan Fresnel", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_61", name: "Assia Benhamou", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 260000, potential: 32 },
+    { id: "fu_62", name: "Victor Chastain", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_63", name: "Maïssa Lahlou", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_64", name: "Gabin Teyssier", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 460000, potential: 37 },
+    { id: "fu_65", name: "Aminata Keita", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_66", name: "Raphaël Soulier", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 200000, potential: 30 },
+    { id: "fu_67", name: "Eve Mercadier", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 330000, potential: 34 },
+    { id: "fu_68", name: "Nahel Barka", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_69", name: "Roxane Villard", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 300000, potential: 33 },
+    { id: "fu_70", name: "Mehdi Sahraoui", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_71", name: "Louise Perrin", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_72", name: "Océan Delcourt", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 180000, potential: 29 },
+    { id: "fu_73", name: "Anissa Guerin", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_74", name: "Tony Vasconcelos", emoji: "🎫", genre: "Reggaeton", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_75", name: "Célia Mandel", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "under", cost: 420000, potential: 36 },
+    { id: "fu_76", name: "Younes Rahal", emoji: "🎧", genre: "R&B", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_77", name: "Margaux Fabre", emoji: "⭐️", genre: "Indie Pop", zone: "FR", rang: "under", cost: 130000, potential: 27 },
+    { id: "fu_78", name: "Kylian Moreno", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 620000, potential: 40 },
+    { id: "fu_79", name: "Shayna Diallo", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_80", name: "Elio Fontana", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 200000, potential: 30 },
+    { id: "fu_81", name: "Lyna Bessette", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_82", name: "Aaron Pichon", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_83", name: "Noélie Carrère", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 510000, potential: 38 },
+    { id: "fu_84", name: "Idir Messaoud", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_85", name: "Romane Saulnier", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 150000, potential: 28 },
+    { id: "fu_86", name: "Keyran Dupuy", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 370000, potential: 35 },
+    { id: "fu_87", name: "Lila Nouri", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_88", name: "Matéo Lorrain", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_89", name: "Flora Sénéchal", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_90", name: "Ilyes Mazouz", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_91", name: "Capucine Rolland", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 130000, potential: 27 },
+    { id: "fu_92", name: "Driss Belaïd", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_93", name: "Anaé Ferrier", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 180000, potential: 29 },
+    { id: "fu_94", name: "Soline Varnier", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 460000, potential: 37 },
+    { id: "fu_95", name: "Nathan Guizot", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_96", name: "Maëva Pontier", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 260000, potential: 32 },
+    { id: "fu_97", name: "Jibril Sow", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_98", name: "Lucien Tardieu", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_99", name: "Nour Chabane", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_0", name: "Dre Maddox", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_1", name: "Kazzy Vane", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_2", name: "Tru Carmichael", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 620000, potential: 40 },
+    { id: "ft_3", name: "Jace Ortiz", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_4", name: "Mello Banks", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 230000, potential: 31 },
+    { id: "ft_5", name: "Sage Whitfield", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_6", name: "Rome Delacroix", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_7", name: "Tay Abernathy", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 510000, potential: 38 },
+    { id: "ft_8", name: "Kota Reyes", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_9", name: "Vee Langston", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_10", name: "Nova Pike", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 370000, potential: 35 },
+    { id: "ft_11", name: "Jett Calloway", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_12", name: "Lex Marrow", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 260000, potential: 32 },
+    { id: "ft_13", name: "Skye Dunbar", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_14", name: "Ro Salcedo", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_15", name: "Tess Harlan", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_16", name: "Juno Beckett", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 80000, potential: 22 },
+    { id: "ft_17", name: "Cass Ellery", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 200000, potential: 30 },
+    { id: "ft_18", name: "Dion Whitlock", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 460000, potential: 37 },
+    { id: "ft_19", name: "Ace Pernell", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_20", name: "Mika Thorne", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 300000, potential: 33 },
+    { id: "ft_21", name: "Rell Donovan", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_22", name: "Ivy Castellan", emoji: "🎹", genre: "Jazz Rap", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_23", name: "Shay Brennan", emoji: "💯", genre: "Afrobeat", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_24", name: "Zeke Alvarado", emoji: "🎛️", genre: "Plugg", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_25", name: "Nia Caldwell", emoji: "💃", genre: "Pop Urbaine", zone: "US", rang: "under", cost: 230000, potential: 31 },
+    { id: "ft_26", name: "Trey Vandal", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 330000, potential: 34 },
+    { id: "ft_27", name: "Lux Barrow", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_28", name: "Omar Keen", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 130000, potential: 27 },
+    { id: "ft_29", name: "Brit Solano", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 560000, potential: 39 },
+    { id: "ft_30", name: "Kyro Lemmon", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 80000, potential: 22 },
+    { id: "ft_31", name: "Dallas Pruitt", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 200000, potential: 30 },
+    { id: "ft_32", name: "Rae Montez", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_33", name: "Finn Okafor", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_34", name: "Dez Hartley", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 420000, potential: 36 },
+    { id: "ft_35", name: "Sloane Tatum", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_36", name: "Cruz Benedetti", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_37", name: "Emery Vaughn", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 510000, potential: 38 },
+    { id: "ft_38", name: "Rio Mathis", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_39", name: "Kian Brady", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 230000, potential: 31 },
+    { id: "ft_40", name: "Taj Winslow", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_41", name: "Lennox Reed", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_42", name: "Marlo Esparza", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 130000, potential: 27 },
+    { id: "ft_43", name: "Devin Ashby", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_44", name: "Sunny Okoro", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_45", name: "Blaise Tran", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 370000, potential: 35 },
+    { id: "ft_46", name: "Zion Carver", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_47", name: "Haven Wylde", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 260000, potential: 32 },
+    { id: "ft_48", name: "Nico Strand", emoji: "🎹", genre: "Jazz Rap", zone: "US", rang: "under", cost: 620000, potential: 40 },
+    { id: "ft_49", name: "Remi Bly", emoji: "💯", genre: "Afrobeat", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_50", name: "Quinn Fontaine", emoji: "🎛️", genre: "Plugg", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_51", name: "Kobe Amari", emoji: "💃", genre: "Pop Urbaine", zone: "US", rang: "under", cost: 80000, potential: 22 },
+    { id: "ft_52", name: "Lyric Shaw", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 200000, potential: 30 },
+    { id: "ft_53", name: "Jonas Veltri", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 460000, potential: 37 },
+    { id: "ft_54", name: "Bex Monroe", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_55", name: "Dove Mercer", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 300000, potential: 33 },
+    { id: "ft_56", name: "Axel Prado", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 620000, potential: 40 },
+    { id: "ft_57", name: "Noa Kingsley", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_58", name: "Rhett Palomo", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_59", name: "Saint Dupree", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_60", name: "Elle Navarro", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_61", name: "Case Tillman", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 330000, potential: 34 },
+    { id: "ft_62", name: "Ivory Lane", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_63", name: "Bodhi Ross", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 130000, potential: 27 },
+    { id: "ft_64", name: "Tyme Walcott", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 420000, potential: 36 },
+    { id: "ft_65", name: "Avery Stoll", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 80000, potential: 22 },
+    { id: "ft_66", name: "Juice Carrington", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 200000, potential: 30 },
+    { id: "ft_67", name: "Kodi Sherman", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_68", name: "Reign Mathers", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_69", name: "Paz Alvarez", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 300000, potential: 33 },
+    { id: "ft_70", name: "Cleo Ward", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_71", name: "Dash Ferrell", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_72", name: "Mars Beaumont", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 510000, potential: 38 },
+    { id: "ft_73", name: "Dani Vance", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_74", name: "Roux Carlisle", emoji: "🎹", genre: "Jazz Rap", zone: "US", rang: "under", cost: 230000, potential: 31 },
+    { id: "ft_75", name: "Sol Emerson", emoji: "💯", genre: "Afrobeat", zone: "US", rang: "under", cost: 560000, potential: 39 },
+    { id: "ft_76", name: "Kace Dillard", emoji: "🎛️", genre: "Plugg", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_77", name: "Wren Alcott", emoji: "💃", genre: "Pop Urbaine", zone: "US", rang: "under", cost: 130000, potential: 27 },
+    { id: "ft_78", name: "Jules Pennington", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_79", name: "Enzo Marsh", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_80", name: "Halo Benton", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 370000, potential: 35 },
+    { id: "ft_81", name: "Kash Everly", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_82", name: "Lumi Hart", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 260000, potential: 32 },
+    { id: "ft_83", name: "Drake Villanueva", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 460000, potential: 37 },
+    { id: "ft_84", name: "Isa Montrose", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_85", name: "Zay Kimbrough", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_86", name: "Fay Lindqvist", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 80000, potential: 22 },
+    { id: "ft_87", name: "Odis Grant", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_88", name: "Brynn Castile", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 460000, potential: 37 },
+    { id: "ft_89", name: "Teo Marchand", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_90", name: "Cyrus Dade", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 300000, potential: 33 },
+    { id: "ft_91", name: "Nell Ortega", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 330000, potential: 34 },
+    { id: "ft_92", name: "Kairo Swift", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_93", name: "Vida Lennon", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_94", name: "Jax Arroyo", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_95", name: "Lena Prescott", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_96", name: "Boone Carver", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 260000, potential: 32 },
+    { id: "ft_97", name: "Sable Reyes", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_98", name: "Theo Massey", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 130000, potential: 27 },
+    { id: "ft_99", name: "Vann Delgado", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 420000, potential: 36 },
 ];
+// ─── QUI PEUT SIGNER CHEZ UNUHU ─────────────────────────────────────────────
+// Un label indépendant signe des artistes qui cherchent une maison. Pas des
+// stars installées, qui ont déjà la leur ou qui dirigent la leur — et pas des
+// gens avec qui tu es en froid : ceux-là ne décrochent même pas le téléphone.
+// Ceux qui dirigent leur propre structure : il n'y a rien à leur proposer.
+const PATRONS_DE_LABEL = new Set([
+    "pharrell", "pusha_t", "kid_cudi", "asap_rocky", "stormzy", "jay_z", "diddy",
+    "sofiane", "rimk", "kery_james", "alonzo", "naps", "youssoupha", "fally_ipupa", "bigflo_oli",
+    "alpha_wann", "booba", "rohff", "la_fouine", "dosseh", "soprano", "gims", "vald", "orelsan",
+    "jul", "sch", "ninho", "damso", "nekfeu", "freeze_corleone",
+]);
+// Les monuments : on ne signe pas une icône, on la croise. Rien à leur offrir
+// qu'ils n'aient déjà, et aucun contrat qui tienne devant le leur.
+const ICONES = new Set([
+    "rihanna", "kanye_west", "pharrell", "kid_cudi", "pusha_t", "asap_rocky", "jay_z", "beyonce",
+    "drake", "travis_scott", "the_weeknd", "lil_wayne", "kendrick_lamar", "jcole", "j_cole",
+    "snoop_dogg", "eminem", "nicki_minaj", "cardi_b", "sza", "doja_cat", "tyler_the_creator",
+    "future", "lil_baby", "playboi_carti", "don_toliver", "metro_boomin", "bad_bunny",
+    "dua_lipa", "taylor_swift", "ariana_grande", "billie_eilish", "post_malone",
+    "justin_bieber", "chris_brown", "usher", "alicia_keys", "mariah_carey", "adele",
+]);
+// Les groupes sous contrat exclusif avec leur agence : rien à racheter.
+const SOUS_AGENCE = new Set(["twice", "newjeans", "aespa", "jennie", "babymonster", "katseye", "cortis"]);
+// Ceux que tu as écartés toi-même, et les mineurs, qui n'ont rien à faire ici.
+const HORS_LISTE = new Set(["clara_luciani", "lorenzo", "north_west"]);
+function enFroidAvec(gs, id) {
+    if (!id)
+        return false;
+    if (id === "falltos")
+        return false; // jamais, sous aucune condition
+    // On ne signe pas quelqu'un contre qui on se bat.
+    const riv = (gs && gs.rivals) || {};
+    if (riv[id] && (riv[id].strength || 0) > 0 && !riv[id].resolved)
+        return true;
+    if (((gs && gs.clashHistory) || []).some(c => c && c.target === id && !c.resolved))
+        return true;
+    const r = (gs && gs.relations || {})[id];
+    if (!r)
+        return false;
+    const st = String(r.status || "").toLowerCase();
+    if (/rival|ennemi|brouill|guerre|froid/.test(st))
+        return true;
+    return (r.score == null ? 0 : r.score) < 0; // en froid dès que ça passe sous zéro
+}
+function talentSignable(gs, t) {
+    if (!t)
+        return false;
+    if (((gs && gs.unuhuRoster) || []).some(r => r.id === t.id))
+        return false;
+    if (((gs && gs.erased) || []).indexOf(t.id) >= 0)
+        return false;
+    const m = monteeDe(gs, t.id);
+    if (m && m.star)
+        return false; // il a percé sans toi : trop tard
+    if (t.charId) {
+        if (PATRONS_DE_LABEL.has(t.charId))
+            return false;
+        if (ICONES.has(t.charId))
+            return false;
+        if (SOUS_AGENCE.has(t.charId))
+            return false;
+        if (HORS_LISTE.has(t.charId))
+            return false;
+        if (((gs && gs.deceased) || []).indexOf(t.charId) >= 0)
+            return false;
+        if (((gs && gs.erased) || []).indexOf(t.charId) >= 0)
+            return false;
+        if (enFroidAvec(gs, t.charId))
+            return false;
+    }
+    return true;
+}
+function talentsDispo(gs) { return marcheTalents(gs).filter(t => talentSignable(gs, t)); }
+// Signer quelqu'un, c'est le faire entrer dans ta vie. Un inconnu du marché
+// n'existe nulle part ailleurs dans le jeu : on lui ouvre une fiche, comme à
+// n'importe qui d'autre, et il apparaît dans tes contacts.
+// ─── LA SCÈNE VIT SANS TOI ─────────────────────────────────────────────────
+// Tu n'es pas le seul à chercher. Chaque année, des inconnus percent sans que
+// tu y sois pour quoi que ce soit : leur cote monte, leur contrat devient plus
+// cher, et au bout d'un moment ils ne signent plus nulle part — ils ont trouvé
+// leur maison avant toi.
+// Le marché n'est pas une liste figée : il arrive du monde chaque année, et
+// ceux qui partent sont remplacés par des gamins dont personne n'a entendu parler.
+const PRENOMS_RELEVE_FR = ["Noam", "Ilyan", "Sacha", "Maël", "Kaïs", "Elio", "Naïm", "Tiago", "Ayden", "Soan",
+    "Léna", "Inaya", "Maïa", "Romy", "Nour", "Ilyes", "Rayan", "Adam", "Liam", "Gabin", "Aaron", "Milo",
+    "Jade", "Lou", "Alba", "Nina", "Sarah", "Yasmine", "Assia", "Manon", "Zoé", "Ambre", "Céleste", "Olia",
+    "Driss", "Samy", "Wassil", "Enzo", "Noé", "Timéo", "Kenzo", "Ryad", "Imran", "Tom", "Yanis", "Bilal"];
+const NOMS_RELEVE_FR = ["Verny", "Bastide", "Kouadio", "Lemoine", "Nabli", "Vasseur", "Diaby", "Perrot",
+    "Chaumont", "Belkaid", "Ferreira", "Laurens", "Sanogo", "Delvaux", "Rahmani", "Ferrand", "Diallo",
+    "Marchetti", "Oumar", "Prévot", "Zidane", "Barthes", "Nourry", "Toledo", "Vialat", "Keïta", "Mercier",
+    "Hadj", "Cordova", "Lasserre", "Bouvier", "Traoré", "Sylvestre", "Amrani", "Pontier", "Noiret"];
+const PRENOMS_RELEVE_US = ["Kaleb", "Zaire", "Jaxon", "Amari", "Rowan", "Kade", "Dior", "Eli", "Mateo", "Cash",
+    "Nyla", "Zuri", "Aria", "Sage", "Wren", "Juno", "Lyric", "Remy", "Kairo", "Deon", "Marlo", "Tyree",
+    "Blu", "Saint", "Koa", "Trey", "Nova", "Harlow", "Reign", "Zion", "Kyrie", "Dante", "Levi", "Osiris",
+    "Shay", "Nile", "Cruz", "Ridge", "Bodhi", "Onyx", "Khari", "Jaden", "Taj", "Rio", "Soren", "Lennox"];
+const NOMS_RELEVE_US = ["Vaughn", "Okonkwo", "Barlowe", "Castellano", "Pryor", "Sinclair", "Ademola",
+    "Whitmore", "Delarosa", "Kincaid", "Ashby", "Mbeki", "Rutherford", "Calloway", "Santana", "Beaumont",
+    "Hollis", "Nakamura", "Devereaux", "Mosley", "Carrington", "Ellison", "Fontaine", "Granger", "Hayes",
+    "Ivers", "Jennings", "Kellerman", "Lassiter", "Mercado", "Norwood", "Ocampo", "Pennington", "Quill",
+    "Ramsay", "Sterling", "Thibault", "Underwood", "Valdez", "Westbrook"];
+// Un nom qui n'a encore jamais servi dans la partie.
+function nomLibre(gs, zone, essais) {
+    const pris = new Set([...UNUHU_TALENT_POOL.map(t => t.name),
+        ...((gs && gs.talentsNes) || []).map(t => t && t.name)]);
+    const pre = zone === "FR" ? PRENOMS_RELEVE_FR : PRENOMS_RELEVE_US;
+    const fam = zone === "FR" ? NOMS_RELEVE_FR : NOMS_RELEVE_US;
+    for (let i = 0; i < (essais || 60); i++) {
+        const nom = pre[Math.floor(Math.random() * pre.length)] + " " + fam[Math.floor(Math.random() * fam.length)];
+        if (!pris.has(nom))
+            return nom;
+    }
+    return null;
+}
+// Celui qui débarque : un inconnu complet, et pas cher.
+function naitreTalent(gs, zone, annee, rang) {
+    const nom = nomLibre(gs, zone);
+    if (!nom)
+        return null;
+    const g = GENRES_UNDER_JEU[Math.floor(Math.random() * GENRES_UNDER_JEU.length)];
+    const pot = 20 + Math.floor(Math.random() * 21);
+    const v = prix5Pour("under", zone, pot) / 1.5;
+    const cost = v >= 1000000 ? Math.round(v / 50000) * 50000 : Math.max(80000, Math.round(v / 10000) * 10000);
+    return { id: `ne_${annee}_${zone}_${rang}_${Math.floor(Math.random() * 100000)}`,
+        name: nom, emoji: g.e, genre: g.g, zone, rang: "under", cost, potential: pot, ne: annee };
+}
+// Ce que font les gamins qui arrivent.
+const GENRES_UNDER_JEU = [
+    { g: "Rap", e: "🎤" }, { g: "Rap", e: "🎙️" }, { g: "Trap", e: "💥" }, { g: "Drill", e: "🔥" }, { g: "Boom Bap", e: "📀" },
+    { g: "Rap Conscient", e: "📝" }, { g: "Cloud Rap", e: "🎚️" }, { g: "Plugg", e: "🎛️" }, { g: "Phonk", e: "⚡" },
+    { g: "Rap Mélo", e: "🎵" }, { g: "Emo Rap", e: "💫" }, { g: "Jazz Rap", e: "🎹" },
+    { g: "R&B", e: "🎧" }, { g: "R&B", e: "🎶" }, { g: "Néo-Soul", e: "🎼" }, { g: "Soul", e: "🌟" }, { g: "Funk", e: "🕺" },
+    { g: "Pop", e: "✨" }, { g: "Pop Urbaine", e: "💃" }, { g: "Indie Pop", e: "⭐️" }, { g: "Hyperpop", e: "🪩" },
+    { g: "Électro", e: "🔊" }, { g: "Afrobeat", e: "💯" }, { g: "Amapiano", e: "📻" }, { g: "Reggaeton", e: "🎫" },
+    { g: "Dancehall", e: "💿" }
+];
+// Le marché complet : ceux du départ, plus tous ceux qui sont nés depuis.
+function marcheTalents(gs) {
+    const nes = ((gs && gs.talentsNes) || []).filter(t => t && t.id);
+    return nes.length ? UNUHU_TALENT_POOL.concat(nes) : UNUHU_TALENT_POOL;
+}
+const PERCEE_SEUIL = 50; // à partir d'ici, on commence à entendre son nom
+const PERCEE_STAR = 68; // au-delà, il n'est plus sur le marché
+function monteeDe(gs, id) { return ((gs && gs.scene) || {})[id] || null; }
+function niveauTalent(gs, t) {
+    if (!t)
+        return 0;
+    const m = monteeDe(gs, t.id);
+    return Math.min(90, (t.potential || 0) + ((m && m.gain) || 0));
+}
+// Le barème, en une seule fonction : ce qu'un contrat de cinq ans coûte à un
+// niveau donné. Les trois paliers se rejoignent sans marche.
+function prix5Pour(rang, zone, pot) {
+    const sousSol = 80000 + 850000 * Math.pow(Math.min(1, Math.max(0, (40 - 18) / 22)), 2.2);
+    if (rang === "under" && pot <= 40)
+        return 80000 + 850000 * Math.pow(Math.min(1, Math.max(0, (pot - 18) / 22)), 2.2);
+    if (zone === "FR")
+        return Math.max(sousSol, 25000000 * Math.pow(Math.min(1, Math.max(0, (pot - 34) / 35)), 1.8));
+    return Math.max(sousSol, 100000000 * Math.pow(Math.min(1, Math.max(0, (pot - 42) / 45)), 1.9));
+}
+function coutTalent(gs, t) {
+    if (!t)
+        return 0;
+    const lvl = niveauTalent(gs, t);
+    if (lvl <= (t.potential || 0))
+        return t.cost;
+    const v = prix5Pour(t.rang, t.zone, lvl) / 1.5;
+    return v >= 10000000 ? Math.round(v / 100000) * 100000
+        : v >= 1000000 ? Math.round(v / 50000) * 50000
+            : Math.max(80000, Math.round(v / 10000) * 10000);
+}
+function castDepuisTalent(a) {
+    if (!a)
+        return null;
+    const fr = a.zone === "FR";
+    return { id: a.id, name: a.name, emoji: a.emoji || "🎤",
+        cat: fr ? "music_fr" : "music", loc: fr ? "France" : "États-Unis",
+        bio: a.star
+            ? (a.starZone === "FR"
+                ? "Signé chez UNUHU. Personne ne le connaissait ; aujourd'hui toutes les radios francophones le passent."
+                : "Signé chez UNUHU. Personne ne le connaissait ; aujourd'hui il remplit des salles sur trois continents.")
+            : `Signé chez UNUHU Records. ${a.genre}.` };
+}
+// Faut-il lui ouvrir une fiche ? Seulement s'il n'existe pas déjà dans le jeu.
+// La fiche de quelqu'un qui a percé tout seul : il ne te doit rien.
+function castDepuisPercee(t, star) {
+    if (!t)
+        return null;
+    const fr = t.zone === "FR";
+    return { id: t.id, name: t.name, emoji: t.emoji || "🎤",
+        cat: fr ? "music_fr" : "music", loc: fr ? "France" : "États-Unis",
+        bio: star
+            ? (fr ? "Parti de rien. Aujourd'hui, plus un label francophone ne peut se l'offrir."
+                : "Parti de rien. Aujourd'hui son nom circule dans des pièces où le tien circule aussi.")
+            : `${t.genre}. On commence à entendre son nom un peu partout.` };
+}
+function aBesoinDeFiche(gs, a) {
+    return !!(a && a.id && a.name && !a.charId && !((gs && gs.newCast) || {})[a.id]);
+}
+// Le cercle ne t'offre pas une star : il place quelqu'un. Tu paies, et tu
+// hérites d'un artiste moyen dont personne ne t'a demandé l'avis.
+function artisteImpose(gs) {
+    const deja = new Set(((gs && gs.unuhuRoster) || []).map(a => a.id));
+    // Toujours un inconnu : le cercle ne t'offre rien, il se sert de ta structure
+    // pour fabriquer quelqu'un à partir de rien.
+    const libres = marcheTalents(gs).filter(t => t.rang === "under" && !deja.has(t.id)
+        && ((gs && gs.erased) || []).indexOf(t.id) < 0);
+    if (!libres.length)
+        return null;
+    const h = Math.abs(Math.round(((gs && gs.currentDate) || 0) / 3600000)) % libres.length;
+    return libres[h];
+}
+// Ce que devient un artiste que le cercle a décidé de lancer. Personne ne monte
+// comme ça tout seul : les radios, les plateformes et les académies s'alignent
+// en quelques semaines, et plus rien ne le freine.
+function consacrerImpose(a, date) {
+    const mondial = a.zone !== "FR";
+    return { ...a,
+        potential: Math.max(a.potential || 40, mondial ? 84 : 72),
+        growth: mondial ? 94 : 88,
+        impose: true, star: true, starZone: mondial ? "US" : "FR",
+        signedDate: date, contractYears: 5, contractEnd: date + 5 * 365 * 86400000 };
+}
+// Celui qu'on te demande de livrer : un proche, et seulement un vrai proche.
+function procheALivrer(gs) {
+    const rels = (gs && gs.relations) || {};
+    const deja = new Set((gs && gs.betrayals) || []);
+    const morts = new Set([...((gs && gs.deceased) || []), ...((gs && gs.erased) || [])]);
+    const noms = typeof CHARS !== "undefined" ? CHARS : {};
+    const cands = Object.keys(rels).filter(id => {
+        if (id === "falltos" || deja.has(id) || morts.has(id))
+            return false;
+        const r = rels[id];
+        if (!r)
+            return false;
+        return (r.score == null ? 0 : r.score) >= 55;
+    });
+    if (!cands.length)
+        return null;
+    const h = Math.abs(Math.round(((gs && gs.currentDate) || 0) / 3600000) + 13) % cands.length;
+    const id = cands[h];
+    return { id, name: (noms[id] && noms[id].name) || id };
+}
+// Celui qu'on te demande de briser : un nom qui montait, et qu'on n'entendra plus.
+function victimeCarriere(gs) {
+    const deja = new Set(((gs && gs.unuhuRoster) || []).map(a => a.id));
+    const morts = new Set((gs && gs.erased) || []);
+    const cibles = marcheTalents(gs).filter(t => !t.charId && !deja.has(t.id) && !morts.has(t.id)
+        && (t.potential || 0) >= 45);
+    if (!cibles.length)
+        return null;
+    const h = Math.abs(Math.round(((gs && gs.currentDate) || 0) / 3600000) + 7) % cibles.length;
+    return cibles[h];
+}
+// Pour trier la liste sans noyer le joueur.
+const FAMILLES_TALENT = [
+    { id: "tous", label: "Tous" },
+    { id: "rap", label: "🎤 Rap", g: ["Rap", "Trap", "Drill", "Boom Bap", "Rap Conscient", "Cloud Rap", "Plugg", "Phonk", "Grime", "Emo Rap", "Jazz Rap", "Rap Mélo", "Afro-Trap", "Slam", "Indie Rap", "Horrorcore", "Rap / Urbain"] },
+    { id: "rnb", label: "💜 R&B", g: ["R&B", "Soul", "Néo-Soul", "Neo-Soul", "Funk"] },
+    { id: "pop", label: "✨ Pop", g: ["Pop", "Pop Urbaine", "Pop Urbain", "Indie Pop", "Hyperpop", "Variété", "Folk", "Country"] },
+    { id: "afro", label: "🌍 Afro", g: ["Afrobeat", "Amapiano", "Reggaeton", "Dancehall"] },
+    { id: "elec", label: "🎛️ Électro", g: ["Électro", "Electro", "House"] },
+];
+const ZONES_TALENT = [{ id: "toutes", label: "Partout" }, { id: "FR", label: "🇫🇷 FR" }, { id: "US", label: "🇺🇸 US" }];
+function zoneTalent(id, t) { return id === "toutes" || (t && t.zone) === id; }
+function familleTalent(id, genre) {
+    const f = FAMILLES_TALENT.find(x => x.id === id);
+    if (!f || !f.g)
+        return true;
+    return f.g.indexOf(genre) >= 0;
+}
 const ARTIST_CONTRACT_TERMS = [{ years: 2, label: "2 ans", mult: 1.0 }, { years: 3, label: "3 ans", mult: 1.2 }, { years: 5, label: "5 ans", mult: 1.5 }];
 // ─── SAN JOSÉ FC : marché des transferts fictif ─────────────────────────────
 const PLAYER_POOL = [
@@ -10724,7 +11225,7 @@ const DIAGNOSTICS_YOUNES = [
     { id: "d_sante", prio: 93, quand: g => g.health < 35,
         court: "ta santé est au plancher",
         titre: "Ta santé",
-        texte: g => `${Math.round(g.health)} de santé. À ce niveau-là, ce n'est plus de la fatigue.\n\nDors, et pas une nuit : plusieurs. Annule ce qui peut l'être, baisse les soirées, et si tu as une dépendance en cours, règle-la avant de reparler de musique.\n\nJe sais que tu détestes ces semaines-là. Elles coûtent beaucoup moins cher que ce qui arrive si tu continues.` },
+        texte: g => `${Math.round(g.health)} de santé. À ce niveau-là, je ne peux plus rien te caler : un studio se paie à la journée et une date annulée se rembourse au double.\n\nJe bloque ton agenda une ou deux semaines, tu récupères, et on repart. Dis-moi juste si j'annule ou si je décale.` },
     { id: "d_proces", prio: 91, quand: g => !!g.activeTrial && !g.activeTrial.lawyer,
         court: "tu n'as toujours pas d'avocat",
         titre: "Ton procès",
@@ -10736,7 +11237,7 @@ const DIAGNOSTICS_YOUNES = [
     { id: "d_stress", prio: 84, quand: g => g.stress >= 80,
         court: "ton stress est au maximum",
         titre: "Ton stress",
-        texte: g => `${Math.round(g.stress)}. C'est le niveau où les gens prennent les décisions qu'ils regrettent — un clash de trop, une signature trop vite, un truc pour tenir le soir.\n\nCoupe une semaine. Vois des gens qui ne t'apportent rien professionnellement. Et si c'est installé depuis des mois, l'onglet Vie a de quoi s'en occuper pour de bon.` },
+        texte: g => `${Math.round(g.stress)}. C'est le niveau où on signe trop vite et où on répond à des choses auxquelles il ne fallait pas répondre.\n\nNe prends aucune décision importante cette semaine : pas de contrat, pas de clash, pas d'annonce. Tout ce qui peut attendre, je le décale.` },
     { id: "d_clash", prio: 78, quand: g => !!g.activeClash,
         court: "ton clash est encore ouvert",
         titre: "Le clash en cours",
@@ -10765,10 +11266,6 @@ const DIAGNOSTICS_YOUNES = [
         court: "ta célébrité stagne",
         titre: "Ton niveau",
         texte: g => `${Math.round(g.fame)} de célébrité après ${g.careerYears} ans. Ce n'est pas la musique qui bloque, c'est le volume.\n\nCe qui fait monter le socle : des hits, oui, mais aussi les collections FOH-0, les boissons Bahasco, et les projets qui passent la barre des 50 millions de streams. Chacun compte, et ils s'additionnent. Empile.` },
-    { id: "d_addiction", prio: 48, quand: g => (g.addictions || []).length > 0,
-        court: "tu as une dépendance en cours",
-        titre: "Ce que tu prends",
-        texte: g => `${(g.addictions || []).length} dépendance${(g.addictions || []).length > 1 ? "s" : ""} en cours. Ça te coûte de la santé chaque semaine et ça ne se règle pas en serrant les dents.\n\nOnglet Vie, santé mentale. Un suivi, c'est long, c'est cher, et c'est la seule chose qui marche.` },
     { id: "d_awards", prio: 44, quand: g => !!g.awardsBanned,
         court: "les académies t'ont écarté",
         titre: "Les cérémonies",
@@ -12805,13 +13302,13 @@ const ELITE_MISSIONS = [
     { id: "em_intro", emoji: "🤝", title: "Introduire quelqu'un dans ton cercle", service: 2,
         brief: "Tu présenteras un inconnu à tes proches comme un ami de longue date. Il a besoin de leur confiance, pas de la tienne.",
         cost: { stress: 28 }, refuse: "Ta loyauté envers tes amis est notée. Ce n'est pas un compliment." },
-    { id: "em_data", emoji: "💾", title: "Livrer tes données d'audience", service: 1,
+    { id: "em_audience", emoji: "💾", title: "Livrer tes données d'audience", service: 1,
         brief: "Des dizaines de millions de profils comportementaux, transmis sans base légale à une structure d'analyse.",
         cost: { rep: -10, stress: 16 }, refuse: "Ils les obtiendront autrement, un peu plus lentement." },
     { id: "em_split", emoji: "🗡️", title: "Diviser un mouvement", service: 3,
         brief: "Un collectif militant devient gênant. On te demande de le soutenir publiquement, puis de t'en désolidariser au bon moment.",
         cost: { rep: -26, stress: 32 }, refuse: "Le mouvement survivra. Toi, un peu moins bien." },
-    { id: "em_heir", emoji: "👶", title: "Parrainer un héritier", service: 2,
+    { id: "em_filleul", emoji: "👶", title: "Parrainer un héritier", service: 2,
         brief: "Tu prendras sous ton aile l'enfant d'un membre, tu le présenteras partout, tu lui ouvriras tes portes.",
         cost: { stress: 18 }, refuse: "On te retire une confiance que tu venais d'acquérir." },
     { id: "em_burn", emoji: "🔥", title: "Faire disparaître des documents", service: 3,
@@ -18516,23 +19013,42 @@ const GRAMMY_VIVIERS = {
         "Steve Lacy", "Omar Apollo", "Miguel", "Eminem", "Snoop Dogg", "Lil Wayne"],
 };
 // Quelle famille pour quelle catégorie.
-function vivierDe(cat) {
-    if (cat === "Artiste masculin de l'Année")
-        return GRAMMY_VIVIERS.homme;
-    if (cat === "Meilleure Performance Live")
-        return GRAMMY_VIVIERS.live;
-    if (cat === "Meilleur Album R&B")
-        return GRAMMY_VIVIERS.rnb;
-    if (cat === "Meilleur Album Rap/Urbain" || cat === "Meilleure Chanson Rap" || cat === "Meilleure Performance Rap")
-        return GRAMMY_VIVIERS.rap;
-    if (cat === "Meilleure Collaboration")
-        return GRAMMY_VIVIERS.rap.concat(GRAMMY_VIVIERS.rnb);
-    return GRAMMY_VIVIERS.grand;
+// Celui que le cercle a lancé finit par s'asseoir dans la salle, comme les
+// autres — et par te passer devant dans ta propre catégorie.
+function starsMondialesCercle(gs, cat) {
+    const toutes = [...((gs && gs.starsCercle) || []),
+        ...(((gs && gs.starsScene) || []).map(s => ({ ...s, zone: s.zone === "FR" ? "FR" : "US" })))];
+    return toutes.filter(s => {
+        if (!s || s.zone !== "US")
+            return false;
+        if (cat === "Meilleur Album R&B")
+            return FAMILLE_RNB.has(s.genre);
+        if (cat === "Meilleur Album Rap/Urbain" || cat === "Meilleure Chanson Rap" || cat === "Meilleure Performance Rap")
+            return FAMILLE_RAP.has(s.genre);
+        return true;
+    }).map(s => s.name);
+}
+function vivierDe(cat, gs) {
+    const sup = starsMondialesCercle(gs, cat);
+    const base = (() => {
+        if (cat === "Artiste masculin de l'Année")
+            return GRAMMY_VIVIERS.homme;
+        if (cat === "Meilleure Performance Live")
+            return GRAMMY_VIVIERS.live;
+        if (cat === "Meilleur Album R&B")
+            return GRAMMY_VIVIERS.rnb;
+        if (cat === "Meilleur Album Rap/Urbain" || cat === "Meilleure Chanson Rap" || cat === "Meilleure Performance Rap")
+            return GRAMMY_VIVIERS.rap;
+        if (cat === "Meilleure Collaboration")
+            return GRAMMY_VIVIERS.rap.concat(GRAMMY_VIVIERS.rnb);
+        return GRAMMY_VIVIERS.grand;
+    })();
+    return sup.length ? base.concat(sup) : base;
 }
 // Les autres nommés d'une catégorie : quatre noms de la bonne famille, et pour
 // une collaboration, des duos.
-function autresNommes(cat, deja) {
-    const vivier = vivierDe(cat).filter(n => !deja.has(n));
+function autresNommes(cat, deja, gs) {
+    const vivier = vivierDe(cat, gs).filter(n => !deja.has(n));
     const tire = [];
     const dispo = [...vivier];
     const combien = cat === "Meilleure Collaboration" ? 8 : 4;
@@ -18995,7 +19511,8 @@ function runVdlmCeremony(gs) {
 const GRAMMY_SONG_CATS = new Set(["Chanson de l'Année", "Meilleure Chanson Rap", "Meilleure Performance Rap", "Meilleure Collaboration"]);
 // ── Un morceau de pop urbaine n'a rien à faire en catégorie rap ──────────
 const FAMILLE_RAP = new Set(["Rap", "Trap", "Drill", "Cloud Rap", "Boom Bap", "Rap Mélo",
-    "Rap / Urbain", "Plugg", "Indie Rap", "Emo Rap", "Rap Conscient", "Phonk", "Grime", "Horrorcore"]);
+    "Rap / Urbain", "Plugg", "Indie Rap", "Emo Rap", "Rap Conscient", "Phonk", "Grime", "Horrorcore",
+    "Jazz Rap", "Afro-Trap", "Slam"]);
 const FAMILLE_RNB = new Set(["R&B", "Funk", "Soul", "Néo-Soul", "Neo-Soul"]);
 const CATS_RAP = new Set(["Meilleur Album Rap/Urbain", "Meilleure Chanson Rap", "Meilleure Performance Rap"]);
 const CATS_RNB = new Set(["Meilleur Album R&B"]);
@@ -19070,7 +19587,7 @@ function scoreTrack(t) {
 // adversaires que pour les catégories où tu es nommé : ailleurs la soirée ne te
 // regarde pas. Personne ne rafle plus de deux prix dans la nuit — une razzia
 // rendrait la défaite anecdotique.
-function garnirCeremonie(results, annee) {
+function garnirCeremonie(results, annee, gs) {
     const sacres = {};
     return results.map(r => {
         // ── Années posées à la main : les vrais nommés, et le vainqueur prévu ──
@@ -19092,7 +19609,7 @@ function garnirCeremonie(results, annee) {
         if (!r.nominated)
             return r;
         const bloques = new Set(Object.keys(sacres).filter(n => sacres[n] >= 2));
-        const rivaux = autresNommes(r.category, bloques);
+        const rivaux = autresNommes(r.category, bloques, gs);
         if (r.youWon)
             return { ...r, rivaux, cote: r.cote === undefined ? 0.3 : r.cote };
         const gagnant = rivaux.length ? rivaux[Math.floor(Math.random() * rivaux.length)] : null;
@@ -19178,7 +19695,7 @@ function runGrammyCeremony(gs) {
         const keep = new Set(wins.sort(() => Math.random() - 0.5).slice(0, 2).map(r => r.category));
         results = results.map(r => (r.youWon && !r.bought && !keep.has(r.category)) ? { ...r, youWon: false } : r);
     }
-    results = garnirCeremonie(results, year);
+    results = garnirCeremonie(results, year, gs);
     const winsCount = results.filter(r => r.youWon).length;
     return { year, results, project: annonce.project, winsCount };
 }
@@ -19337,7 +19854,7 @@ const ACHIEVEMENTS = [
     { id: "club_value", emoji: "🏟️", title: "Club de Renom", desc: "Porter la note moyenne de l'effectif au-dessus de 85.", check: gs => (gs.sanJoseSquad || []).length >= 30 && ((gs.sanJoseSquad || []).reduce((s, p) => s + p.rating, 0) / (gs.sanJoseSquad || []).length) > 85 },
     { id: "kit_deal_elite", emoji: "👕", title: "Équipementier Prestige", desc: "Signer un contrat avec Nike ou Adidas pour San Jose.", check: gs => gs.kitDeal && ["Nike", "Adidas"].includes(gs.kitDeal.brand) },
     { id: "label_mogul", emoji: "🏷️", title: "Magnat du Label", desc: "Avoir 15 artistes signés simultanément chez UNUHU.", check: gs => (gs.unuhuRoster || []).length >= 15 },
-    { id: "talent_scout", emoji: "🔭", title: "Dénicheur de Talents", desc: "Signer un artiste au potentiel supérieur à 85.", check: gs => (gs.unuhuRoster || []).some(a => a.potential > 85) },
+    { id: "talent_scout", emoji: "🔭", title: "Dénicheur de Talents", desc: "Amener un artiste signé chez toi à 85 de progression.", check: gs => (gs.unuhuRoster || []).some(a => (a.growth || 0) >= 85) },
     { id: "series_king", emoji: "📺", title: "Roi des Séries", desc: "Diffuser une série jusqu'à sa 5e saison.", check: gs => (gs.seriesography || []).some(s => s.seasons.length >= 5) },
     { id: "casino_high", emoji: "🎰", title: "Flambeur", desc: "Gagner 1M$ en une seule mise au casino.", check: gs => (gs.casinoBiggestWin || 0) >= 1000000 },
     { id: "casino_ruin", emoji: "🃏", title: "La Maison Gagne Toujours", desc: "Perdre 5M$ cumulés au casino.", check: gs => (gs.casinoTotalLost || 0) >= 5000000 },
@@ -20080,7 +20597,7 @@ const INIT = {
     rlM6: null, detteVue: 0, bienFaits: [], bienVu: 0, marche: null, bonnePart: false, dime: false, falltosVus: [], naelVus: [], marcheActs: {}, marcheJour: null, marcheVu: null, tentations: [], temoignages: [], publicFidele: 0, nael: null, eliteSince: null, membreDepuis: null, grossesseCercle: null, enfantLivre: null, enfantRevu: false, sacrifices: [], warMission: null, warMissionsDone: [], docLeaked: false, eliteInfluence: 0, favorsUsed: [], circleNews: [], evidence: 0, exposure: 0, activeOps: [], pendingCM: null, cmDone: [], activeOp: null, opsDone: [], targetExposure: {}, exposedTargets: [],
     allyState: { falltos: "actif", kanye_west: "actif", candace_owens: "actif", alain_soral: "actif", dieudonne: "actif", ryan_garcia: "actif", justin_bieber: "absent", the_weeknd: "absent" },
     inResistance: false, awardsBanned: false, conspiracist: false, tutorialDone: false, baptismDate: null, faithStart: null, faithStage: 0, faithDone: false, exElite: false,
-    grammyNoms: null, anokPlan: null, anokAt: null, dario: null, alpha: null, filleF: null, enfantCercle: [], npcKids: [], warrant: null, mourning: false, mourningTold: false, boughtGrammys: [], lawShield: false, openCountries: [], mediaCycle: null, kaineEnded: null, eliteMet: [], newElites: {}, lastRecruitYear: null, curiaNames: null, curiaUntil: null, mkStage: {}, mkActive: null, mkFails: [], mkDone: {}, sacrificesDone: [], festivalDisaster: null, sabotaged: [], erased: [], seatsPlaced: [], lawsPassed: [], exitStrikes: [], resistanceTried: false, resistDeclinedAt: null, musicTier: null, musicOn: true, falltosSacrificed: false, lastFalltosOffer: null, eliteService: 0, rankSeen: null, eliteMission: null, eliteMissionsDone: [], circleOp: null, circleOpsDone: [], circleOpsFailed: [], lastCircleOpAt: null, eliteEndDone: false, lastEliteOffer: null, eliteOfferAt: null, eliteRefused: false, pendingDeath: null, elite: false, eliteOffered: false, eliteStrikes: 0, eliteFallen: false, hits: [], postStreaming: null, lastSummerHitYear: null, mentalAspects: { anxiety: 22, burnout: 18, loneliness: 25, purpose: 78 }, therapy: null, addictions: [], stis: [], unsafeActs: 0, lastStiCheck: null, stiTested: null,
+    starsCercle: [], starsScene: [], scene: {}, sceneYear: null, talentsNes: [], grammyNoms: null, anokPlan: null, anokAt: null, dario: null, alpha: null, filleF: null, enfantCercle: [], npcKids: [], warrant: null, mourning: false, mourningTold: false, boughtGrammys: [], lawShield: false, openCountries: [], mediaCycle: null, kaineEnded: null, eliteMet: [], newElites: {}, lastRecruitYear: null, curiaNames: null, curiaUntil: null, mkStage: {}, mkActive: null, mkFails: [], mkDone: {}, sacrificesDone: [], festivalDisaster: null, sabotaged: [], erased: [], seatsPlaced: [], lawsPassed: [], exitStrikes: [], resistanceTried: false, resistDeclinedAt: null, musicTier: null, musicOn: true, falltosSacrificed: false, lastFalltosOffer: null, eliteService: 0, rankSeen: null, eliteMission: null, eliteMissionsDone: [], circleOp: null, circleOpsDone: [], circleOpsFailed: [], lastCircleOpAt: null, eliteEndDone: false, lastEliteOffer: null, eliteOfferAt: null, eliteRefused: false, pendingDeath: null, elite: false, eliteOffered: false, eliteStrikes: 0, eliteFallen: false, hits: [], postStreaming: null, lastSummerHitYear: null, mentalAspects: { anxiety: 22, burnout: 18, loneliness: 25, purpose: 78 }, therapy: null, addictions: [], stis: [], unsafeActs: 0, lastStiCheck: null, stiTested: null,
     reissues: [], endedRuns: null, atoneLog: [], pendingLeak: null, betrayals: [], industryEra: null, eraIndex: 0, eraAdapted: [], secrets: [], secretThreat: null,
     objectives: [], objectivesDone: [], timeline: [], grief: null, callbacks: [],
     healthAspects: { voice: 88, body: 85, sleep: 80, mind: 82 },
@@ -20269,7 +20786,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "122";
+const VERSION_JEU = "131";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -20318,7 +20835,7 @@ function capStreams(next) {
 // Le plafond de streams, le plafond de célébrité, le palier du cercle et la
 // réparation des couples s'appliquent d'eux-mêmes à chaque geste du joueur.
 // Reste une correction rétroactive, qui n'a de sens qu'une seule fois.
-const VERSION_EQUILIBRE = 4;
+const VERSION_EQUILIBRE = 7;
 // Où se trouve réellement un morceau : on cherche dans toute la discographie.
 function projetDuMorceau(titre, disco) {
     if (!titre || !Array.isArray(disco))
@@ -20395,6 +20912,43 @@ function reprendrePartie(next) {
         repris.boycottLevel = 0;
     if (!Array.isArray(repris.questionsVues))
         repris.questionsVues = [];
+    // Le cercle t'avait fait signer quelqu'un, et personne n'était jamais arrivé.
+    // Tu as payé : on te livre l'artiste, même avec du retard.
+    if (!Array.isArray(repris.starsCercle))
+        repris.starsCercle = [];
+    // Ceux que tu avais signés avant que le jeu ne sache leur ouvrir une fiche.
+    (repris.unuhuRoster || []).forEach(a => {
+        if (!aBesoinDeFiche(repris, a))
+            return;
+        repris.newCast = { ...(repris.newCast || {}), [a.id]: castDepuisTalent(a) };
+        repris.relations = { ...(repris.relations || {}),
+            [a.id]: (repris.relations || {})[a.id] || { score: a.star ? 22 : 34, status: "neutre" } };
+    });
+    // Un artiste imposé est une star fabriquée : on le remet à son niveau et on
+    // l'inscrit là où il doit apparaître.
+    if ((repris.unuhuRoster || []).some(a => a && a.impose && !a.star)) {
+        repris.unuhuRoster = (repris.unuhuRoster || []).map(a => (a && a.impose && !a.star) ? consacrerImpose(a, a.signedDate || repris.currentDate) : a);
+    }
+    (repris.unuhuRoster || []).forEach(a => {
+        if (a && a.star && !repris.starsCercle.some(x => x && x.id === a.id))
+            repris.starsCercle = [...repris.starsCercle,
+                { id: a.id, name: a.name, genre: a.genre, zone: a.starZone || "US", since: a.signedDate || repris.currentDate }];
+    });
+    if ((repris.eliteMissionsDone || []).indexOf("em_artist") >= 0
+        && !((repris.unuhuRoster || []).some(a => a && a.impose))) {
+        const a = artisteImpose(repris);
+        if (a) {
+            const star = consacrerImpose(a, repris.currentDate);
+            repris.unuhuRoster = [...(repris.unuhuRoster || []), star];
+            repris.starsCercle = [...repris.starsCercle,
+                { id: star.id, name: star.name, genre: star.genre, zone: star.starZone, since: repris.currentDate }];
+            if (repris.businesses && repris.businesses.unuhu) {
+                repris.businesses = { ...repris.businesses,
+                    unuhu: { ...repris.businesses.unuhu,
+                        revenue: repris.businesses.unuhu.revenue + Math.round(star.potential * 900) } };
+            }
+        }
+    }
     return repris;
 }
 function gameReducer(state, action) {
@@ -20970,16 +21524,91 @@ function gameReducerInner(state, action) {
                 businesses: { ...state.businesses, bahasco: { ...state.businesses.bahasco, revenue: state.businesses.bahasco.revenue + action.revenueDelta } },
             };
         }
-        case "SIGN_ARTIST":
-            if (state.money < action.cost)
+        // Le cercle place quelqu'un chez toi. Tu ne l'as pas choisi, tu le paies
+        // quand même, et il apparaît dans ton label comme n'importe quel signé.
+        // Une année de scène : quelques inconnus montent, certains percent, et les
+        // plus gros quittent définitivement le marché.
+        case "SCENE_ANNEE": {
+            const nes = [...(state.talentsNes || []), ...((action.nouveaux || []).filter(Boolean))];
+            const scene = { ...(state.scene || {}) };
+            const cast = { ...(state.newCast || {}) };
+            const rels = { ...(state.relations || {}) };
+            let stars = [...(state.starsScene || [])];
+            (action.montees || []).forEach(mv => {
+                if (!mv || !mv.id)
+                    return;
+                const t = [...UNUHU_TALENT_POOL, ...(state.talentsNes || [])].find(x => x.id === mv.id);
+                if (!t)
+                    return;
+                const avant = scene[t.id] || { gain: 0, percee: false, star: false };
+                const gain = Math.min(90 - (t.potential || 0), (avant.gain || 0) + mv.gain);
+                const lvl = (t.potential || 0) + gain;
+                const percee = avant.percee || lvl >= PERCEE_SEUIL;
+                const star = avant.star || lvl >= PERCEE_STAR;
+                scene[t.id] = { gain, percee, star, an: action.annee };
+                if (percee && !cast[t.id] && !t.charId) {
+                    cast[t.id] = castDepuisPercee(t, star);
+                    rels[t.id] = rels[t.id] || { score: 6, status: "neutre" };
+                }
+                if (star && !cast[t.id] && !t.charId)
+                    cast[t.id] = castDepuisPercee(t, true);
+                if (star && cast[t.id] && !t.charId)
+                    cast[t.id] = { ...cast[t.id], bio: castDepuisPercee(t, true).bio };
+                if (star && !stars.some(x => x && x.id === t.id))
+                    stars = [...stars, { id: t.id, name: t.name, genre: t.genre, zone: t.zone, since: state.currentDate }];
+            });
+            return { ...state, scene, newCast: cast, relations: rels, talentsNes: nes,
+                starsScene: stars, sceneYear: action.annee };
+        }
+        case "SIGN_IMPOSED": {
+            if (!action.artist)
                 return state;
+            const a = consacrerImpose(action.artist, state.currentDate);
+            const fiche = castDepuisTalent(a);
+            return { ...state,
+                unuhuRoster: [...(state.unuhuRoster || []), a],
+                starsCercle: [...(state.starsCercle || []),
+                    { id: a.id, name: a.name, genre: a.genre, zone: a.starZone, since: state.currentDate }],
+                newCast: a.charId ? state.newCast : { ...(state.newCast || {}), [a.id]: fiche },
+                relations: a.charId ? state.relations
+                    : { ...state.relations, [a.id]: state.relations[a.id] || { score: 22, status: "neutre" } },
+                businesses: { ...state.businesses, unuhu: { ...state.businesses.unuhu,
+                        revenue: state.businesses.unuhu.revenue + Math.round(a.potential * 900) } } };
+        }
+        // Celui que tu as livré ne revient pas. Il ne te le dira jamais en face :
+        // il cesse simplement de répondre.
+        case "LIVRER_PROCHE": {
+            if (!action.id)
+                return state;
+            const rels = JSON.parse(JSON.stringify(state.relations || {}));
+            if (rels[action.id]) {
+                rels[action.id].score = -100;
+                rels[action.id].status = "rival";
+            }
+            return { ...state, relations: rels,
+                betrayals: [...new Set([...(state.betrayals || []), action.id])] };
+        }
+        case "BRISER_CARRIERE":
+            if (!action.id)
+                return state;
+            return { ...state,
+                erased: [...new Set([...(state.erased || []), action.id])],
+                sabotaged: [...new Set([...(state.sabotaged || []), action.id])] };
+        case "SIGN_ARTIST": {
+            if (!action.artist || state.money < action.cost)
+                return state;
+            const a = action.artist;
+            const fiche = aBesoinDeFiche(state, a) ? castDepuisTalent(a) : null;
             return { ...state,
                 money: state.money - action.cost,
                 rep: Math.min(100, state.rep + 3),
-                unuhuRoster: [...state.unuhuRoster, { ...action.artist, growth: action.artist.potential * 0.4, signedDate: state.currentDate,
+                unuhuRoster: [...state.unuhuRoster, { ...a, growth: a.potential * 0.4, signedDate: state.currentDate,
                         contractYears: action.years || 3, contractEnd: state.currentDate + (action.years || 3) * 365 * 86400000 }],
-                businesses: { ...state.businesses, unuhu: { ...state.businesses.unuhu, revenue: state.businesses.unuhu.revenue + Math.round(action.artist.potential * 150) } },
+                newCast: fiche ? { ...(state.newCast || {}), [a.id]: fiche } : state.newCast,
+                relations: fiche ? { ...state.relations, [a.id]: state.relations[a.id] || { score: 34, status: "neutre" } } : state.relations,
+                businesses: { ...state.businesses, unuhu: { ...state.businesses.unuhu, revenue: state.businesses.unuhu.revenue + Math.round(a.potential * 150) } },
             };
+        }
         case "RENEW_ARTIST":
             if (state.money < action.cost)
                 return state;
@@ -25750,6 +26379,77 @@ function FiscoGame() {
                     desc: "Aucun communiqué, aucune excuse, aucun article pour le dire.\n\nUne enseigne te recontacte pour une campagne. Une radio te remet en rotation sans prévenir. Une salle que tu avais rayée de ta liste te propose trois dates.\n\nLes gens qui t'évitaient ont simplement **arrêté de le faire**, et aucun d'eux ne se souvient d'avoir commencé." });
             }
         }
+        // ── CE QUI SE PASSE SANS TOI ─────────────────────────────────────────
+        // Chaque automne, quelques inconnus montent d'un cran. Certains finissent
+        // par percer, et les plus gros quittent le marché : tu ne les auras pas.
+        // Le premier jour de septembre où le jeu reprend la main : avancer de
+        // semaine en semaine ne tombe presque jamais pile sur une date donnée.
+        if (phase === "game" && !ending && d.getMonth() === 8
+            && gs.sceneYear !== d.getFullYear()) {
+            const prisParToi = new Set((gs.unuhuRoster || []).map(a => a && a.id));
+            const libres = marcheTalents(gs).filter(t => t.rang === "under"
+                && !prisParToi.has(t.id) && !((gs.scene || {})[t.id] || {}).star);
+            const montees = [];
+            const vus = new Set();
+            // Ceux qui ont déjà commencé à monter ne retombent pas dans l'anonymat :
+            // ils continuent, année après année, jusqu'à percer ou plafonner.
+            const enRoute = libres.filter(t => ((gs.scene || {})[t.id] || {}).gain > 0)
+                .sort((a, b) => niveauTalent(gs, b) - niveauTalent(gs, a)).slice(0, 5);
+            enRoute.forEach(t => {
+                vus.add(t.id);
+                const lvl = niveauTalent(gs, t);
+                montees.push({ id: t.id, gain: 3 + Math.floor(Math.random() * (lvl >= 45 ? 8 : 6)) });
+            });
+            const combien = 6 + Math.floor(Math.random() * 5);
+            for (let i = 0; i < combien && libres.length; i++) {
+                // Un petit tournoi : celui qui est déjà le plus haut monte le plus souvent.
+                let choisi = null;
+                for (let k = 0; k < 3; k++) {
+                    const c = libres[Math.floor(Math.random() * libres.length)];
+                    if (vus.has(c.id))
+                        continue;
+                    if (!choisi || niveauTalent(gs, c) > niveauTalent(gs, choisi))
+                        choisi = c;
+                }
+                if (!choisi)
+                    continue;
+                vus.add(choisi.id);
+                const lvl = niveauTalent(gs, choisi);
+                montees.push({ id: choisi.id, gain: 2 + Math.floor(Math.random() * (lvl >= 45 ? 7 : 5)) });
+            }
+            // Et il arrive du monde : deux à quatre gamins que personne ne connaît.
+            const nouveaux = [];
+            const combienNes = 2 + Math.floor(Math.random() * 3);
+            for (let i = 0; i < combienNes; i++) {
+                const zone = Math.random() < 0.5 ? "FR" : "US";
+                const t = naitreTalent({ ...gs, talentsNes: [...(gs.talentsNes || []), ...nouveaux] }, zone, d.getFullYear(), i);
+                if (t)
+                    nouveaux.push(t);
+            }
+            if (montees.length || nouveaux.length) {
+                dispatch({ type: "SCENE_ANNEE", annee: d.getFullYear(), montees, nouveaux });
+                // On ne te prévient que pour ceux qui viennent de basculer.
+                const bascules = montees.map(mv => {
+                    const t = marcheTalents(gs).find(x => x.id === mv.id);
+                    if (!t)
+                        return null;
+                    const av = niveauTalent(gs, t), ap = Math.min(90, av + mv.gain);
+                    return { t, av, ap };
+                }).filter(Boolean);
+                const stars = bascules.filter(x => x.av < PERCEE_STAR && x.ap >= PERCEE_STAR);
+                const perces = bascules.filter(x => x.av < PERCEE_SEUIL && x.ap >= PERCEE_SEUIL);
+                if (stars.length) {
+                    const x = stars[0];
+                    setCalAlert({ emoji: "🌠", title: "Tu ne l'auras pas",
+                        desc: `**${x.t.name}** jouait dans des salles de deux cents personnes il y a quelques années. Tu l'as eu sous les yeux dans ta liste de talents, à un prix que tu pouvais payer.\n\nIl vient de signer ailleurs. Plus aucun label de ta taille ne peut l'approcher.\n\n${stars.length > 1 ? `${stars.length - 1} autre${stars.length > 2 ? "s" : ""} a${stars.length > 2 ? "ont" : ""} fait pareil cette année.` : "C'est comme ça que ça se passe. Tout le temps."}` });
+                }
+                else if (perces.length) {
+                    const noms = perces.slice(0, 3).map(x => `**${x.t.name}** (${x.t.genre})`).join(", ");
+                    setCalAlert({ emoji: "📈", title: "On parle d'eux",
+                        desc: `${noms} ${perces.length > 1 ? "sortent" : "sort"} de nulle part cette année. Rien d'énorme encore — mais leur nom revient, et leur prix aussi.\n\nSi tu les veux, c'est maintenant.${nouveaux.length ? `\n\nEt ${nouveaux.length} nouveau${nouveaux.length > 1 ? "x noms viennent" : " nom vient"} d'apparaître sur le marché.` : ""}` });
+                }
+            }
+        }
         // ── LES NOMINATIONS, VINGT JOURS AVANT ───────────────────────────────
         // La cérémonie tombe le 4 février : l'Académie annonce le 15 janvier. Ce
         // qui est annoncé ici est exactement ce qui se jouera — les nominations
@@ -28112,6 +28812,10 @@ function FiscoGame() {
     const [kitTerm, setKitTerm] = (0, react_1.useState)({ years: 4, label: "4 ans", mult: 1.15 });
     const [artistFilter, setArtistFilter] = (0, react_1.useState)("");
     const [artistTerm, setArtistTerm] = (0, react_1.useState)({ years: 3, label: "3 ans", mult: 1.2 });
+    const [talentFamille, setTalentFamille] = (0, react_1.useState)("tous");
+    const [talentZone, setTalentZone] = (0, react_1.useState)("toutes");
+    const [talentBudget, setTalentBudget] = (0, react_1.useState)(false);
+    const [talentsPlus, setTalentsPlus] = (0, react_1.useState)(false);
     const [casinoModal, setCasinoModal] = (0, react_1.useState)(false);
     const [staffModal, setStaffModal] = (0, react_1.useState)(false);
     const [staffOpen, setStaffOpen] = (0, react_1.useState)(null);
@@ -30681,31 +31385,65 @@ function FiscoGame() {
                             react_1.default.createElement("br", null),
                             fmtMoney(cost));
                     }))))))),
-            react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(240,201,138,.5)", letterSpacing: 2, margin: "14px 0 8px", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
-                "TALENTS DISPONIBLES (",
-                UNUHU_TALENT_POOL.length,
-                ")"),
-            react_1.default.createElement("input", { value: artistFilter, onChange: e => setArtistFilter(e.target.value), placeholder: "\uD83D\uDD0D Rechercher un artiste ou un genre\u2026", style: { ...inputStyle, marginBottom: 7 } }),
-            react_1.default.createElement("div", { style: { display: "flex", gap: 5, marginBottom: 9 } }, ARTIST_CONTRACT_TERMS.map(t => (react_1.default.createElement("button", { key: t.years, onClick: () => setArtistTerm(t), style: { flex: 1, padding: "6px", background: artistTerm.years === t.years ? "rgba(242,195,121,.2)" : "rgba(255,255,255,.04)", border: artistTerm.years === t.years ? "1px solid rgba(242,195,121,.45)" : "1px solid rgba(255,255,255,.1)", color: artistTerm.years === t.years ? "#f2c379" : "rgba(255,255,255,.55)", borderRadius: 6, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, t.label)))),
-            UNUHU_TALENT_POOL
-                .filter(t => !(gs.unuhuRoster || []).some(r => r.id === t.id))
-                .filter(t => `${t.name} ${t.genre}`.toLowerCase().includes(artistFilter.toLowerCase()))
-                .sort((a, b) => b.potential - a.potential)
-                .slice(0, 40).map(t => (react_1.default.createElement("div", { key: t.id, style: { display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 8, padding: 10, marginBottom: 6, boxShadow: RELIEF } },
-                react_1.default.createElement("div", null,
-                    react_1.default.createElement("div", { style: { fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.85)" } },
-                        t.emoji,
-                        " ",
-                        t.name),
-                    react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(230,180,99,.6)" } },
-                        t.genre,
-                        " \u00B7 potentiel ",
-                        t.potential)),
-                react_1.default.createElement("button", { onClick: () => signArtist(t, artistTerm.years, Math.round(t.cost * artistTerm.mult)), style: { background: "rgba(230,172,86,.15)", border: "1px solid rgba(230,172,86,.35)", color: "#f2c379", padding: "6px 10px", borderRadius: 6, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" } },
-                    "Signer ",
-                    artistTerm.label,
-                    react_1.default.createElement("br", null),
-                    fmtMoney(Math.round(t.cost * artistTerm.mult)))))),
+            (() => {
+                const dispo = talentsDispo(gs);
+                const prix = t => Math.round(coutTalent(gs, t) * artistTerm.mult);
+                const q = artistFilter.trim().toLowerCase();
+                const vus = dispo
+                    .filter(t => zoneTalent(talentZone, t))
+                    .filter(t => familleTalent(talentFamille, t.genre))
+                    .filter(t => !talentBudget || prix(t) <= gs.money)
+                    .filter(t => !q || `${t.name} ${t.genre}`.toLowerCase().includes(q))
+                    .sort((a, b) => (coutTalent(gs, b) - coutTalent(gs, a)) || (niveauTalent(gs, b) - niveauTalent(gs, a)));
+                const montres = talentsPlus ? vus.slice(0, 260) : vus.slice(0, 8);
+                const reste = vus.length - montres.length;
+                const abordables = dispo.filter(t => prix(t) <= gs.money).length;
+                return (react_1.default.createElement(react_1.default.Fragment, null,
+                    react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, margin: "14px 0 8px" } },
+                        react_1.default.createElement("span", { style: { fontSize: 9, color: "rgba(240,201,138,.5)", letterSpacing: 2, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                            "TALENTS DISPONIBLES (",
+                            dispo.length,
+                            ")"),
+                        react_1.default.createElement("span", { style: { fontSize: 9, color: "rgba(124,224,164,.7)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" } },
+                            abordables,
+                            " dans tes moyens")),
+                    react_1.default.createElement("input", { value: artistFilter, onChange: e => { setArtistFilter(e.target.value); setTalentsPlus(false); }, placeholder: "\uD83D\uDD0D Un nom, un genre\u2026", style: { ...inputStyle, marginBottom: 7 } }),
+                    react_1.default.createElement("div", { style: { display: "flex", gap: 4, marginBottom: 6 } }, ZONES_TALENT.map(z => (react_1.default.createElement("button", { key: z.id, onClick: () => { setTalentZone(z.id); setTalentsPlus(false); }, style: { flex: 1, padding: "5px 7px", background: talentZone === z.id ? "rgba(122,158,224,.22)" : "rgba(255,255,255,.04)", border: talentZone === z.id ? "1px solid rgba(122,158,224,.5)" : "1px solid rgba(255,255,255,.1)", color: talentZone === z.id ? "#9fc0ff" : "rgba(255,255,255,.5)", borderRadius: 6, fontSize: 10, cursor: "pointer", whiteSpace: "nowrap", fontFamily: "'Space Mono',monospace" } }, z.label)))),
+                    react_1.default.createElement("div", { style: { display: "flex", gap: 4, marginBottom: 7, flexWrap: "wrap" } }, FAMILLES_TALENT.map(f => (react_1.default.createElement("button", { key: f.id, onClick: () => { setTalentFamille(f.id); setTalentsPlus(false); }, style: { flex: "1 1 auto", padding: "5px 7px", background: talentFamille === f.id ? "rgba(242,195,121,.2)" : "rgba(255,255,255,.04)", border: talentFamille === f.id ? "1px solid rgba(242,195,121,.45)" : "1px solid rgba(255,255,255,.1)", color: talentFamille === f.id ? "#f2c379" : "rgba(255,255,255,.5)", borderRadius: 6, fontSize: 10, cursor: "pointer", whiteSpace: "nowrap", fontFamily: "'Space Mono',monospace" } }, f.label)))),
+                    react_1.default.createElement("button", { onClick: () => { setTalentBudget(v => !v); setTalentsPlus(false); }, style: { width: "100%", padding: "6px", marginBottom: 7, background: talentBudget ? "rgba(124,224,164,.14)" : "rgba(255,255,255,.04)", border: talentBudget ? "1px solid rgba(124,224,164,.4)" : "1px solid rgba(255,255,255,.1)", color: talentBudget ? "#7ce0a4" : "rgba(255,255,255,.5)", borderRadius: 6, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace" } },
+                        talentBudget ? "☑" : "☐",
+                        " Seulement ce que je peux payer"),
+                    react_1.default.createElement("div", { style: { display: "flex", gap: 5, marginBottom: 9 } }, ARTIST_CONTRACT_TERMS.map(t => (react_1.default.createElement("button", { key: t.years, onClick: () => setArtistTerm(t), style: { flex: 1, padding: "6px", background: artistTerm.years === t.years ? "rgba(242,195,121,.2)" : "rgba(255,255,255,.04)", border: artistTerm.years === t.years ? "1px solid rgba(242,195,121,.45)" : "1px solid rgba(255,255,255,.1)", color: artistTerm.years === t.years ? "#f2c379" : "rgba(255,255,255,.55)", borderRadius: 6, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, t.label)))),
+                    !montres.length && (react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.45)", fontStyle: "italic", padding: "10px 2px", lineHeight: 1.5 } }, "Personne ne correspond. \u00C9largis la recherche \u2014 ou attends : il sort des artistes tous les ans.")),
+                    montres.map(t => {
+                        const c = prix(t);
+                        const cher = c > gs.money;
+                        return (react_1.default.createElement("div", { key: t.id, style: { display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 8, padding: 10, marginBottom: 6, boxShadow: RELIEF } },
+                            react_1.default.createElement("div", { style: { minWidth: 0 } },
+                                react_1.default.createElement("div", { style: { fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.85)" } },
+                                    t.emoji,
+                                    " ",
+                                    t.name),
+                                react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(230,180,99,.6)" } },
+                                    t.genre,
+                                    " \u00B7 potentiel ",
+                                    niveauTalent(gs, t),
+                                    (monteeDe(gs, t.id) || {}).percee && react_1.default.createElement("span", { style: { color: "#7ce0a4" } }, " \u00B7 \uD83D\uDCC8 en train de percer"),
+                                    !!t.ne && (new Date(gs.currentDate).getFullYear() - t.ne) <= 1 && react_1.default.createElement("span", { style: { color: "#9fc0ff" } }, " \u00B7 \u2728 nouveau"))),
+                            react_1.default.createElement("button", { disabled: cher, onClick: () => signArtist({ ...t, potential: niveauTalent(gs, t) }, artistTerm.years, c), style: { opacity: cher ? .4 : 1, background: "rgba(230,172,86,.15)", border: "1px solid rgba(230,172,86,.35)", color: "#f2c379", padding: "6px 10px", borderRadius: 6, fontSize: 10, cursor: cher ? "not-allowed" : "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" } },
+                                "Signer ",
+                                artistTerm.label,
+                                react_1.default.createElement("br", null),
+                                fmtMoney(c))));
+                    }),
+                    reste > 0 && (react_1.default.createElement("button", { onClick: () => setTalentsPlus(true), style: { width: "100%", padding: "7px", marginBottom: 6, background: "rgba(255,255,255,.04)", border: "1px dashed rgba(255,255,255,.18)", color: "rgba(255,255,255,.55)", borderRadius: 8, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                        "\u25BE Voir ",
+                        reste,
+                        " autre",
+                        reste > 1 ? "s" : "",
+                        " talent",
+                        reste > 1 ? "s" : ""))));
+            })(),
             react_1.default.createElement("button", { onClick: () => setUnuhuModal(false), style: { width: "100%", marginTop: 10, padding: "9px", background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.5)", borderRadius: 8, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 11, cursor: "pointer", boxShadow: RELIEF } }, "Fermer")))) : null;
     const SanJoseOv = sanJoseModal ? (react_1.default.createElement("div", { style: { position: "fixed", inset: 0, zIndex: 270, background: "rgba(4,9,26,.85)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" } },
         react_1.default.createElement("div", { style: { maxWidth: 440, width: "100%", maxHeight: "85vh", overflowY: "auto", background: "linear-gradient(135deg,#05091a,#0a1836)", border: "1px solid rgba(122,158,224,.35)", borderRadius: 14, padding: "20px 18px" } },
@@ -33615,10 +34353,38 @@ function FiscoGame() {
                         }
                         dispatch({ type: "ACCEPT_MISSION", id: m.id, service: m.service });
                         dispatch({ type: "APPLY", effects: { ...m.cost, deliberate: true } });
+                        // Ce qu'on te demande doit laisser une trace dans la partie, sinon
+                        // tu paies pour quelque chose que tu ne retrouves nulle part.
+                        let suite = "";
+                        if (m.id === "em_artist") {
+                            const a = artisteImpose(gs);
+                            if (a) {
+                                dispatch({ type: "SIGN_IMPOSED", artist: a });
+                                const mondial = a.zone !== "FR";
+                                suite = `\n\n**${a.name}** (${a.genre}) apparaît dans ton label ce matin-là. Contrat de cinq ans, déjà paraphé, déjà déposé. Personne chez toi ne l'avait jamais entendu.\n\nTrois semaines plus tard, ${mondial ? "les plateformes le mettent en page d'accueil dans quarante pays, les radios américaines le passent en rotation lourde, et l'académie commence à citer son nom" : "toutes les radios francophones le passent, les plateformes le mettent en avant et les Victoires commencent à citer son nom"}. Tu n'as rien fait. Personne n'a rien fait. **C'est comme ça qu'on fabrique une star.**`;
+                                addLog(`[UNUHU] ${a.name} — signature imposée par le cercle`);
+                            }
+                        }
+                        if (m.id === "em_betray") {
+                            const v = procheALivrer(gs);
+                            if (v) {
+                                dispatch({ type: "LIVRER_PROCHE", id: v.id });
+                                suite = `\n\n**${v.name}** ne répond plus. Pas de reproche, pas d'explication : les messages restent sans réponse, et un jour tu comprends que ça ne reviendra pas.`;
+                                addLog(`[CERCLE] proche livré — ${v.name}`);
+                            }
+                        }
+                        if (m.id === "em_destroy") {
+                            const v = victimeCarriere(gs);
+                            if (v) {
+                                dispatch({ type: "BRISER_CARRIERE", id: v.id, nom: v.name });
+                                suite = `\n\n**${v.name}** ne sortira plus rien. Son label le lâche en trois semaines, ses dates tombent une à une, et son nom quitte les playlists sans que personne ne pose de question.`;
+                                addLog(`[CERCLE] carrière brisée — ${v.name}`);
+                            }
+                        }
                         dispatch({ type: "ADD_TIMELINE", entry: { type: "elite", emoji: m.emoji, title: `Service rendu : ${m.title}` } });
                         addLog(`[CERCLE] ${m.title} — exécuté`);
                         setCalAlert({ emoji: m.emoji, title: "C'est fait",
-                            desc: `Personne ne te remerciera, personne n'en parlera. Mais ton nom vient de monter d'un cran dans une liste que tu n'as jamais vue.\n\nServices rendus : ${(gs.eliteService || 0) + m.service}.` });
+                            desc: `Personne ne te remerciera, personne n'en parlera. Mais ton nom vient de monter d'un cran dans une liste que tu n'as jamais vue.\n\nServices rendus : ${(gs.eliteService || 0) + m.service}.${suite}` });
                     }, style: { padding: "13px", background: "linear-gradient(135deg,rgba(217,182,95,.3),rgba(140,105,20,.25))", border: "1px solid rgba(217,182,95,.55)", color: "#d9b65f", borderRadius: 9, fontFamily: "'Bebas Neue',cursive", fontSize: 15, letterSpacing: 2, cursor: "pointer" } }, "EX\u00C9CUTER"),
                 react_1.default.createElement("button", { onClick: () => {
                         const m = gs.eliteMission;
