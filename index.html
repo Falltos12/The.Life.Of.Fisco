@@ -18563,7 +18563,22 @@ function typeTitre(cat) {
         return "chanson";
     return null;
 }
+// Une tournée porte le nom de l'album qu'elle défend : c'est ainsi que ça se
+// passe, et ça relie les deux titres d'un même artiste la même année.
+const SUFFIXES_TOURNEE = ["{T} Tour", "The {T} Tour", "{T} World Tour", "{T} Live",
+    "{T} Arena Tour", "{T} Stadium Tour", "The {T} Experience", "{T} Tour", "{T} World Tour",
+    "{T} Tour", "The {T} Tour", "{T} on Tour", "{T} Live Across the World", "{T} Nights",
+    "{T} Residency", "{T} Tour", "{T} World Tour", "The {T} Tour"];
+function titreTournee(nom, annee) {
+    const album = titreProjet(nom, "Album de l'Année", annee);
+    if (!album)
+        return null;
+    const h = hachTitre(`${nom}|tournee|${annee}`);
+    return SUFFIXES_TOURNEE[h % SUFFIXES_TOURNEE.length].replace("{T}", album);
+}
 function titreProjet(nom, cat, annee) {
+    if (cat === "Meilleure Performance Live")
+        return titreTournee(nom, annee);
     const type = typeTitre(cat);
     if (!type || !nom)
         return null;
@@ -18904,6 +18919,34 @@ function runVdlmCeremony(gs) {
     return { year, results, winsCount: results.filter(r => r.youWon).length, project: bestAlbum ? bestAlbum.title : (bestTrack ? bestTrack.title : null) };
 }
 const GRAMMY_SONG_CATS = new Set(["Chanson de l'Année", "Meilleure Chanson Rap", "Meilleure Performance Rap", "Meilleure Collaboration"]);
+// ── Un morceau de pop urbaine n'a rien à faire en catégorie rap ──────────
+const FAMILLE_RAP = new Set(["Rap", "Trap", "Drill", "Cloud Rap", "Boom Bap", "Rap Mélo",
+    "Rap / Urbain", "Plugg", "Indie Rap", "Emo Rap", "Rap Conscient", "Phonk", "Grime", "Horrorcore"]);
+const FAMILLE_RNB = new Set(["R&B", "Funk", "Soul", "Néo-Soul", "Neo-Soul"]);
+const CATS_RAP = new Set(["Meilleur Album Rap/Urbain", "Meilleure Chanson Rap", "Meilleure Performance Rap"]);
+const CATS_RNB = new Set(["Meilleur Album R&B"]);
+// Pour un album, le genre qui revient le plus souvent dans ses morceaux.
+function genreDominant(p) {
+    if (!p)
+        return null;
+    const tb = (p.trackBreakdown || []).filter(t => t && t.genre);
+    if (tb.length) {
+        const c = {};
+        tb.forEach(t => { c[t.genre] = (c[t.genre] || 0) + 1; });
+        return Object.entries(c).sort((a, b) => b[1] - a[1])[0][0];
+    }
+    return p.genre || null;
+}
+function genreAdmis(cat, porteur) {
+    const g = genreDominant(porteur);
+    if (!g)
+        return true; // sans information, on ne bloque pas
+    if (CATS_RAP.has(cat))
+        return FAMILLE_RAP.has(g);
+    if (CATS_RNB.has(cat))
+        return FAMILLE_RNB.has(g);
+    return true; // catégories généralistes : tout passe
+}
 const GRAMMY_ALBUM_CATS = new Set(["Album de l'Année", "Meilleur Album Rap/Urbain", "Meilleur Album R&B"]);
 // ─── ACHETER UN GRAMMY : CE QUI EST RÉELLEMENT POSSIBLE ────────────────────
 // Un trophée s'attache à un projet précis, sorti dans l'année écoulée.
@@ -19019,7 +19062,8 @@ function nominerGrammy(gs) {
         const francoBlocked = feats.count > 0 && feats.onlyFranco;
         // En 2024 les autres catégories restent accessoires : on y est nommé sans y gagner.
         const seuil = year === 2024 ? 0.3 : 0.55;
-        const retenu = !!(porteur && note >= 74 && !francoBlocked && Math.random() < seuil);
+        const retenu = !!(porteur && note >= 74 && !francoBlocked
+            && genreAdmis(cat, porteur) && Math.random() < seuil);
         return { category: cat, nominated: retenu,
             projectTitle: (retenu && !isArtistCat) ? (porteur.title || porteur.parentTitle || null) : null,
             score: retenu ? note : 0 };
@@ -20132,7 +20176,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "115";
+const VERSION_JEU = "117";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -25517,7 +25561,8 @@ function FiscoGame() {
         if (phase === "game" && !ending && d.getMonth() === 0 && d.getDate() === 15
             && !(gs.grammyNoms && gs.grammyNoms.year === d.getFullYear())
             && (gs.lastGrammyYear || 0) < d.getFullYear()) {
-            const noms = nominerGrammy(gs);
+            const ecarte = !!(gs.awardsBanned || (gs.boycott && !gs.elite));
+            const noms = ecarte ? { year: d.getFullYear(), cats: [], project: null } : nominerGrammy(gs);
             dispatch({ type: "SET_GRAMMY_NOMS", noms });
             const retenues = noms.cats.filter(c => c.nominated);
             if (retenues.length) {
@@ -25525,13 +25570,13 @@ function FiscoGame() {
                 addLog(`[GRAMMY] ${retenues.length} nomination(s) pour ${noms.year}`);
                 dispatch({ type: "ADD_TIMELINE", entry: { type: "musique", emoji: "🏆",
                         title: `${retenues.length} nomination(s) aux Grammy ${noms.year}` } });
-                setCalAlert({ emoji: "📜", title: "Les nominations sont tombées", majeur: true,
+                setCalAlert({ emoji: "🏆", title: "Les nominations sont tombées", majeur: true,
                     desc: `L'Académie a publié sa liste. Tu es nommé dans **${retenues.length} catégorie${retenues.length > 1 ? "s" : ""}** aux Grammy Awards ${noms.year} :\n\n${lignes}\n\nLa cérémonie a lieu le 4 février. D'ici là, rien de ce que tu feras ne changera cette liste.` });
             }
             else {
                 addLog(`[GRAMMY] Aucune nomination pour ${noms.year}`);
-                setCalAlert({ emoji: "📜", title: "Les nominations sont tombées", majeur: true,
-                    desc: `L'Académie a publié sa liste pour les Grammy Awards ${noms.year}.\n\n**Ton nom n'y est pas.**\n\n${(gs.discography || []).length ? "Ce que tu as sorti cette année n'a pas suffi, ou n'était pas éligible." : "Il faut avoir sorti quelque chose dans l'année pour y prétendre."}\n\nLa cérémonie a lieu le 4 février. Tu peux la regarder depuis chez toi.` });
+                setCalAlert({ emoji: "🏆", title: "Les nominations sont tombées", majeur: true,
+                    desc: `L'Académie a publié sa liste pour les Grammy Awards ${noms.year}.\n\n**Ton nom n'y est pas.**\n\n${ecarte ? "Ce n'est pas une question de musique : en pleine période de boycott, l'académie ne retient ta candidature dans aucune catégorie." : ((gs.discography || []).length ? "Ce que tu as sorti cette année n'a pas suffi, ou n'était pas éligible." : "Il faut avoir sorti quelque chose dans l'année pour y prétendre.")}\n\nLa cérémonie a lieu le 4 février. Tu peux la regarder depuis chez toi.` });
             }
         }
         // ── FALLTOS ET ANOK YAI, PUIS DARIO ──────────────────────────────────
