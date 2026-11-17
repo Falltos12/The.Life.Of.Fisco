@@ -1688,7 +1688,7 @@ function featTierOf(id) {
         return "franco_export";
     if (FEAT_TIER_FRANCO.has(id))
         return "franco";
-    const c = CHARS_BY_ID[id];
+    const c = charAny(id);
     if (c && ["Paris", "Nice", "Marseille", "Bruxelles", "Bourg-en-Bresse", "France"].includes(c.loc))
         return "franco";
     return "mid";
@@ -1845,8 +1845,18 @@ function getFeatIds(t) {
         return [t.featId];
     return [];
 }
+const PERSOS_VENUS = {};
+function majPersosVenus(cast) {
+    if (!cast)
+        return;
+    for (const k in cast) {
+        if (cast[k] && !PERSOS_VENUS[k])
+            PERSOS_VENUS[k] = cast[k];
+    }
+}
+function charAny(id) { return CHARS_BY_ID[id] || PERSOS_VENUS[id] || null; }
 function getFeatNames(t) {
-    return getFeatIds(t).map(id => { var _a; return (_a = CHARS_BY_ID[id]) === null || _a === void 0 ? void 0 : _a.name; }).filter(Boolean);
+    return getFeatIds(t).map(id => { var _a; return (_a = charAny(id)) === null || _a === void 0 ? void 0 : _a.name; }).filter(Boolean);
 }
 function hasLegendaryFeat(t) {
     return getFeatIds(t).some(id => LEGENDARY_FEATS.includes(id));
@@ -8408,6 +8418,7 @@ const BAHASCO_BRANDS = [
 ];
 // ─── UNUHU RECORDS : roster fictif signable ─────────────────────────────────
 const UNUHU_TALENT_POOL = [
+    { id: "us_damon", name: "Damon", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 260000, potential: 32 },
     { id: "ua_angele", charId: "angele", name: "Angèle", emoji: "✨", genre: "Pop", zone: "FR", rang: "fr", cost: 16700000, potential: 69 },
     { id: "ua_camelia_jordana", charId: "camelia_jordana", name: "Camélia Jordana", emoji: "🎼", genre: "Variété", zone: "FR", rang: "fr", cost: 2100000, potential: 45 },
     { id: "ua_amel_bent", charId: "amel_bent", name: "Amel Bent", emoji: "🌟", genre: "Pop", zone: "FR", rang: "fr", cost: 4550000, potential: 51 },
@@ -8630,206 +8641,206 @@ const UNUHU_TALENT_POOL = [
     { id: "ua_duckwrth", charId: "r_duckwrth", name: "Duckwrth", emoji: "🕺", genre: "Funk", zone: "US", rang: "us", cost: 8250000, potential: 57 },
     { id: "ua_buddy", charId: "r_buddy", name: "Buddy", emoji: "🎙️", genre: "Rap", zone: "US", rang: "us", cost: 10500000, potential: 59 },
     { id: "ua_lute", charId: "r_lute", name: "Lute", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "us", cost: 5400000, potential: 54 },
-    { id: "fu_0", name: "Nayel Brunet", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 80000, potential: 20 },
-    { id: "fu_1", name: "Sofia Terras", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 150000, potential: 28 },
-    { id: "fu_2", name: "Tako Vidal", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 330000, potential: 34 },
-    { id: "fu_3", name: "Malo Rives", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 80000, potential: 23 },
-    { id: "fu_4", name: "Jina Beclair", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 230000, potential: 31 },
-    { id: "fu_5", name: "Elyas Noor", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 560000, potential: 39 },
-    { id: "fu_6", name: "Lina Verdier", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 110000, potential: 26 },
-    { id: "fu_7", name: "Wassim Daher", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 130000, potential: 27 },
-    { id: "fu_8", name: "Noé Taillandier", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 80000, potential: 21 },
-    { id: "fu_9", name: "Sarah Mounir", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 80000, potential: 22 },
-    { id: "fu_10", name: "Idriss Belkacem", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 420000, potential: 36 },
-    { id: "fu_11", name: "Maya Roussel", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 90000, potential: 24 },
-    { id: "fu_12", name: "Oscar Pellegrin", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 260000, potential: 32 },
-    { id: "fu_13", name: "Lenny Boucher", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 510000, potential: 38 },
-    { id: "fu_14", name: "Fara Samaké", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 80000, potential: 20 },
-    { id: "fu_15", name: "Tom Vasseur", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 150000, potential: 28 },
-    { id: "fu_16", name: "Inès Ferrand", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 80000, potential: 22 },
-    { id: "fu_17", name: "Kenzo Mariani", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 80000, potential: 23 },
-    { id: "fu_18", name: "Awa Sissoko", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 230000, potential: 31 },
-    { id: "fu_19", name: "Milan Dubreuil", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 100000, potential: 25 },
-    { id: "fu_20", name: "Rayan Benali", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 300000, potential: 33 },
-    { id: "fu_21", name: "Clémence Loiseau", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 370000, potential: 35 },
-    { id: "fu_22", name: "Diego Fontanel", emoji: "🎫", genre: "Reggaeton", zone: "FR", rang: "under", cost: 80000, potential: 21 },
-    { id: "fu_23", name: "Nour Hadji", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "under", cost: 180000, potential: 29 },
-    { id: "fu_24", name: "Basile Rochefort", emoji: "🎧", genre: "R&B", zone: "FR", rang: "under", cost: 620000, potential: 40 },
-    { id: "fu_25", name: "Alya Bensalem", emoji: "⭐️", genre: "Indie Pop", zone: "FR", rang: "under", cost: 90000, potential: 24 },
-    { id: "fu_26", name: "Noham Prévost", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 260000, potential: 32 },
-    { id: "fu_27", name: "Louka Grimaldi", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 110000, potential: 26 },
-    { id: "fu_28", name: "Ismaël Cissoko", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 130000, potential: 27 },
-    { id: "fu_29", name: "Jeanne Darmon", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 460000, potential: 37 },
-    { id: "fu_30", name: "Maël Cordier", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 80000, potential: 22 },
-    { id: "fu_31", name: "Lisa Pereira", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 200000, potential: 30 },
-    { id: "fu_32", name: "Yanis Toumi", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 620000, potential: 40 },
-    { id: "fu_33", name: "Chloé Vanden", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 100000, potential: 25 },
-    { id: "fu_34", name: "Ruben Castel", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 300000, potential: 33 },
-    { id: "fu_35", name: "Sonia Trabelsi", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 80000, potential: 20 },
-    { id: "fu_36", name: "Esteban Marchal", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 80000, potential: 21 },
-    { id: "fu_37", name: "Nina Lafitte", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 330000, potential: 34 },
-    { id: "fu_38", name: "Adil Zerrouki", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 80000, potential: 23 },
-    { id: "fu_39", name: "Timéo Bourgeois", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 230000, potential: 31 },
-    { id: "fu_40", name: "Kenza Ouali", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 420000, potential: 36 },
-    { id: "fu_41", name: "Hugo Delaunay", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 110000, potential: 26 },
-    { id: "fu_42", name: "Sirine Mejri", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 130000, potential: 27 },
-    { id: "fu_43", name: "Loris Bonnard", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 80000, potential: 21 },
-    { id: "fu_44", name: "Djibril Fofana", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 80000, potential: 22 },
-    { id: "fu_45", name: "Manon Esteve", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 200000, potential: 30 },
-    { id: "fu_46", name: "Ayoub Nasri", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 90000, potential: 24 },
-    { id: "fu_47", name: "Alice Carpentier", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 260000, potential: 32 },
-    { id: "fu_48", name: "Enzo Rinaldi", emoji: "🎫", genre: "Reggaeton", zone: "FR", rang: "under", cost: 510000, potential: 38 },
-    { id: "fu_49", name: "Nawel Bouchard", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "under", cost: 80000, potential: 20 },
-    { id: "fu_50", name: "Soan Ferrero", emoji: "🎧", genre: "R&B", zone: "FR", rang: "under", cost: 150000, potential: 28 },
-    { id: "fu_51", name: "Camille Dervaux", emoji: "⭐️", genre: "Indie Pop", zone: "FR", rang: "under", cost: 560000, potential: 39 },
-    { id: "fu_52", name: "Bilal Tazi", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 80000, potential: 23 },
-    { id: "fu_53", name: "Jade Marinho", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 230000, potential: 31 },
-    { id: "fu_54", name: "Théo Lassalle", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 100000, potential: 25 },
-    { id: "fu_55", name: "Fatou Diarra", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 300000, potential: 33 },
-    { id: "fu_56", name: "Arthur Vauclair", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 370000, potential: 35 },
-    { id: "fu_57", name: "Lou Berthelot", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 80000, potential: 21 },
-    { id: "fu_58", name: "Samir Khelifi", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 180000, potential: 29 },
-    { id: "fu_59", name: "Agathe Mounier", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 460000, potential: 37 },
-    { id: "fu_60", name: "Nolan Fresnel", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 90000, potential: 24 },
-    { id: "fu_61", name: "Assia Benhamou", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 260000, potential: 32 },
-    { id: "fu_62", name: "Victor Chastain", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 110000, potential: 26 },
-    { id: "fu_63", name: "Maïssa Lahlou", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 80000, potential: 20 },
-    { id: "fu_64", name: "Gabin Teyssier", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 460000, potential: 37 },
-    { id: "fu_65", name: "Aminata Keita", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 80000, potential: 22 },
-    { id: "fu_66", name: "Raphaël Soulier", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 200000, potential: 30 },
-    { id: "fu_67", name: "Eve Mercadier", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 330000, potential: 34 },
-    { id: "fu_68", name: "Nahel Barka", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 100000, potential: 25 },
-    { id: "fu_69", name: "Roxane Villard", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 300000, potential: 33 },
-    { id: "fu_70", name: "Mehdi Sahraoui", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 80000, potential: 20 },
-    { id: "fu_71", name: "Louise Perrin", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 80000, potential: 21 },
-    { id: "fu_72", name: "Océan Delcourt", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 180000, potential: 29 },
-    { id: "fu_73", name: "Anissa Guerin", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 80000, potential: 23 },
-    { id: "fu_74", name: "Tony Vasconcelos", emoji: "🎫", genre: "Reggaeton", zone: "FR", rang: "under", cost: 230000, potential: 31 },
-    { id: "fu_75", name: "Célia Mandel", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "under", cost: 420000, potential: 36 },
-    { id: "fu_76", name: "Younes Rahal", emoji: "🎧", genre: "R&B", zone: "FR", rang: "under", cost: 110000, potential: 26 },
-    { id: "fu_77", name: "Margaux Fabre", emoji: "⭐️", genre: "Indie Pop", zone: "FR", rang: "under", cost: 130000, potential: 27 },
-    { id: "fu_78", name: "Kylian Moreno", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 620000, potential: 40 },
-    { id: "fu_79", name: "Shayna Diallo", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 80000, potential: 22 },
-    { id: "fu_80", name: "Elio Fontana", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 200000, potential: 30 },
-    { id: "fu_81", name: "Lyna Bessette", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 90000, potential: 24 },
-    { id: "fu_82", name: "Aaron Pichon", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 100000, potential: 25 },
-    { id: "fu_83", name: "Noélie Carrère", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 510000, potential: 38 },
-    { id: "fu_84", name: "Idir Messaoud", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 80000, potential: 20 },
-    { id: "fu_85", name: "Romane Saulnier", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 150000, potential: 28 },
-    { id: "fu_86", name: "Keyran Dupuy", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 370000, potential: 35 },
-    { id: "fu_87", name: "Lila Nouri", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 80000, potential: 23 },
-    { id: "fu_88", name: "Matéo Lorrain", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 230000, potential: 31 },
-    { id: "fu_89", name: "Flora Sénéchal", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 100000, potential: 25 },
-    { id: "fu_90", name: "Ilyes Mazouz", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 110000, potential: 26 },
-    { id: "fu_91", name: "Capucine Rolland", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 130000, potential: 27 },
-    { id: "fu_92", name: "Driss Belaïd", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 80000, potential: 21 },
-    { id: "fu_93", name: "Anaé Ferrier", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 180000, potential: 29 },
-    { id: "fu_94", name: "Soline Varnier", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 460000, potential: 37 },
-    { id: "fu_95", name: "Nathan Guizot", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 90000, potential: 24 },
-    { id: "fu_96", name: "Maëva Pontier", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 260000, potential: 32 },
-    { id: "fu_97", name: "Jibril Sow", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 110000, potential: 26 },
-    { id: "fu_98", name: "Lucien Tardieu", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 80000, potential: 20 },
-    { id: "fu_99", name: "Nour Chabane", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 150000, potential: 28 },
-    { id: "ft_0", name: "Dre Maddox", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 80000, potential: 20 },
-    { id: "ft_1", name: "Kazzy Vane", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 150000, potential: 28 },
-    { id: "ft_2", name: "Tru Carmichael", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 620000, potential: 40 },
-    { id: "ft_3", name: "Jace Ortiz", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 80000, potential: 23 },
-    { id: "ft_4", name: "Mello Banks", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 230000, potential: 31 },
-    { id: "ft_5", name: "Sage Whitfield", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 100000, potential: 25 },
-    { id: "ft_6", name: "Rome Delacroix", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 110000, potential: 26 },
-    { id: "ft_7", name: "Tay Abernathy", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 510000, potential: 38 },
-    { id: "ft_8", name: "Kota Reyes", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 80000, potential: 21 },
-    { id: "ft_9", name: "Vee Langston", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 180000, potential: 29 },
-    { id: "ft_10", name: "Nova Pike", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 370000, potential: 35 },
-    { id: "ft_11", name: "Jett Calloway", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 90000, potential: 24 },
-    { id: "ft_12", name: "Lex Marrow", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 260000, potential: 32 },
-    { id: "ft_13", name: "Skye Dunbar", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 110000, potential: 26 },
-    { id: "ft_14", name: "Ro Salcedo", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 20 },
-    { id: "ft_15", name: "Tess Harlan", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 150000, potential: 28 },
-    { id: "ft_16", name: "Juno Beckett", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 80000, potential: 22 },
-    { id: "ft_17", name: "Cass Ellery", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 200000, potential: 30 },
-    { id: "ft_18", name: "Dion Whitlock", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 460000, potential: 37 },
-    { id: "ft_19", name: "Ace Pernell", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 100000, potential: 25 },
-    { id: "ft_20", name: "Mika Thorne", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 300000, potential: 33 },
-    { id: "ft_21", name: "Rell Donovan", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 20 },
-    { id: "ft_22", name: "Ivy Castellan", emoji: "🎹", genre: "Jazz Rap", zone: "US", rang: "under", cost: 80000, potential: 21 },
-    { id: "ft_23", name: "Shay Brennan", emoji: "💯", genre: "Afrobeat", zone: "US", rang: "under", cost: 180000, potential: 29 },
-    { id: "ft_24", name: "Zeke Alvarado", emoji: "🎛️", genre: "Plugg", zone: "US", rang: "under", cost: 80000, potential: 23 },
-    { id: "ft_25", name: "Nia Caldwell", emoji: "💃", genre: "Pop Urbaine", zone: "US", rang: "under", cost: 230000, potential: 31 },
-    { id: "ft_26", name: "Trey Vandal", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 330000, potential: 34 },
-    { id: "ft_27", name: "Lux Barrow", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 110000, potential: 26 },
-    { id: "ft_28", name: "Omar Keen", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 130000, potential: 27 },
-    { id: "ft_29", name: "Brit Solano", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 560000, potential: 39 },
-    { id: "ft_30", name: "Kyro Lemmon", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 80000, potential: 22 },
-    { id: "ft_31", name: "Dallas Pruitt", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 200000, potential: 30 },
-    { id: "ft_32", name: "Rae Montez", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 90000, potential: 24 },
-    { id: "ft_33", name: "Finn Okafor", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 100000, potential: 25 },
-    { id: "ft_34", name: "Dez Hartley", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 420000, potential: 36 },
-    { id: "ft_35", name: "Sloane Tatum", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 80000, potential: 20 },
-    { id: "ft_36", name: "Cruz Benedetti", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 150000, potential: 28 },
-    { id: "ft_37", name: "Emery Vaughn", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 510000, potential: 38 },
-    { id: "ft_38", name: "Rio Mathis", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 80000, potential: 23 },
-    { id: "ft_39", name: "Kian Brady", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 230000, potential: 31 },
-    { id: "ft_40", name: "Taj Winslow", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 100000, potential: 25 },
-    { id: "ft_41", name: "Lennox Reed", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 110000, potential: 26 },
-    { id: "ft_42", name: "Marlo Esparza", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 130000, potential: 27 },
-    { id: "ft_43", name: "Devin Ashby", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 80000, potential: 21 },
-    { id: "ft_44", name: "Sunny Okoro", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 180000, potential: 29 },
-    { id: "ft_45", name: "Blaise Tran", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 370000, potential: 35 },
-    { id: "ft_46", name: "Zion Carver", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 90000, potential: 24 },
-    { id: "ft_47", name: "Haven Wylde", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 260000, potential: 32 },
-    { id: "ft_48", name: "Nico Strand", emoji: "🎹", genre: "Jazz Rap", zone: "US", rang: "under", cost: 620000, potential: 40 },
-    { id: "ft_49", name: "Remi Bly", emoji: "💯", genre: "Afrobeat", zone: "US", rang: "under", cost: 80000, potential: 20 },
-    { id: "ft_50", name: "Quinn Fontaine", emoji: "🎛️", genre: "Plugg", zone: "US", rang: "under", cost: 150000, potential: 28 },
-    { id: "ft_51", name: "Kobe Amari", emoji: "💃", genre: "Pop Urbaine", zone: "US", rang: "under", cost: 80000, potential: 22 },
-    { id: "ft_52", name: "Lyric Shaw", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 200000, potential: 30 },
-    { id: "ft_53", name: "Jonas Veltri", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 460000, potential: 37 },
-    { id: "ft_54", name: "Bex Monroe", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 100000, potential: 25 },
-    { id: "ft_55", name: "Dove Mercer", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 300000, potential: 33 },
-    { id: "ft_56", name: "Axel Prado", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 620000, potential: 40 },
-    { id: "ft_57", name: "Noa Kingsley", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 80000, potential: 21 },
-    { id: "ft_58", name: "Rhett Palomo", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 180000, potential: 29 },
-    { id: "ft_59", name: "Saint Dupree", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 80000, potential: 23 },
-    { id: "ft_60", name: "Elle Navarro", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 90000, potential: 24 },
-    { id: "ft_61", name: "Case Tillman", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 330000, potential: 34 },
-    { id: "ft_62", name: "Ivory Lane", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 110000, potential: 26 },
-    { id: "ft_63", name: "Bodhi Ross", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 130000, potential: 27 },
-    { id: "ft_64", name: "Tyme Walcott", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 420000, potential: 36 },
-    { id: "ft_65", name: "Avery Stoll", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 80000, potential: 22 },
-    { id: "ft_66", name: "Juice Carrington", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 200000, potential: 30 },
-    { id: "ft_67", name: "Kodi Sherman", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 90000, potential: 24 },
-    { id: "ft_68", name: "Reign Mathers", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 100000, potential: 25 },
-    { id: "ft_69", name: "Paz Alvarez", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 300000, potential: 33 },
-    { id: "ft_70", name: "Cleo Ward", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 80000, potential: 20 },
-    { id: "ft_71", name: "Dash Ferrell", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 150000, potential: 28 },
-    { id: "ft_72", name: "Mars Beaumont", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 510000, potential: 38 },
-    { id: "ft_73", name: "Dani Vance", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 23 },
-    { id: "ft_74", name: "Roux Carlisle", emoji: "🎹", genre: "Jazz Rap", zone: "US", rang: "under", cost: 230000, potential: 31 },
-    { id: "ft_75", name: "Sol Emerson", emoji: "💯", genre: "Afrobeat", zone: "US", rang: "under", cost: 560000, potential: 39 },
-    { id: "ft_76", name: "Kace Dillard", emoji: "🎛️", genre: "Plugg", zone: "US", rang: "under", cost: 110000, potential: 26 },
-    { id: "ft_77", name: "Wren Alcott", emoji: "💃", genre: "Pop Urbaine", zone: "US", rang: "under", cost: 130000, potential: 27 },
-    { id: "ft_78", name: "Jules Pennington", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 80000, potential: 21 },
-    { id: "ft_79", name: "Enzo Marsh", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 180000, potential: 29 },
-    { id: "ft_80", name: "Halo Benton", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 370000, potential: 35 },
-    { id: "ft_81", name: "Kash Everly", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 90000, potential: 24 },
-    { id: "ft_82", name: "Lumi Hart", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 260000, potential: 32 },
-    { id: "ft_83", name: "Drake Villanueva", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 460000, potential: 37 },
-    { id: "ft_84", name: "Isa Montrose", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 80000, potential: 20 },
-    { id: "ft_85", name: "Zay Kimbrough", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 150000, potential: 28 },
-    { id: "ft_86", name: "Fay Lindqvist", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 80000, potential: 22 },
-    { id: "ft_87", name: "Odis Grant", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 80000, potential: 23 },
-    { id: "ft_88", name: "Brynn Castile", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 460000, potential: 37 },
-    { id: "ft_89", name: "Teo Marchand", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 100000, potential: 25 },
-    { id: "ft_90", name: "Cyrus Dade", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 300000, potential: 33 },
-    { id: "ft_91", name: "Nell Ortega", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 330000, potential: 34 },
-    { id: "ft_92", name: "Kairo Swift", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 21 },
-    { id: "ft_93", name: "Vida Lennon", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 180000, potential: 29 },
-    { id: "ft_94", name: "Jax Arroyo", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 80000, potential: 23 },
-    { id: "ft_95", name: "Lena Prescott", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 90000, potential: 24 },
-    { id: "ft_96", name: "Boone Carver", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 260000, potential: 32 },
-    { id: "ft_97", name: "Sable Reyes", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 110000, potential: 26 },
-    { id: "ft_98", name: "Theo Massey", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 130000, potential: 27 },
-    { id: "ft_99", name: "Vann Delgado", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 420000, potential: 36 },
+    { id: "fu_0", name: "Ilka", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_1", name: "Rimka", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 150000, potential: 28 },
+    { id: "fu_2", name: "Bahko", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 330000, potential: 34 },
+    { id: "fu_3", name: "Ismo", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_4", name: "Baby Yako", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_5", name: "DJ Melko", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 560000, potential: 39 },
+    { id: "fu_6", name: "Alice Rives", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_7", name: "Calio", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 130000, potential: 27 },
+    { id: "fu_8", name: "Big Tovar", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_9", name: "Lyro", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_10", name: "Big Olko", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 420000, potential: 36 },
+    { id: "fu_11", name: "Louka Trabelsi", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_12", name: "Krado", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 260000, potential: 32 },
+    { id: "fu_13", name: "Alya Verdier", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 510000, potential: 38 },
+    { id: "fu_14", name: "Noham Castel", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_15", name: "Okso", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 150000, potential: 28 },
+    { id: "fu_16", name: "Noé Vasseur", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_17", name: "Clémence Zerrouki", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_18", name: "Lisa Noor", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_19", name: "Yska", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_20", name: "Delko", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 300000, potential: 33 },
+    { id: "fu_21", name: "Baby Rimka", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 370000, potential: 35 },
+    { id: "fu_22", name: "Kenzo Taillandier", emoji: "🎫", genre: "Reggaeton", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_23", name: "Morvo", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "under", cost: 180000, potential: 29 },
+    { id: "fu_24", name: "Lenny Sissoko", emoji: "🎧", genre: "R&B", zone: "FR", rang: "under", cost: 620000, potential: 40 },
+    { id: "fu_25", name: "Kesso", emoji: "⭐️", genre: "Indie Pop", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_26", name: "Velko", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 260000, potential: 32 },
+    { id: "fu_27", name: "Tyko", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_28", name: "Nahko", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 130000, potential: 27 },
+    { id: "fu_29", name: "Malo Verdier", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 460000, potential: 37 },
+    { id: "fu_30", name: "DJ Elzo", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_31", name: "Yung Tovar", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 200000, potential: 30 },
+    { id: "fu_32", name: "Enko", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 620000, potential: 40 },
+    { id: "fu_33", name: "Big Tyko", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_34", name: "Tamir", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 300000, potential: 33 },
+    { id: "fu_35", name: "Lil Sorya", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_36", name: "Tchiko", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_37", name: "Nina Roussel", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 330000, potential: 34 },
+    { id: "fu_38", name: "Oscar Beclair", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_39", name: "Loris Rochefort", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_40", name: "Lisa Rives", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 420000, potential: 36 },
+    { id: "fu_41", name: "Jovan", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_42", name: "Zalik", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 130000, potential: 27 },
+    { id: "fu_43", name: "Esteban Benali", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_44", name: "Lil Ilka", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_45", name: "Noé Fofana", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 200000, potential: 30 },
+    { id: "fu_46", name: "Nayel Pereira", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_47", name: "Goma", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 260000, potential: 32 },
+    { id: "fu_48", name: "Noham Fontanel", emoji: "🎫", genre: "Reggaeton", zone: "FR", rang: "under", cost: 510000, potential: 38 },
+    { id: "fu_49", name: "Rayko", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_50", name: "Lil Nyro", emoji: "🎧", genre: "R&B", zone: "FR", rang: "under", cost: 150000, potential: 28 },
+    { id: "fu_51", name: "Vanko", emoji: "⭐️", genre: "Indie Pop", zone: "FR", rang: "under", cost: 560000, potential: 39 },
+    { id: "fu_52", name: "Lenny Cissoko", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_53", name: "Fyrn", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_54", name: "Maryk", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_55", name: "Yanis Bourgeois", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 300000, potential: 33 },
+    { id: "fu_56", name: "Alya Trabelsi", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 370000, potential: 35 },
+    { id: "fu_57", name: "Hugo Bonnard", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_58", name: "Zeko", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 180000, potential: 29 },
+    { id: "fu_59", name: "Baby Delko", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 460000, potential: 37 },
+    { id: "fu_60", name: "Lonka", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_61", name: "Nour Bourgeois", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 260000, potential: 32 },
+    { id: "fu_62", name: "Sonia Bensalem", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_63", name: "Nayel Mounir", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_64", name: "Jeanne Bonnard", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 460000, potential: 37 },
+    { id: "fu_65", name: "Hazo", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_66", name: "Alya Bensalem", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 200000, potential: 30 },
+    { id: "fu_67", name: "Nivek", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 330000, potential: 34 },
+    { id: "fu_68", name: "Fara Mounir", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_69", name: "Velia", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 300000, potential: 33 },
+    { id: "fu_70", name: "Eska", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_71", name: "Orso", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_72", name: "Yoska", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 180000, potential: 29 },
+    { id: "fu_73", name: "Galko", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_74", name: "Ulka", emoji: "🎫", genre: "Reggaeton", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_75", name: "Elyas Roussel", emoji: "📝", genre: "Rap Conscient", zone: "FR", rang: "under", cost: 420000, potential: 36 },
+    { id: "fu_76", name: "Diego Belkacem", emoji: "🎧", genre: "R&B", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_77", name: "DJ Yako", emoji: "⭐️", genre: "Indie Pop", zone: "FR", rang: "under", cost: 130000, potential: 27 },
+    { id: "fu_78", name: "Timéo Daher", emoji: "🎤", genre: "Rap", zone: "FR", rang: "under", cost: 620000, potential: 40 },
+    { id: "fu_79", name: "Melko", emoji: "🎛️", genre: "Plugg", zone: "FR", rang: "under", cost: 80000, potential: 22 },
+    { id: "fu_80", name: "Zorka", emoji: "🎼", genre: "Néo-Soul", zone: "FR", rang: "under", cost: 200000, potential: 30 },
+    { id: "fu_81", name: "Sofia Darmon", emoji: "🔊", genre: "Électro", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_82", name: "Alya Rives", emoji: "💥", genre: "Trap", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_83", name: "Sarah Samaké", emoji: "🎵", genre: "Rap Mélo", zone: "FR", rang: "under", cost: 510000, potential: 38 },
+    { id: "fu_84", name: "Nayko", emoji: "🕺", genre: "Funk", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_85", name: "Sanko", emoji: "📻", genre: "Amapiano", zone: "FR", rang: "under", cost: 150000, potential: 28 },
+    { id: "fu_86", name: "Inès Sissoko", emoji: "📀", genre: "Boom Bap", zone: "FR", rang: "under", cost: 370000, potential: 35 },
+    { id: "fu_87", name: "Idriss Daher", emoji: "🎹", genre: "Jazz Rap", zone: "FR", rang: "under", cost: 80000, potential: 23 },
+    { id: "fu_88", name: "Young Ravik", emoji: "💃", genre: "Pop Urbaine", zone: "FR", rang: "under", cost: 230000, potential: 31 },
+    { id: "fu_89", name: "Maël Ouali", emoji: "💿", genre: "Dancehall", zone: "FR", rang: "under", cost: 100000, potential: 25 },
+    { id: "fu_90", name: "Zemir", emoji: "🎚️", genre: "Cloud Rap", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_91", name: "Nyro", emoji: "🎶", genre: "R&B", zone: "FR", rang: "under", cost: 130000, potential: 27 },
+    { id: "fu_92", name: "Pamir", emoji: "🪩", genre: "Hyperpop", zone: "FR", rang: "under", cost: 80000, potential: 21 },
+    { id: "fu_93", name: "Sirine Samaké", emoji: "🎙️", genre: "Rap", zone: "FR", rang: "under", cost: 180000, potential: 29 },
+    { id: "fu_94", name: "Yung Vyro", emoji: "⚡", genre: "Phonk", zone: "FR", rang: "under", cost: 460000, potential: 37 },
+    { id: "fu_95", name: "Quenzo", emoji: "🌟", genre: "Soul", zone: "FR", rang: "under", cost: 90000, potential: 24 },
+    { id: "fu_96", name: "Idriss Cissoko", emoji: "💯", genre: "Afrobeat", zone: "FR", rang: "under", cost: 260000, potential: 32 },
+    { id: "fu_97", name: "Sorya", emoji: "🔥", genre: "Drill", zone: "FR", rang: "under", cost: 110000, potential: 26 },
+    { id: "fu_98", name: "Kenzo Esteve", emoji: "💫", genre: "Emo Rap", zone: "FR", rang: "under", cost: 80000, potential: 20 },
+    { id: "fu_99", name: "Brisko", emoji: "✨", genre: "Pop", zone: "FR", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_0", name: "Baby Shade", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_1", name: "Shay Ellery", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_2", name: "Mello Dunbar", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 620000, potential: 40 },
+    { id: "ft_3", name: "Vellum", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_4", name: "Omar Esparza", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 230000, potential: 31 },
+    { id: "ft_5", name: "Jett Keen", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_6", name: "Talon", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_7", name: "Kazzy Marrow", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 510000, potential: 38 },
+    { id: "ft_8", name: "Onyx", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_9", name: "Zephyr", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_10", name: "Sunny Banks", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 370000, potential: 35 },
+    { id: "ft_11", name: "Echo", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_12", name: "Wander", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 260000, potential: 32 },
+    { id: "ft_13", name: "Ember", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_14", name: "Vex", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_15", name: "Halcyon", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_16", name: "Fable", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 80000, potential: 22 },
+    { id: "ft_17", name: "Jonas Pruitt", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 200000, potential: 30 },
+    { id: "ft_18", name: "Lotus", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 460000, potential: 37 },
+    { id: "ft_19", name: "DJ Orbit", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_20", name: "Flux", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 300000, potential: 33 },
+    { id: "ft_21", name: "Dion Banks", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_22", name: "Obsidian", emoji: "🎹", genre: "Jazz Rap", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_23", name: "Ace Hartley", emoji: "💯", genre: "Afrobeat", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_24", name: "Dez Pernell", emoji: "🎛️", genre: "Plugg", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_25", name: "Ace Reed", emoji: "💃", genre: "Pop Urbaine", zone: "US", rang: "under", cost: 230000, potential: 31 },
+    { id: "ft_26", name: "Sloane Mathis", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 330000, potential: 34 },
+    { id: "ft_27", name: "Emery Keen", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_28", name: "DJ Loom", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 130000, potential: 27 },
+    { id: "ft_29", name: "Yield", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 560000, potential: 39 },
+    { id: "ft_30", name: "Rune", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 80000, potential: 22 },
+    { id: "ft_31", name: "Sage Reyes", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 200000, potential: 30 },
+    { id: "ft_32", name: "Taj Esparza", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_33", name: "Ace Lemmon", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_34", name: "Corso", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 420000, potential: 36 },
+    { id: "ft_35", name: "Ultra", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_36", name: "Mika Esparza", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_37", name: "Quasar", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 510000, potential: 38 },
+    { id: "ft_38", name: "Rell Okafor", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_39", name: "Wraith", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 230000, potential: 31 },
+    { id: "ft_40", name: "Baby Ember", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_41", name: "Brit Ashby", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_42", name: "Koda", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 130000, potential: 27 },
+    { id: "ft_43", name: "Umbra", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_44", name: "Jarvis", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_45", name: "Brixx", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 370000, potential: 35 },
+    { id: "ft_46", name: "Zayde", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_47", name: "Zenith", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 260000, potential: 32 },
+    { id: "ft_48", name: "Cruz Carver", emoji: "🎹", genre: "Jazz Rap", zone: "US", rang: "under", cost: 620000, potential: 40 },
+    { id: "ft_49", name: "Finn Reyes", emoji: "💯", genre: "Afrobeat", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_50", name: "Vesper", emoji: "🎛️", genre: "Plugg", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_51", name: "Lennox Langston", emoji: "💃", genre: "Pop Urbaine", zone: "US", rang: "under", cost: 80000, potential: 22 },
+    { id: "ft_52", name: "Wilder", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 200000, potential: 30 },
+    { id: "ft_53", name: "Dre Caldwell", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 460000, potential: 37 },
+    { id: "ft_54", name: "Marrow", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_55", name: "Vertigo", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 300000, potential: 33 },
+    { id: "ft_56", name: "Jace Harlan", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 620000, potential: 40 },
+    { id: "ft_57", name: "Quill", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_58", name: "Taj Pruitt", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_59", name: "Lil Fable", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_60", name: "Marlo Okafor", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_61", name: "Mirage", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 330000, potential: 34 },
+    { id: "ft_62", name: "Ivory", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_63", name: "Kismet", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 130000, potential: 27 },
+    { id: "ft_64", name: "Cypher", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 420000, potential: 36 },
+    { id: "ft_65", name: "Young Shade", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 80000, potential: 22 },
+    { id: "ft_66", name: "Union", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 200000, potential: 30 },
+    { id: "ft_67", name: "Ro Ellery", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_68", name: "Grove", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_69", name: "Kyro Abernathy", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 300000, potential: 33 },
+    { id: "ft_70", name: "Caspian", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_71", name: "Quinn Whitlock", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_72", name: "Tru Vaughn", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 510000, potential: 38 },
+    { id: "ft_73", name: "Young Trell", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_74", name: "Finn Donovan", emoji: "🎹", genre: "Jazz Rap", zone: "US", rang: "under", cost: 230000, potential: 31 },
+    { id: "ft_75", name: "Lil Trell", emoji: "💯", genre: "Afrobeat", zone: "US", rang: "under", cost: 560000, potential: 39 },
+    { id: "ft_76", name: "Reverie", emoji: "🎛️", genre: "Plugg", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_77", name: "Zeal", emoji: "💃", genre: "Pop Urbaine", zone: "US", rang: "under", cost: 130000, potential: 27 },
+    { id: "ft_78", name: "DJ Echo", emoji: "🔥", genre: "Drill", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_79", name: "Orbit", emoji: "🎼", genre: "Néo-Soul", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_80", name: "Jace Vane", emoji: "💿", genre: "Dancehall", zone: "US", rang: "under", cost: 370000, potential: 35 },
+    { id: "ft_81", name: "Young Ember", emoji: "💫", genre: "Emo Rap", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_82", name: "Young Vance", emoji: "🔊", genre: "Électro", zone: "US", rang: "under", cost: 260000, potential: 32 },
+    { id: "ft_83", name: "Tay Dunbar", emoji: "🎚️", genre: "Cloud Rap", zone: "US", rang: "under", cost: 460000, potential: 37 },
+    { id: "ft_84", name: "Kyro Bly", emoji: "✨", genre: "Pop", zone: "US", rang: "under", cost: 80000, potential: 20 },
+    { id: "ft_85", name: "Marlo Salcedo", emoji: "💥", genre: "Trap", zone: "US", rang: "under", cost: 150000, potential: 28 },
+    { id: "ft_86", name: "Finn Mathis", emoji: "🎶", genre: "R&B", zone: "US", rang: "under", cost: 80000, potential: 22 },
+    { id: "ft_87", name: "Vee Carmichael", emoji: "🎫", genre: "Reggaeton", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_88", name: "Yung Shade", emoji: "🎵", genre: "Rap Mélo", zone: "US", rang: "under", cost: 460000, potential: 37 },
+    { id: "ft_89", name: "Xylem", emoji: "🪩", genre: "Hyperpop", zone: "US", rang: "under", cost: 100000, potential: 25 },
+    { id: "ft_90", name: "Baby Zeal", emoji: "📝", genre: "Rap Conscient", zone: "US", rang: "under", cost: 300000, potential: 33 },
+    { id: "ft_91", name: "Dune", emoji: "🕺", genre: "Funk", zone: "US", rang: "under", cost: 330000, potential: 34 },
+    { id: "ft_92", name: "Thorn", emoji: "🎙️", genre: "Rap", zone: "US", rang: "under", cost: 80000, potential: 21 },
+    { id: "ft_93", name: "Lyric Ellery", emoji: "🎧", genre: "R&B", zone: "US", rang: "under", cost: 180000, potential: 29 },
+    { id: "ft_94", name: "Yung Bloom", emoji: "📻", genre: "Amapiano", zone: "US", rang: "under", cost: 80000, potential: 23 },
+    { id: "ft_95", name: "Haven Strand", emoji: "⚡", genre: "Phonk", zone: "US", rang: "under", cost: 90000, potential: 24 },
+    { id: "ft_96", name: "Young Corso", emoji: "⭐️", genre: "Indie Pop", zone: "US", rang: "under", cost: 260000, potential: 32 },
+    { id: "ft_97", name: "Nico Okoro", emoji: "📀", genre: "Boom Bap", zone: "US", rang: "under", cost: 110000, potential: 26 },
+    { id: "ft_98", name: "Raze", emoji: "🌟", genre: "Soul", zone: "US", rang: "under", cost: 130000, potential: 27 },
+    { id: "ft_99", name: "Gold", emoji: "🎤", genre: "Rap", zone: "US", rang: "under", cost: 420000, potential: 36 },
 ];
 // ─── QUI PEUT SIGNER CHEZ UNUHU ─────────────────────────────────────────────
 // Un label indépendant signe des artistes qui cherchent une maison. Pas des
@@ -8931,19 +8942,58 @@ const NOMS_RELEVE_US = ["Vaughn", "Okonkwo", "Barlowe", "Castellano", "Pryor", "
     "Hollis", "Nakamura", "Devereaux", "Mosley", "Carrington", "Ellison", "Fontaine", "Granger", "Hayes",
     "Ivers", "Jennings", "Kellerman", "Lassiter", "Mercado", "Norwood", "Ocampo", "Pennington", "Quill",
     "Ramsay", "Sterling", "Thibault", "Underwood", "Valdez", "Westbrook"];
-// Un nom qui n'a encore jamais servi dans la partie.
+// Les noms de scène en un seul mot : près d'un artiste sur deux en porte un.
+const UN_MOT_FR = ["Zeko", "Tchiko", "Nayko", "Belko", "Ravik", "Lazka", "Kymo", "Noza", "Elzo", "Sylko", "Yoska", "Drazek", "Jaryn", "Sorya", "Kelia", "Saphy", "Velko", "Nahko", "Maryk", "Rivko", "Vanko", "Zalik", "Calio", "Enko", "Galko", "Hirko", "Jovan", "Lysio", "Morvo", "Nivek", "Orso", "Pamir", "Quenzo", "Rayko", "Tamir", "Varko", "Wylo", "Xanto", "Zorka", "Brisko", "Dorva", "Farko", "Hazo", "Ismo", "Krado", "Lyro", "Mazo", "Nyro", "Okso", "Tyko", "Uzo", "Vyro", "Wako", "Xylo", "Yako", "Zyro", "Askia", "Bahko", "Cedra", "Delko", "Eska", "Fyrn", "Goma", "Ilka", "Jolka", "Kesso", "Lonka", "Melko", "Nadir", "Olko", "Prako", "Rimka", "Sanko", "Tovar", "Ulka", "Velia", "Wanko", "Yska", "Zemir"];
+const UN_MOT_US = ["Vex", "Nyro", "Zayde", "Rune", "Sablo", "Trell", "Vance", "Wrenn", "Zephyr", "Onyx", "Koda", "Cypher", "Jettson", "Loom", "Marrow", "Nocturne", "Obsidian", "Prism", "Quartz", "Solace", "Tundra", "Umbra", "Vellum", "Wraith", "Xeno", "Yonder", "Zenith", "Brixx", "Caspian", "Drexl", "Echo", "Fable", "Grove", "Haze", "Indigo", "Jarvis", "Kestrel", "Lumen", "Mirage", "Nimbus", "Orbit", "Pilot", "Quill", "Raze", "Shade", "Talon", "Ultra", "Vesper", "Wilder", "Xander", "Yuma", "Zodiac", "Atlas", "Bloom", "Corso", "Dune", "Ember", "Flux", "Gold", "Halcyon", "Ivory", "Juno", "Kismet", "Lotus", "Mosaic", "Nova", "Opal", "Pacific", "Quasar", "Reverie", "Saint", "Thorn", "Union", "Vertigo", "Wander", "Xylem", "Yield", "Zeal"];
+const PREFIXES_SCENE = ["Lil", "Yung", "Baby", "Young", "Big", "DJ"];
+const SUITES_FR = ["Zeko", "Nayko", "Ravik", "Kymo", "Elzo", "Sorya", "Maryk", "Vanko", "Calio", "Galko", "Lysio", "Nivek", "Rayko", "Tamir", "Varko", "Dorva", "Hazo", "Krado", "Lyro", "Nyro", "Tyko", "Vyro", "Yako", "Askia", "Delko", "Fyrn", "Ilka", "Kesso", "Melko", "Olko", "Rimka", "Tovar"];
+const SUITES_US = ["Vex", "Rune", "Trell", "Vance", "Koda", "Loom", "Haze", "Grove", "Raze", "Shade", "Talon", "Thorn", "Flux", "Dune", "Ember", "Bloom", "Corso", "Atlas", "Brixx", "Drexl", "Echo", "Fable", "Jarvis", "Lumen", "Orbit", "Pilot", "Quill", "Wilder", "Yuma", "Zeal"];
+// Un nom qui n'a encore jamais servi dans la partie — et qui ne ressemble pas
+// systématiquement à un état civil : un mot, deux mots, ou un nom à préfixe.
 function nomLibre(gs, zone, essais) {
     const pris = new Set([...UNUHU_TALENT_POOL.map(t => t.name),
         ...((gs && gs.talentsNes) || []).map(t => t && t.name)]);
     const pre = zone === "FR" ? PRENOMS_RELEVE_FR : PRENOMS_RELEVE_US;
     const fam = zone === "FR" ? NOMS_RELEVE_FR : NOMS_RELEVE_US;
-    for (let i = 0; i < (essais || 60); i++) {
-        const nom = pre[Math.floor(Math.random() * pre.length)] + " " + fam[Math.floor(Math.random() * fam.length)];
+    const un = zone === "FR" ? UN_MOT_FR : UN_MOT_US;
+    const suites = zone === "FR" ? SUITES_FR : SUITES_US;
+    const pioche = a => a[Math.floor(Math.random() * a.length)];
+    // Les banques finissent par s'épuiser : on sait aussi forger un nom de toutes
+    // pièces, syllabe par syllabe, pour que les noms d'un seul mot ne manquent jamais.
+    // Deux syllabes, jamais plus : un nom de scène est court ou il n'en est pas un.
+    const forge = () => {
+        for (let k = 0; k < 12; k++) {
+            const m = pioche(SYL_DEBUT) + pioche(SYL_FIN);
+            if (m.length <= 7)
+                return m.charAt(0).toUpperCase() + m.slice(1);
+        }
+        return null;
+    };
+    for (let i = 0; i < (essais || 80); i++) {
+        const d = Math.random();
+        let nom;
+        if (d < 0.45) {
+            nom = pioche(un);
+            if (pris.has(nom))
+                nom = forge();
+            if (!nom)
+                continue;
+        }
+        else if (d < 0.60)
+            nom = pioche(PREFIXES_SCENE) + " " + pioche(suites);
+        else
+            nom = pioche(pre) + " " + pioche(fam);
         if (!pris.has(nom))
             return nom;
     }
     return null;
 }
+const SYL_DEBUT = ["Ka", "Ze", "No", "Ry", "Ma", "Va", "Lo", "Ji", "Ta", "Sy", "Dre", "Nay", "Kor", "Mel", "Zan",
+    "Bri", "Tcha", "Olk", "Nir", "Vex", "Sha", "Dro", "Kly", "Mir", "Ran", "Sol", "Tyr", "Vel", "Wyn", "Xan",
+    "Yor", "Zel", "Ark", "Bel", "Cas", "Dun", "Esk", "Fal", "Gri", "Hal", "Isk", "Jor", "Kes", "Lum", "Nox"];
+const SYL_FIN = ["ko", "ri", "na", "vo", "ska", "lio", "my", "zo", "ra", "nek", "vik", "sha", "ro", "la", "dre",
+    "tis", "vyn", "ken", "sko", "mir", "lan", "dor", "sen", "tha", "rix", "mo", "ny", "va", "ki", "zen", "del",
+    "ron", "sia", "to", "wen", "yx", "za"];
 // Celui qui débarque : un inconnu complet, et pas cher.
 function naitreTalent(gs, zone, annee, rang) {
     const nom = nomLibre(gs, zone);
@@ -8970,6 +9020,22 @@ const GENRES_UNDER_JEU = [
 function marcheTalents(gs) {
     const nes = ((gs && gs.talentsNes) || []).filter(t => t && t.id);
     return nes.length ? UNUHU_TALENT_POOL.concat(nes) : UNUHU_TALENT_POOL;
+}
+// Il y en a un dont la montée n'est pas laissée au hasard. Personne ne le
+// connaît au départ, il coûte trois fois rien, et dix ans plus tard il est le
+// plus gros rappeur du monde. Celui qui l'a vu venir aura eu raison seul.
+const DAMON_ID = "us_damon";
+const DAMON_SOMMET = 90;
+// Sa montée est datée : percée en 2024, star en 2029, sommet en 2037. Entre
+// ces trois bornes, il progresse sans jamais s'arrêter.
+function niveauDamonPour(annee) {
+    if (annee < 2024)
+        return 32;
+    if (annee < 2029)
+        return 50 + Math.round((annee - 2024) / 5 * 17);
+    if (annee < 2037)
+        return 68 + Math.round((annee - 2029) / 8 * 22);
+    return DAMON_SOMMET;
 }
 const PERCEE_SEUIL = 50; // à partir d'ici, on commence à entendre son nom
 const PERCEE_STAR = 68; // au-delà, il n'est plus sur le marché
@@ -9001,6 +9067,16 @@ function coutTalent(gs, t) {
         : v >= 1000000 ? Math.round(v / 50000) * 50000
             : Math.max(80000, Math.round(v / 10000) * 10000);
 }
+// Les artistes avec qui on peut poser : le casting d'origine, plus tous ceux
+// qui sont entrés dans la partie en cours de route — ceux que tu as signés et
+// ceux qui ont percé sans toi.
+function artistesPourFeat(gs) {
+    const vus = new Set(MUSIC_ARTISTS.map(a => a.id));
+    const venus = Object.values((gs && gs.newCast) || {}).filter(c => c && c.id && !vus.has(c.id) && String(c.cat || "").includes("music"));
+    return venus.length ? MUSIC_ARTISTS.concat(venus) : MUSIC_ARTISTS;
+}
+// Retrouver quelqu'un, qu'il soit du casting d'origine ou arrivé depuis.
+function persoDe(gs, id) { return CHARS_BY_ID[id] || ((gs && gs.newCast) || {})[id] || null; }
 function castDepuisTalent(a) {
     if (!a)
         return null;
@@ -9015,10 +9091,16 @@ function castDepuisTalent(a) {
 }
 // Faut-il lui ouvrir une fiche ? Seulement s'il n'existe pas déjà dans le jeu.
 // La fiche de quelqu'un qui a percé tout seul : il ne te doit rien.
-function castDepuisPercee(t, star) {
+function castDepuisPercee(t, star, niveau) {
     if (!t)
         return null;
     const fr = t.zone === "FR";
+    if (t.id === DAMON_ID)
+        return { id: t.id, name: t.name, emoji: "🎤", cat: "music", loc: "Toronto",
+            bio: (niveau || 0) >= DAMON_SOMMET
+                ? "Le plus gros rappeur du monde. Il y a dix ans, son nom traînait au bas d'une liste de talents que personne ne lisait."
+                : (star ? "Il est partout. Radios, plateformes, stades — et ce n'est pas fini."
+                    : "On ne parlait de lui nulle part il y a deux ans. Aujourd'hui, tout le monde a un avis.") };
     return { id: t.id, name: t.name, emoji: t.emoji || "🎤",
         cat: fr ? "music_fr" : "music", loc: fr ? "France" : "États-Unis",
         bio: star
@@ -9035,7 +9117,7 @@ function artisteImpose(gs) {
     const deja = new Set(((gs && gs.unuhuRoster) || []).map(a => a.id));
     // Toujours un inconnu : le cercle ne t'offre rien, il se sert de ta structure
     // pour fabriquer quelqu'un à partir de rien.
-    const libres = marcheTalents(gs).filter(t => t.rang === "under" && !deja.has(t.id)
+    const libres = marcheTalents(gs).filter(t => t.rang === "under" && t.id !== DAMON_ID && !deja.has(t.id)
         && ((gs && gs.erased) || []).indexOf(t.id) < 0);
     if (!libres.length)
         return null;
@@ -9077,8 +9159,8 @@ function procheALivrer(gs) {
 function victimeCarriere(gs) {
     const deja = new Set(((gs && gs.unuhuRoster) || []).map(a => a.id));
     const morts = new Set((gs && gs.erased) || []);
-    const cibles = marcheTalents(gs).filter(t => !t.charId && !deja.has(t.id) && !morts.has(t.id)
-        && (t.potential || 0) >= 45);
+    const cibles = marcheTalents(gs).filter(t => !t.charId && t.id !== DAMON_ID && !deja.has(t.id)
+        && !morts.has(t.id) && (t.potential || 0) >= 45);
     if (!cibles.length)
         return null;
     const h = Math.abs(Math.round(((gs && gs.currentDate) || 0) / 3600000) + 7) % cibles.length;
@@ -18912,6 +18994,52 @@ const INTERVIEW_TOPICS = [
     { id: "annonce", label: "Faire une annonce exclusive", emoji: "📣", effect: "Gros pic d'audience",
         apply: g => ({ social: 2.2, rep: 1.2, hype: true }) },
 ];
+// ─── CE QUE DAMON RAFLE, ET QUAND ───────────────────────────────────────────
+// Sa carrière est écrite d'avance. Chaque ligne est une nomination ; « g » veut
+// dire qu'il repart avec le trophée — sauf si tu le lui prends le soir même.
+const CAT_ALBUM_RAP = "Meilleur Album Rap/Urbain";
+const CAT_CHANSON_RAP = "Meilleure Chanson Rap";
+const CAT_CHANSON = "Chanson de l'Année";
+const CAT_COLLAB = "Meilleure Collaboration";
+const CAT_HOMME = "Artiste masculin de l'Année";
+const CAT_ALBUM = "Album de l'Année";
+const CAT_LIVE = "Meilleure Performance Live";
+const CAT_PERF_RAP = "Meilleure Performance Rap";
+const RIGHT_NOW = "Right Now (feat. 21 Savage, Lil Wayne)";
+const GUCCI = "Gucci Vision (feat. Lil Wayne, Kid Cudi)";
+const DAMON_GRAMMY = {
+    2029: { [CAT_ALBUM_RAP]: { t: "Red Island" }, [CAT_CHANSON]: { t: "Abandoned (feat. Post Malone)" } },
+    2030: { [CAT_ALBUM_RAP]: { t: "The Movie" } },
+    2031: { [CAT_CHANSON_RAP]: { t: RIGHT_NOW }, [CAT_COLLAB]: { t: RIGHT_NOW, g: true } },
+    2032: { [CAT_ALBUM_RAP]: { t: "Waansin", g: true }, [CAT_CHANSON_RAP]: { t: "Ticket Storm" },
+        [CAT_COLLAB]: { t: "Mimosa (feat. Don Toliver, Lil Nas X)" }, [CAT_HOMME]: {},
+        [CAT_PERF_RAP]: { t: "Ticket Storm" } },
+    2033: { [CAT_LIVE]: { t: "Waansin World Tour" } },
+    2034: { [CAT_ALBUM_RAP]: { t: "Hot Fire" }, [CAT_CHANSON_RAP]: { t: "Spicy Honey" }, [CAT_HOMME]: {} },
+    2035: { [CAT_COLLAB]: { t: "HighVengers (feat. Wiz Khalifa, Snoop Dogg, Lil John Stone)" },
+        [CAT_PERF_RAP]: { t: "Spicy Honey" } },
+    2037: { [CAT_ALBUM_RAP]: { t: "Light Or Fame", g: true }, [CAT_CHANSON_RAP]: { t: GUCCI, g: true },
+        [CAT_CHANSON]: { t: GUCCI }, [CAT_COLLAB]: { t: GUCCI, g: true }, [CAT_HOMME]: { g: true },
+        [CAT_PERF_RAP]: { t: GUCCI, g: true } },
+    2038: { [CAT_LIVE]: { t: "Light Or Fame World Tour", g: true } },
+    2039: { [CAT_ALBUM_RAP]: { t: "Living God" }, [CAT_HOMME]: {} },
+    2041: { [CAT_ALBUM_RAP]: { t: "White Like Snow" }, [CAT_HOMME]: {}, [CAT_PERF_RAP]: { t: "White Like Snow" } },
+    2043: { [CAT_ALBUM_RAP]: { t: "Work of Art", g: true }, [CAT_CHANSON]: { t: "Fly Away", g: true }, [CAT_HOMME]: { g: true } },
+    2044: { [CAT_ALBUM]: { t: "Western Cowboy" }, [CAT_HOMME]: {}, [CAT_LIVE]: { t: "Western Cowboy Stadium Tour" } },
+    2045: { [CAT_COLLAB]: { t: "Tsunami (feat. Travis Scott, Polo G, Drake)" } },
+    2046: { [CAT_ALBUM_RAP]: { t: "KINK" }, [CAT_CHANSON]: { t: "Galactic Shadow" }, [CAT_HOMME]: {} },
+    // Après 2046, il ne disparaît pas : il devient ce qu'on cite en exemple.
+    2048: { [CAT_COLLAB]: { t: "Megatron (feat. Baby Keem, Lil Baby)" }, [CAT_ALBUM_RAP]: { t: "Nowhere Twice" } },
+    2050: { [CAT_HOMME]: {}, [CAT_LIVE]: { t: "Nowhere Twice Tour" } },
+    2052: { [CAT_ALBUM_RAP]: { t: "Afterlight", g: true }, [CAT_ALBUM]: { t: "Afterlight" } },
+    2055: { [CAT_ALBUM_RAP]: { t: "Ruins" }, [CAT_HOMME]: {} },
+};
+function damonNomme(gs, annee, cat) {
+    if (niveauDamonPour(annee) < PERCEE_STAR)
+        return null; // avant d'être une star, il n'y est pas
+    const a = DAMON_GRAMMY[annee];
+    return (a && a[cat]) ? a[cat] : null;
+}
 // ─── QUI TE BAT AUX GRAMMY ──────────────────────────────────────────────────
 // Des artistes qui existent vraiment et qui sont déjà dans le casting du jeu —
 // jamais de noms inventés. Les francophones n'y figurent pas : les Grammy ne
@@ -19609,10 +19737,21 @@ function garnirCeremonie(results, annee, gs) {
         if (!r.nominated)
             return r;
         const bloques = new Set(Object.keys(sacres).filter(n => sacres[n] >= 2));
-        const rivaux = autresNommes(r.category, bloques, gs);
+        let rivaux = autresNommes(r.category, bloques, gs);
+        const dam = damonNomme(gs, annee, r.category);
+        if (dam) {
+            // Il prend la place de l'un des autres : la salle n'est pas extensible.
+            rivaux = [{ nom: "Damon", titre: dam.t || null }, ...rivaux.slice(0, Math.max(0, rivaux.length - 1))];
+        }
         if (r.youWon)
             return { ...r, rivaux, cote: r.cote === undefined ? 0.3 : r.cote };
-        const gagnant = rivaux.length ? rivaux[Math.floor(Math.random() * rivaux.length)] : null;
+        if (dam && dam.g) {
+            sacres["Damon"] = (sacres["Damon"] || 0) + 1;
+            return { ...r, rivaux, gagnant: "Damon", gagnantTitre: dam.t || null,
+                cote: r.cote === undefined ? 0.07 : r.cote };
+        }
+        const autres = rivaux.filter(x => typeof x === "string");
+        const gagnant = autres.length ? autres[Math.floor(Math.random() * autres.length)] : null;
         if (gagnant)
             gagnant.split(" & ").forEach(n => { sacres[n] = (sacres[n] || 0) + 1; });
         return { ...r, rivaux, gagnant, cote: r.cote === undefined ? 0.12 : r.cote };
@@ -20786,7 +20925,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "131";
+const VERSION_JEU = "133";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -20952,7 +21091,9 @@ function reprendrePartie(next) {
     return repris;
 }
 function gameReducer(state, action) {
-    return reprendrePartie(capStreams(capFame(sanitizeState(gameReducerInner(state, action), state))));
+    const suivant = reprendrePartie(capStreams(capFame(sanitizeState(gameReducerInner(state, action), state))));
+    majPersosVenus(suivant && suivant.newCast);
+    return suivant;
 }
 function gameReducerInner(state, action) {
     var _a, _b, _c, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
@@ -21531,6 +21672,7 @@ function gameReducerInner(state, action) {
         case "SCENE_ANNEE": {
             const nes = [...(state.talentsNes || []), ...((action.nouveaux || []).filter(Boolean))];
             const scene = { ...(state.scene || {}) };
+            let roster = [...(state.unuhuRoster || [])];
             const cast = { ...(state.newCast || {}) };
             const rels = { ...(state.relations || {}) };
             let stars = [...(state.starsScene || [])];
@@ -21547,18 +21689,23 @@ function gameReducerInner(state, action) {
                 const star = avant.star || lvl >= PERCEE_STAR;
                 scene[t.id] = { gain, percee, star, an: action.annee };
                 if (percee && !cast[t.id] && !t.charId) {
-                    cast[t.id] = castDepuisPercee(t, star);
+                    cast[t.id] = castDepuisPercee(t, star, lvl);
                     rels[t.id] = rels[t.id] || { score: 6, status: "neutre" };
                 }
                 if (star && !cast[t.id] && !t.charId)
-                    cast[t.id] = castDepuisPercee(t, true);
+                    cast[t.id] = castDepuisPercee(t, true, lvl);
                 if (star && cast[t.id] && !t.charId)
-                    cast[t.id] = { ...cast[t.id], bio: castDepuisPercee(t, true).bio };
+                    cast[t.id] = { ...cast[t.id], bio: castDepuisPercee(t, true, lvl).bio };
+                // Celui que tu as signé monte avec le reste : son contrat ne le gèle pas.
+                if (roster.some(a => a && a.id === t.id))
+                    roster = roster.map(a => (a && a.id === t.id)
+                        ? { ...a, potential: Math.max(a.potential || 0, lvl), growth: Math.max(a.growth || 0, Math.min(96, lvl)) }
+                        : a);
                 if (star && !stars.some(x => x && x.id === t.id))
                     stars = [...stars, { id: t.id, name: t.name, genre: t.genre, zone: t.zone, since: state.currentDate }];
             });
             return { ...state, scene, newCast: cast, relations: rels, talentsNes: nes,
-                starsScene: stars, sceneYear: action.annee };
+                unuhuRoster: roster, starsScene: stars, sceneYear: action.annee };
         }
         case "SIGN_IMPOSED": {
             if (!action.artist)
@@ -26393,7 +26540,17 @@ function FiscoGame() {
             const vus = new Set();
             // Ceux qui ont déjà commencé à monter ne retombent pas dans l'anonymat :
             // ils continuent, année après année, jusqu'à percer ou plafonner.
-            const enRoute = libres.filter(t => ((gs.scene || {})[t.id] || {}).gain > 0)
+            // Damon monte tous les ans, quoi qu'il arrive — même sous contrat chez toi.
+            const damon = marcheTalents(gs).find(t => t.id === DAMON_ID);
+            if (damon) {
+                const vise = niveauDamonPour(d.getFullYear());
+                const ecart = vise - niveauTalent(gs, damon);
+                if (ecart > 0) {
+                    vus.add(DAMON_ID);
+                    montees.push({ id: DAMON_ID, gain: ecart });
+                }
+            }
+            const enRoute = libres.filter(t => t.id !== DAMON_ID && ((gs.scene || {})[t.id] || {}).gain > 0)
                 .sort((a, b) => niveauTalent(gs, b) - niveauTalent(gs, a)).slice(0, 5);
             enRoute.forEach(t => {
                 vus.add(t.id);
@@ -26438,7 +26595,23 @@ function FiscoGame() {
                 }).filter(Boolean);
                 const stars = bascules.filter(x => x.av < PERCEE_STAR && x.ap >= PERCEE_STAR);
                 const perces = bascules.filter(x => x.av < PERCEE_SEUIL && x.ap >= PERCEE_SEUIL);
-                if (stars.length) {
+                const dam = bascules.find(x => x.t.id === DAMON_ID);
+                const chezToi = (gs.unuhuRoster || []).some(a => a && a.id === DAMON_ID);
+                if (dam && dam.av < DAMON_SOMMET && dam.ap >= DAMON_SOMMET) {
+                    setCalAlert({ emoji: "👑", title: "Damon", majeur: true,
+                        desc: chezToi
+                            ? "Il n'y a plus de débat. **Damon** est le plus gros rappeur du monde : stades complets sur quatre continents, chaque sortie en tête partout, et une génération entière qui ne connaît que lui.\n\nIl est chez toi. Tu l'as signé quand il coûtait moins qu'une voiture et que personne ne savait écrire son nom.\n\nOn ne te demandera jamais comment tu as su."
+                            : "Il n'y a plus de débat. **Damon** est le plus gros rappeur du monde : stades complets sur quatre continents, chaque sortie en tête partout, et une génération entière qui ne connaît que lui.\n\nIl y a dix ans, son nom traînait en bas de ta liste de talents, à un prix que tu pouvais payer en une après-midi.\n\nTu l'as lu. Tu es passé à autre chose." });
+                }
+                else if (dam && dam.av < PERCEE_STAR && dam.ap >= PERCEE_STAR) {
+                    setCalAlert({ emoji: "🚀", title: "Damon passe un cap",
+                        desc: `**Damon** ne joue plus dans des salles. Il remplit des arénas, il passe en rotation lourde partout, et deux majors se disputent déjà ce qu'il n'a pas encore signé.\n\n${chezToi ? "Il est sous contrat chez toi. Tiens bon." : "Il n'est plus sur le marché. Tu ne l'auras pas."}` });
+                }
+                else if (dam && dam.av < PERCEE_SEUIL && dam.ap >= PERCEE_SEUIL) {
+                    setCalAlert({ emoji: "📈", title: "On commence à parler de Damon",
+                        desc: `Un nom revient dans les conversations : **Damon**. Rien d'énorme encore — des salles de mille personnes, quelques millions de streams.\n\n${chezToi ? "Il est chez toi depuis le début." : "Il est encore sur le marché. Encore."}` });
+                }
+                else if (stars.length) {
                     const x = stars[0];
                     setCalAlert({ emoji: "🌠", title: "Tu ne l'auras pas",
                         desc: `**${x.t.name}** jouait dans des salles de deux cents personnes il y a quelques années. Tu l'as eu sous les yeux dans ta liste de talents, à un prix que tu pouvais payer.\n\nIl vient de signer ailleurs. Plus aucun label de ta taille ne peut l'approcher.\n\n${stars.length > 1 ? `${stars.length - 1} autre${stars.length > 2 ? "s" : ""} a${stars.length > 2 ? "ont" : ""} fait pareil cette année.` : "C'est comme ça que ça se passe. Tout le temps."}` });
@@ -30543,7 +30716,7 @@ function FiscoGame() {
     const GenrePicker = ({ selected, onSelect }) => (react_1.default.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 12 } }, GENRES.map(g => (react_1.default.createElement("button", { key: g, onClick: () => onSelect(g), style: { padding: "5px 10px", background: selected === g ? "rgba(230,180,99,.25)" : "rgba(255,255,255,.04)", border: selected === g ? "1px solid rgba(230,180,99,.5)" : "1px solid rgba(255,255,255,.08)", color: selected === g ? "#f2c379" : "rgba(255,255,255,.6)", borderRadius: 20, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, g)))));
     const FeatPicker = ({ selected, onToggle }) => {
         const [q, setQ] = (0, react_1.useState)("");
-        const filtered = sortPeople(MUSIC_ARTISTS
+        const filtered = sortPeople(artistesPourFeat(gs)
             .filter(a => !isHostile(gs, a.id))
             .filter(a => !(gs.deceased || []).includes(a.id))
             .filter(a => a.name.toLowerCase().includes(q.toLowerCase())), gs, "feat");
@@ -34715,7 +34888,7 @@ function FiscoGame() {
             var _a, _b;
             const { t, d: proj } = trackSheet;
             const clip = (gs.clipography || []).find(c => c.track === t.title);
-            const feats = getFeatIds(t).map(id => CHARS_BY_ID[id]).filter(Boolean);
+            const feats = getFeatIds(t).map(id => persoDe(gs, id)).filter(Boolean);
             const ageDays = Math.max(0, Math.floor((gs.currentDate - proj.releaseDate) / 86400000));
             const liveSnep = (((_a = gs.billboard) === null || _a === void 0 ? void 0 : _a.snepTracks) || []).find(e => (e.label || e.title) === t.title);
             const snepPeak = (() => {
@@ -36607,7 +36780,7 @@ function FiscoGame() {
                             (() => {
                                 const soloFeats = breakdown && breakdown.length === 1 ? getFeatIds(breakdown[0])
                                     : (!breakdown && d.tracks && d.tracks.length === 1) ? getFeatIds(d.tracks[0]) : [];
-                                const names = soloFeats.map(id => { var _a; return (_a = CHARS_BY_ID[id]) === null || _a === void 0 ? void 0 : _a.name; }).filter(Boolean);
+                                const names = soloFeats.map(id => { var _a; return (_a = charAny(id)) === null || _a === void 0 ? void 0 : _a.name; }).filter(Boolean);
                                 return names.length > 0 ? react_1.default.createElement("span", { style: { color: "#e8963c", fontWeight: 400, fontSize: 12 } },
                                     " (ft. ",
                                     names.join(", "),
