@@ -20925,7 +20925,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "133";
+const VERSION_JEU = "135";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -21008,6 +21008,52 @@ function recalerClips(clips, disco) {
     });
     return change ? out : clips;
 }
+// La dernière rentrée de septembre déjà passée dans la partie.
+function derniereRentree(date) {
+    const d = new Date(date || 0);
+    const an = d.getFullYear();
+    return d.getMonth() >= 8 ? an : an - 1;
+}
+// Remettre Damon à l'heure : sa trajectoire est datée, donc une partie ouverte
+// en 2030 doit le trouver au niveau de 2030, même si les septembres sont passés
+// avant que tout cela n'existe. On ne fait jamais redescendre, seulement monter.
+function rattraperDamon(etat) {
+    if (!etat || typeof etat !== "object")
+        return etat;
+    const base = UNUHU_TALENT_POOL.find(t => t.id === DAMON_ID);
+    if (!base)
+        return etat;
+    const vise = niveauDamonPour(derniereRentree(etat.currentDate));
+    const scene = { ...(etat.scene || {}) };
+    const avant = scene[DAMON_ID] || { gain: 0, percee: false, star: false };
+    const dejaLa = (base.potential || 0) + (avant.gain || 0);
+    if (dejaLa >= vise)
+        return etat;
+    const gain = vise - (base.potential || 0);
+    const percee = avant.percee || vise >= PERCEE_SEUIL;
+    const star = avant.star || vise >= PERCEE_STAR;
+    scene[DAMON_ID] = { gain, percee, star, an: derniereRentree(etat.currentDate) };
+    const out = { ...etat, scene };
+    if (percee) {
+        const cast = { ...(out.newCast || {}) };
+        if (!cast[DAMON_ID] || star)
+            cast[DAMON_ID] = castDepuisPercee(base, star, vise);
+        out.newCast = cast;
+        out.relations = { ...(out.relations || {}),
+            [DAMON_ID]: (out.relations || {})[DAMON_ID] || { score: 6, status: "neutre" } };
+    }
+    if (star && !((out.starsScene || []).some(x => x && x.id === DAMON_ID))) {
+        out.starsScene = [...(out.starsScene || []),
+            { id: DAMON_ID, name: base.name, genre: base.genre, zone: base.zone, since: etat.currentDate }];
+    }
+    // S'il est chez toi, son contrat ne le gèle pas non plus.
+    if ((out.unuhuRoster || []).some(a => a && a.id === DAMON_ID)) {
+        out.unuhuRoster = (out.unuhuRoster || []).map(a => (a && a.id === DAMON_ID)
+            ? { ...a, potential: Math.max(a.potential || 0, vise), growth: Math.max(a.growth || 0, Math.min(96, vise)) }
+            : a);
+    }
+    return out;
+}
 function reprendrePartie(next) {
     if (!next || typeof next !== "object")
         return next;
@@ -21051,6 +21097,12 @@ function reprendrePartie(next) {
         repris.boycottLevel = 0;
     if (!Array.isArray(repris.questionsVues))
         repris.questionsVues = [];
+    if (!Array.isArray(repris.starsScene))
+        repris.starsScene = [];
+    if (!repris.scene || typeof repris.scene !== "object")
+        repris.scene = {};
+    if (!Array.isArray(repris.talentsNes))
+        repris.talentsNes = [];
     // Le cercle t'avait fait signer quelqu'un, et personne n'était jamais arrivé.
     // Tu as payé : on te livre l'artiste, même avec du retard.
     if (!Array.isArray(repris.starsCercle))
@@ -23397,7 +23449,8 @@ function gameReducerInner(state, action) {
                 });
             }
             merged.hits = (merged.hits || []).map(h => ({ ...h, title: fixT(h.title) }));
-            return merged;
+            // Une partie rouverte après coup retrouve Damon au niveau de son époque.
+            return rattraperDamon(merged);
         }
         case "RESET": return JSON.parse(JSON.stringify(INIT));
         default: return state;
