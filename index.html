@@ -10696,11 +10696,109 @@ const LECONS_YOUNES = [
         titre: "Ce dans quoi tu viens d'entrer",
         texte: "Je ne te dirai pas ce que tu dois en penser. Je te dis comment ça marche : on te demandera des services, tu monteras en grade, et chaque service rendu te coûtera quelque chose que tu ne verras pas tout de suite.\n\nTon écran a changé : tu as maintenant un accès au cercle depuis l'onglet Vie. Tout ce qu'ils te demandent passera par là.",
         cible: "cercle" },
+    { id: "l_boycott", quand: g => !!g.boycott,
+        titre: "Ce qui vient de te tomber dessus",
+        texte: "Écoute-moi bien, parce que c'est le moment où les gens font n'importe quoi.\n\nPersonne ne va annoncer la fin de ça. Il n'y aura pas de communiqué, pas d'excuses, pas d'article. Un boycott, ça s'use — il en part un peu chaque semaine, et plus ta réputation tient, plus ça part vite.\n\nCe qui accélère : une interview, onglet Réseaux, sujet **« Désamorcer la crise médiatique »**. C'est le seul sujet qui tape dessus. Un média calme, une réponse longue et travaillée, et tu en enlèves un gros morceau d'un coup.\n\nEt surtout : continue de sortir des morceaux. Ceux qui se taisent pendant un boycott ne reviennent jamais.\n\nAppelle-moi quand tu veux, je te dirai où tu en es.",
+        cible: "onglet-reseaux" },
     { id: "l_clash", quand: g => !!g.activeClash,
         titre: "Le clash est lancé",
         texte: "Ça se joue sur les réseaux et nulle part ailleurs. Poste, réponds, laisse monter — ou laisse mourir.\n\nRegarde l'onglet Réseaux : tant que c'est ouvert, chaque message compte double, dans les deux sens.",
         cible: "onglet-reseaux" },
 ];
+// ─── QUAND TU L'APPELLES ───────────────────────────────────────────────────
+// Younes n'est pas un manuel : il regarde ta situation, prend ce qui presse le
+// plus, et te dit quoi faire cette semaine-là. Le reste passe en « sinon ».
+const DIAGNOSTICS_YOUNES = [
+    { id: "d_boycott", prio: 100, quand: g => !!g.boycott,
+        court: "tu es encore boycotté",
+        titre: "Le boycott",
+        texte: g => {
+            const reste = (g.boycottLevel == null ? 100 : g.boycottLevel);
+            const mois = Math.max(1, Math.round(reste / (vitesseDegel(g) * 30)));
+            return `Tu en es à **${Math.round(reste)}%** de ce que la campagne pesait au départ. À ce rythme, sans rien faire, tu en as pour **${mois} mois** environ.\n\nCe qui le fait tomber vraiment : une interview, onglet Réseaux, et tu choisis le sujet **« Désamorcer la crise médiatique »**. Aucun autre sujet n'y touche.\n\nDeux conditions. Un média qui ne cherche pas le clash — Kelly and Mark, GQ France, Mouv', Konbini, Kimmel. Surtout pas Drink Champs, Akademiks ou VladTV : sur ces plateaux-là, une sur deux se retourne contre toi et tu repars en arrière. Et une réponse longue, écrite, travaillée — bâclée, elle ne compte pas.\n\nDeux bons passages et c'est derrière toi.${reste >= 45 ? "\n\nTant que tu es au-dessus de 45%, les académies ne te nommeront nulle part et le festival reste fermé. En dessous, les portes se rouvrent toutes seules." : "\n\nTu es redescendu assez bas pour que les académies te reprennent et que le festival redevienne possible."}`;
+        } },
+    { id: "d_rouge", prio: 96, quand: g => g.money < 0,
+        court: "tes comptes sont dans le rouge",
+        titre: "Tu es dans le rouge",
+        texte: g => `Tes sociétés et ton train de vie se paient tous les mois, que tu bosses ou non. Là, ça creuse.\n\nTrois leviers, dans cet ordre : sors quelque chose — même un single, l'argent arrive en semaines, pas en mois. Vends un bien ou un véhicule que tu n'utilises pas. Et regarde ton équipe : chaque poste a un salaire, et certains ne te rapportent plus rien.\n\nNe laisse pas traîner. Au-delà d'un certain trou, la banque décide à ta place.` },
+    { id: "d_sante", prio: 93, quand: g => g.health < 35,
+        court: "ta santé est au plancher",
+        titre: "Ta santé",
+        texte: g => `${Math.round(g.health)} de santé. À ce niveau-là, ce n'est plus de la fatigue.\n\nDors, et pas une nuit : plusieurs. Annule ce qui peut l'être, baisse les soirées, et si tu as une dépendance en cours, règle-la avant de reparler de musique.\n\nJe sais que tu détestes ces semaines-là. Elles coûtent beaucoup moins cher que ce qui arrive si tu continues.` },
+    { id: "d_proces", prio: 91, quand: g => !!g.activeTrial && !g.activeTrial.lawyer,
+        court: "tu n'as toujours pas d'avocat",
+        titre: "Ton procès",
+        texte: g => `Tu as une procédure en cours et personne pour te défendre. Onglet Vie, ton procès, tu constitues ta défense — aujourd'hui.\n\nUn bon avocat coûte une fortune et c'est exactement pour ça qu'on en prend un. Ceux qui ont essayé d'économiser là-dessus, je les ai tous vus le regretter.` },
+    { id: "d_epuise", prio: 88, quand: g => g.energy <= 20,
+        court: "tu n'as plus d'énergie",
+        titre: "Tu es à bout",
+        texte: g => `Sous vingt d'énergie, tu ne peux plus rien faire de sérieux, et ce que tu produis quand même, tu le jettes dans six mois.\n\nDors. C'est une action comme une autre et c'est la moitié du métier.` },
+    { id: "d_stress", prio: 84, quand: g => g.stress >= 80,
+        court: "ton stress est au maximum",
+        titre: "Ton stress",
+        texte: g => `${Math.round(g.stress)}. C'est le niveau où les gens prennent les décisions qu'ils regrettent — un clash de trop, une signature trop vite, un truc pour tenir le soir.\n\nCoupe une semaine. Vois des gens qui ne t'apportent rien professionnellement. Et si c'est installé depuis des mois, l'onglet Vie a de quoi s'en occuper pour de bon.` },
+    { id: "d_clash", prio: 78, quand: g => !!g.activeClash,
+        court: "ton clash est encore ouvert",
+        titre: "Le clash en cours",
+        texte: g => `Tant que c'est ouvert, ça se joue sur les réseaux et nulle part ailleurs. Chaque message compte double, dans les deux sens.\n\nTu as deux sorties : tu montes le ton et tu encaisses les chiffres en sachant que ça durera plus longtemps que prévu, ou tu laisses mourir et on passe à autre chose en trois semaines. Les deux se défendent. Le pire, c'est de répondre mollement.` },
+    { id: "d_secret", prio: 72, quand: g => !!g.secretThreat,
+        court: "quelqu'un a quelque chose sur toi",
+        titre: "Ce qui va sortir",
+        texte: g => `Quelqu'un tient quelque chose et s'apprête à s'en servir. Tu as le temps de choisir comment ça sort — pas si ça sort.\n\nCe qui est dit par toi, en premier, coûte toujours moins cher que ce qui est révélé par un autre.` },
+    { id: "d_silence", prio: 66, quand: g => {
+            const d = (g.discography || []).filter(x => x.releaseDate > GAME_START_DATE);
+            const dernier = d.length ? Math.max(...d.map(x => x.releaseDate)) : (g.careerStart || GAME_START_DATE);
+            return (g.currentDate - dernier) > 270 * 86400000;
+        },
+        court: "ça fait trop longtemps que tu n'as rien sorti",
+        titre: "Ton silence",
+        texte: g => `Neuf mois au moins sans rien sortir. Le public ne t'en veut pas, c'est pire : il a trouvé autre chose.\n\nUn single suffit à rouvrir la porte. Et quatre choses décident de ce qu'il vaudra : le studio, la campagne autour, le mois de sortie — octobre et novembre sont les meilleurs, août le pire — et le clip, qui le relance longtemps après.` },
+    { id: "d_equipe", prio: 60, quand: g => !((g.staff || []).some(x => x.role === "manager")) && (g.careerYears || 0) >= 2,
+        court: "tu n'as toujours pas de manager",
+        titre: "Ton équipe",
+        texte: g => `Tu gères tout seul et ça se voit. Un manager prend sa commission, d'accord, mais il fait rentrer plus qu'il ne coûte.\n\nRegarde aussi un attaché de presse — sur les mauvaises semaines, c'est lui qui t'évite la sortie de route — et un directeur financier si tes sociétés ont grossi.` },
+    { id: "d_repu", prio: 56, quand: g => g.rep < 30,
+        court: "ta réputation est très basse",
+        titre: "Ta réputation",
+        texte: g => `${Math.round(g.rep)} de réputation. À ce niveau-là, on t'écoute mais on ne te propose plus rien : les features coûtent plus cher, les marques hésitent, et le moindre scandale te coûte double.\n\nÇa remonte lentement et par des choses ennuyeuses : des interviews bien faites, une cause que tu portes vraiment, du temps avec les gens qui comptent. Pas par un coup d'éclat.` },
+    { id: "d_fame", prio: 52, quand: g => g.fame < 45 && (g.careerYears || 0) >= 3,
+        court: "ta célébrité stagne",
+        titre: "Ton niveau",
+        texte: g => `${Math.round(g.fame)} de célébrité après ${g.careerYears} ans. Ce n'est pas la musique qui bloque, c'est le volume.\n\nCe qui fait monter le socle : des hits, oui, mais aussi les collections FOH-0, les boissons Bahasco, et les projets qui passent la barre des 50 millions de streams. Chacun compte, et ils s'additionnent. Empile.` },
+    { id: "d_addiction", prio: 48, quand: g => (g.addictions || []).length > 0,
+        court: "tu as une dépendance en cours",
+        titre: "Ce que tu prends",
+        texte: g => `${(g.addictions || []).length} dépendance${(g.addictions || []).length > 1 ? "s" : ""} en cours. Ça te coûte de la santé chaque semaine et ça ne se règle pas en serrant les dents.\n\nOnglet Vie, santé mentale. Un suivi, c'est long, c'est cher, et c'est la seule chose qui marche.` },
+    { id: "d_awards", prio: 44, quand: g => !!g.awardsBanned,
+        court: "les académies t'ont écarté",
+        titre: "Les cérémonies",
+        texte: g => `Tu es écarté des cérémonies, et ce n'est pas une question de boycott : c'est une décision des académies.\n\nJe ne vais pas te mentir, ça ne se négocie pas par en bas. Soit quelqu'un intervient pour toi, soit tu construis une carrière assez grosse pour que ne pas te nommer devienne leur problème.` },
+];
+// Ce qu'il te répond quand il n'y a rien qui brûle.
+const RAS_YOUNES = [
+    "Rien qui brûle. C'est rare, profites-en : c'est exactement le moment où on prépare le projet suivant au lieu de le sortir dans l'urgence.",
+    "Tout est en ordre. Si tu veux un conseil quand même : regarde le mois où tu comptes sortir ton prochain projet. Octobre et novembre valent trois mois de promo.",
+    "Rien à signaler. Garde un œil sur ta santé et ton énergie avant de lancer quoi que ce soit de lourd — une tournée partie trop tôt, ça ne se rattrape pas.",
+];
+function appelerYounes(gs) {
+    const urgents = DIAGNOSTICS_YOUNES.filter(d => { try {
+        return d.quand(gs);
+    }
+    catch (e) {
+        return false;
+    } })
+        .sort((a, b) => b.prio - a.prio);
+    if (!urgents.length) {
+        const h = Math.abs(Math.round((gs.currentDate || 0) / 86400000)) % RAS_YOUNES.length;
+        return { titre: "Rien ne brûle", texte: RAS_YOUNES[h] };
+    }
+    const tete = urgents[0];
+    const autres = urgents.slice(1, 4);
+    let t = tete.texte(gs);
+    if (autres.length)
+        t += "\n\n— — —\n\nEt sinon, dans l'ordre : " + autres.map(a => a.court).join(", ") + ". On en reparle quand le reste est réglé.";
+    return { titre: tete.titre, texte: t };
+}
 const NAEL = { id: "nael_bouaziz", name: "Naël Bouaziz", emoji: "🎧", cat: "music_fr", loc: "Bourg-en-Bresse" };
 const NAEL_BIOS = [
     "Dix-neuf ans, deux projets sortis seul, et une proposition qu'il n'a pas comprise.",
@@ -17479,848 +17577,824 @@ const INTERVIEW_OUTLETS = [
 const MEDIA_YEARLY_LIMIT = 10;
 // ─── QUESTIONS SPÉCIFIQUES À CHAQUE MÉDIA ───────────────────────────────────
 // tone: le registre attendu. Répondre "juste" selon le média rapporte plus.
-const MEDIA_QUESTIONS = {
-    akademiks: [
-        "Tu as combien de gens qui vivent de toi aujourd'hui ?",
-        "Le rap est-il devenu un business de vieux ?",
-        "Qui te doit encore de l'argent dans ce game ?",
-        "Tu crois que ta carrière aurait marché sans les Bahamas ?",
-        "Tu fais plus d'argent avec Bahasco ou avec la musique ? Sois honnête.",
-        "Les rappeurs français qui te copient, tu les nommes ?",
-        "Ton pire ennemi dans l'industrie, il est français ou américain ?",
-        "T'as déjà payé pour du placement en playlist ?",
-        "Si ton label coule demain, tu fais quoi ?",
-        "On dit que t'as acheté ton club juste pour l'image. Réponse ?",
-        "Le plus gros chèque que t'as refusé, c'était combien ?",
-        "T'as des dossiers sur des gens du game ?",
-        "Tu penses quoi des rappeurs qui font de la politique ?",
-        "Ton fils ou ta fille, tu le laisses écouter du rap ?",
-        "Un artiste qui t'a manqué de respect et que t'as jamais calculé ?",
-        "T'as combien de gens sur ta payroll ?",
-        "Les gens disent que t'as changé depuis que t'es aux Bahamas. Tu réponds quoi ?",
-        "On m'a dit qu'il y avait des tensions entre toi et Lomepal. C'est vrai ou pas ?",
-        "Tes streams, y'a des gens qui pensent qu'ils sont gonflés. Tu dis quoi ?",
-        "Le plus grand rappeur français de tous les temps : Booba, Jul ou Orelsan ?",
-        "T'as combien sur ton compte en banque, là, maintenant ?",
-        "Tu clashes qui si tu dois clasher quelqu'un demain ?",
-        "Le pseudocide, c'était un coup marketing ou t'allais vraiment mal ?",
-        "Pourquoi les rappeurs français percent pas aux États-Unis selon toi ?",
-        "T'as peur de personne dans le game ? Vraiment personne ?",
-        "Si Drake t'appelle pour un feat demain, tu réponds en combien de temps ?",
-    ],
-    vladtv: [
-        "Qu'est-ce que la solitude t'a appris que le succès n'a pas pu t'apprendre ?",
-        "Tu as déjà eu peur pour ta vie ?",
-        "Quelle décision as-tu prise trop jeune ?",
-        "Tu referais le même parcours en connaissant la suite ?",
-        "Le studio Coral Sound à Nassau, pourquoi ce lieu précisément ?",
-        "Ta première signature de contrat, tu l'as lue en entier ?",
-        "Combien de fois on a essayé de t'arnaquer ?",
-        "Ta relation avec l'argent avant et après le premier million ?",
-        "Tu as gardé des objets de ta vie dans la forêt ?",
-        "Le moment où tu as compris que tu étais riche ?",
-        "Est-ce que tu as pardonné à tes parents biologiques ?",
-        "Ta première rencontre avec The Weeknd, raconte.",
-        "Combien de contrats tu as rompus dans ta carrière ?",
-        "Le prix de la célébrité, c'est quoi concrètement pour toi ?",
-        "Tu as déjà été menacé physiquement ?",
-        "Qu'est-ce que tu n'as jamais raconté publiquement ?",
-        "Raconte-moi ton enfance dans la forêt. Comment tu as survécu ?",
-        "Le jour où on t'a retrouvé après l'incendie, tu ressens quoi ?",
-        "Falltos t'a recueilli. Quelle est la vraie nature de votre relation aujourd'hui ?",
-        "Tu n'es jamais allé à l'école. Ça te manque, l'éducation formelle ?",
-        "Parle-moi du moment exact où tu as décidé de simuler ta mort.",
-        "Ton ancien manager Léo Vasseur — que s'est-il vraiment passé entre vous ?",
-        "Ton rapport à l'argent a changé comment depuis la forêt ?",
-        "Tu as des regrets sur la manière dont tu as géré ton retour ?",
-        "Est-ce que tu fais confiance à quelqu'un, aujourd'hui ?",
-        "Comment tu veux qu'on se souvienne de toi dans cinquante ans ?",
-    ],
-    breakfast: [
-        "Comment tu expliques ton succès à quelqu'un qui ne connaît pas le rap français ?",
-        "Qu'est-ce que l'Amérique t'a coûté ?",
-        "Tu te sens plus proche de New York ou de Nice ?",
-        "Ton conseil à un artiste qui veut percer à l'international ?",
-        "Angela veut savoir : comment tu gères la pression au quotidien ?",
-        "Tu investis dans quoi en dehors de la musique ?",
-        "Le racisme dans l'industrie française, ça existe ?",
-        "Comment tu choisis les gens autour de toi ?",
-        "Ta routine matinale, elle ressemble à quoi ?",
-        "Tu comptes t'installer aux États-Unis un jour ?",
-        "Qu'est-ce que l'Amérique n'a pas compris du rap français ?",
-        "Tu te vois faire un album entièrement en anglais ?",
-        "Ton rapport à la foi, à la spiritualité ?",
-        "Le conseil le plus important qu'on t'ait donné ?",
-        "Tu préfères être respecté ou être aimé ?",
-        "Qu'est-ce qui t'empêche de dormir la nuit ?",
-        "Introduce yourself — qui est Fisco pour ceux qui te découvrent ici ?",
-        "Comment un Français se retrouve à vivre aux Bahamas avec un empire ?",
-        "Charlamagne veut savoir : c'est quoi ton plus gros échec ?",
-        "Tu te vois comme un rappeur ou comme un entrepreneur avant tout ?",
-        "Le marché américain, tu l'attaques comment concrètement ?",
-        "Qu'est-ce que le rap français a que le rap américain n'a pas ?",
-        "Parle-nous de Bahasco. Pourquoi une boisson, et pourquoi les Bahamas ?",
-        "Tu as des enfants ou tu comptes en avoir ? Ça change quoi pour toi ?",
-        "Donkey of the Day à qui, dans l'industrie musicale ?",
-        "Un conseil pour les jeunes qui viennent de rien, comme toi ?",
-    ],
-    drinkchamps: [
-        "La soirée la plus chère que tu aies payée ?",
-        "Tu as déjà réveillé quelqu'un à 4h pour une idée de son ?",
-        "Quelle bouteille tu gardes sans jamais l'ouvrir ?",
-        "Le pire conseil qu'on t'ait donné en début de carrière ?",
-        "La première fois que t'as bu ton propre Bahasco, réaction ?",
-        "Raconte le pire lendemain de fête de ta vie.",
-        "T'as déjà perdu de l'argent au casino ? Combien ?",
-        "Le concert le plus chaotique que t'aies fait ?",
-        "Ton plus gros fou rire en studio ?",
-        "Un featuring qui s'est mal passé ?",
-        "T'as combien de voitures dans ton garage ?",
-        "La chose la plus chère que t'aies cassée par accident ?",
-        "Un artiste mort que t'aurais rêvé de rencontrer ?",
-        "T'as déjà dormi en studio pendant une semaine entière ?",
-        "Ton plus beau voyage, tous confondus ?",
-        "Si tu devais boire un dernier verre avec quelqu'un, qui ?",
-        "Santé ! Alors dis-moi, c'est quoi la soirée la plus folle de ta vie ?",
-        "N.O.R.E. veut savoir : ton meilleur souvenir en studio, tous artistes confondus ?",
-        "T'as déjà refusé combien de millions pour un truc que tu sentais pas ?",
-        "Le rap game français, c'est aussi chaud qu'ici ?",
-        "Balance le nom d'un artiste français sous-coté que l'Amérique devrait écouter.",
-        "Ta boisson, Bahasco, elle se boit comment ? Explique-nous là.",
-        "Le pire deal business que t'as signé, sans donner de nom ?",
-        "T'as déjà eu peur pour ta vie dans ce game ?",
-        "Si tu devais refaire toute ta carrière, tu changes quoi ?",
-        "Dernière gorgée : ton message à ceux qui t'écoutent là maintenant ?",
-    ],
-    hot97: [
-        "Quel classique américain aurait pu être un classique français ?",
-        "Ta définition d'un vrai MC ?",
-        "Le rap français est-il traduisible ?",
-        "Tu écoutes encore de la radio ?",
-        "Tu connais quoi de l'histoire du hip-hop new-yorkais ?",
-        "Biggie ou Nas ?",
-        "Ton sample préféré de tous les temps ?",
-        "Tu produis toi-même ou tu délègues ?",
-        "Un classique américain que tu rêverais de remixer ?",
-        "Ce que le rap français a copié aux États-Unis, et l'inverse ?",
-        "Comment tu as bossé ton flow en anglais ?",
-        "Un concert américain qui t'a marqué comme spectateur ?",
-        "Tu penses quoi du drill new-yorkais ?",
-        "Ton avis sur l'évolution du BPM dans le rap actuel ?",
-        "Une radio française équivalente à Hot 97 ?",
-        "Tu reviendrais faire un freestyle ici quand ?",
-        "Tu veux nous lâcher un freestyle avant qu'on commence ?",
-        "New York t'inspire quoi, musicalement ?",
-        "Ebro veut savoir : ton album préféré de tous les temps ?",
-        "Comment tu expliques ton son à un auditeur américain qui comprend pas le français ?",
-        "Metro Boomin ou Pharrell — qui produit ton prochain album ?",
-        "Ton top 5 rappeurs, tous pays confondus ?",
-        "Le rap français est-il prêt à conquérir les États-Unis ?",
-        "Tu écris tes textes ou tu freestyles en cabine ?",
-        "Un morceau de ton catalogue que le public américain doit absolument écouter ?",
-        "Qu'est-ce qui te fait rester affamé après tout ce que tu as accompli ?",
-    ],
-    budden: [
-        "Ton album est-il une réussite ou un compromis ?",
-        "Quel morceau de ta discographie ne mérite pas d'y être ?",
-        "Est-ce que tu écris encore pour toi ou pour les chiffres ?",
-        "La technique t'intéresse-t-elle toujours autant qu'avant ?",
-        "Ton album le plus faible, tu l'identifies lequel ?",
-        "Est-ce que tu écoutes les critiques ou tu les évites ?",
-        "Le featuring nuit-il à la cohérence d'un album ?",
-        "Comment tu évalues ta propre progression technique ?",
-        "Un rappeur qui écrit mieux que toi, tu l'admets ?",
-        "Le concept d'album est-il mort avec le streaming ?",
-        "Tu écris en pensant au live ou à l'écoute solo ?",
-        "Ton rapport aux métriques : tu regardes tes chiffres ?",
-        "La longueur idéale d'un album selon toi ?",
-        "Tu gardes des morceaux non sortis par insatisfaction ?",
-        "Quel artiste actuel vieillira le mieux ?",
-        "Tu produirais un album pour quelqu'un d'autre ?",
-        "Techniquement, où situes-tu ton niveau d'écriture aujourd'hui ?",
-        "Ton dernier projet : qu'est-ce que tu referais différemment ?",
-        "Joe pense que ta production est plus forte que tes textes. Tu réponds ?",
-        "Est-ce que le succès commercial a dilué ton propos ?",
-        "Comment tu construis un album, structurellement ?",
-        "Qui sont tes vraies influences, pas celles que tu cites en interview ?",
-        "Tu te considères comme un artiste de niche ou grand public ?",
-        "Le featuring, c'est un choix artistique ou stratégique chez toi ?",
-        "Quel est le morceau de ton catalogue que tu défends le plus ?",
-        "Tu penses encore progresser, ou tu es à ton plafond ?",
-    ],
-    bigboy: [
-        "Qu'est-ce qui te fait te lever le matin aujourd'hui ?",
-        "Le luxe t'a-t-il rendu plus heureux, honnêtement ?",
-        "Qui te dit encore la vérité en face ?",
-        "Tu te reconnais dans le gamin de tes débuts ?",
-        "Ton plat préféré, celui qui te ramène à Nice ?",
-        "Tu es plutôt matinal ou couche-tard ?",
-        "La dernière fois que tu as pleuré de joie ?",
-        "Tu gardes contact avec qui de tes débuts ?",
-        "Un film qui t'a bouleversé ?",
-        "Tu fais du sport ? Tu tiens comment physiquement ?",
-        "Ton endroit préféré au monde ?",
-        "La chose la plus simple qui te rend heureux ?",
-        "Tu crois au destin ?",
-        "Qu'est-ce que tu dirais au Fisco de 17 ans ?",
-        "Un lieu où tu retournes pour te ressourcer ?",
-        "Ta plus grande fierté en dehors de la musique ?",
-        "Big Boy's Neighborhood ! Comment tu te sens aujourd'hui, vraiment ?",
-        "Raconte-nous ta journée type aux Bahamas.",
-        "Ta famille, tes proches — qui te garde les pieds sur terre ?",
-        "C'est quoi la chose la plus folle qu'un fan ait faite pour toi ?",
-        "Tu cuisines ? Tu fais quoi quand t'es pas en studio ?",
-        "Ton rapport à la West Coast, tu connais bien ?",
-        "Quel morceau te fait encore frissonner quand tu l'écoutes ?",
-        "Un message pour Los Angeles ?",
-        "Si tu devais garder un seul de tes projets, lequel ?",
-        "C'est quoi le bonheur, pour toi, aujourd'hui ?",
-    ],
-    tonight: [
-        "Apprends-nous un mot de français que personne ne peut prononcer.",
-        "Tu as un club de foot — tu arbitres bien ?",
-        "Quelle est la chose la plus chère que tu aies achetée par accident ?",
-        "Tu peux nous faire un freestyle sur un mot du public ?",
-        "Tu as apporté quelque chose des Bahamas pour nous ?",
-        "Apprends-moi une expression française qu'on ne peut pas traduire.",
-        "Tu possèdes un club de foot — tu joues toi-même ?",
-        "Quelle est la chose la plus française chez toi ?",
-        "Tu as un surnom que seuls tes proches utilisent ?",
-        "Ton premier achat après ton premier gros chèque ?",
-        "Tu sais faire quoi que personne ne soupçonne ?",
-        "Tu préfères la scène ou le studio ?",
-        "Une habitude bizarre que tu as en tournée ?",
-        "Tu as un talent caché à nous montrer ?",
-        "Qu'est-ce qui te fait rire aux éclats ?",
-        "Tu joues quoi pour nous ce soir ?",
-        "Bienvenue ! Première fois sur ce plateau — tu ressens quoi ?",
-        "Explique aux Américains ce que veut dire 'Tecktonik'.",
-        "On a vu tes photos aux Bahamas. C'est vraiment ta vie quotidienne ?",
-        "Tu veux jouer à un jeu avec moi avant de performer ?",
-        "Ton anglais s'est amélioré. Tu l'as appris comment ?",
-        "Raconte l'histoire de ton enfance — le public ne va pas y croire.",
-        "Tu as un empire : boissons, mode, football. C'est quoi la suite ?",
-        "Qui est la personne la plus célèbre dans ton téléphone ?",
-        "Un mot en français que tout le monde devrait connaître ?",
-        "Tu nous joues quoi ce soir ?",
-    ],
-    kimmel: [
-        "Combien de paires de chaussures possèdes-tu, vraiment ?",
-        "Tu sais faire la cuisine ou tu mens ?",
-        "Quelqu'un t'a déjà refusé l'entrée quelque part ?",
-        "Tu réponds à tes propres messages ?",
-        "Tu as vraiment un yacht ? Tu l'utilises combien de fois par an ?",
-        "Quelqu'un t'a déjà confondu avec un autre artiste ?",
-        "Tu as un club de foot — tu peux nous vendre un joueur là ?",
-        "Le truc le plus américain que tu aies adopté ?",
-        "Tu réponds à tes fans sur les réseaux ou jamais ?",
-        "Qu'est-ce qui t'a le plus choqué en arrivant à Hollywood ?",
-        "Tu as un garde du corps ? Il s'appelle comment ?",
-        "Tu cuisines ou tu commandes tous les soirs ?",
-        "Quel est ton pire investissement ?",
-        "Tu as déjà été reconnu dans un endroit improbable ?",
-        "Tu regardes tes propres clips ?",
-        "Un truc que tu refuses de faire, même pour de l'argent ?",
-        "Alors, Fisco — j'ai lu ta biographie et franchement, c'est invraisemblable.",
-        "Tu as vraiment grandi seul dans une forêt ? Explique-moi ça.",
-        "Tu possèdes un club de football. Tu y connais quelque chose au foot ?",
-        "C'est quoi le truc le plus cher que tu aies acheté sur un coup de tête ?",
-        "Les Américains prononcent ton nom correctement ou pas du tout ?",
-        "Tu as une boisson alcoolisée à ton nom. On peut goûter ?",
-        "Raconte-moi ton pire moment de gêne en public.",
-        "Tu préfères qu'on te présente comme rappeur ou comme millionnaire ?",
-        "Qu'est-ce qui t'étonne le plus chez les Américains ?",
-        "Un conseil pour quelqu'un qui veut tout recommencer à zéro ?",
-    ],
-    colbert: [
-        "L'art peut-il encore déranger aujourd'hui ?",
-        "Que doit-on à ceux qui nous ont précédés ?",
-        "La célébrité est-elle compatible avec la lucidité ?",
-        "Qu'est-ce qu'une vie réussie selon vous ?",
-        "La culture peut-elle encore rassembler aujourd'hui ?",
-        "Votre génération a-t-elle perdu quelque chose d'essentiel ?",
-        "Que pensez-vous du pouvoir des plateformes sur la création ?",
-        "L'artiste doit-il prendre position politiquement ?",
-        "La richesse extrême est-elle moralement défendable ?",
-        "Que vous a appris l'échec ?",
-        "La France et l'Amérique se comprennent-elles vraiment ?",
-        "L'intelligence artificielle menace-t-elle votre métier ?",
-        "Qu'est-ce qui vous donne encore de l'espoir ?",
-        "Comment définiriez-vous la liberté ?",
-        "La postérité vous préoccupe-t-elle ?",
-        "Que liriez-vous à quelqu'un qui doute de tout ?",
-        "Votre parcours interroge notre rapport à la réussite. Qu'en pensez-vous ?",
-        "Vous avez grandi hors de toute institution. Que vous inspire l'école ?",
-        "La célébrité vous a-t-elle rendu meilleur ou pire ?",
-        "Quelle responsabilité porte un artiste de votre influence ?",
-        "Comment voyez-vous la relation entre la France et les États-Unis aujourd'hui ?",
-        "Votre musique porte-t-elle un message politique, consciemment ?",
-        "Que dites-vous à ceux qui vous reprochent votre train de vie ?",
-        "L'industrie musicale est-elle réformable, selon vous ?",
-        "Qu'avez-vous appris de la solitude de votre enfance ?",
-        "Quel héritage souhaitez-vous laisser, au-delà de la musique ?",
-    ],
-    kellymark: [
-        "Quel est votre plus beau souvenir de famille récent ?",
-        "Vous cuisinez pour vos proches ?",
-        "Comment gardez-vous les pieds sur terre ?",
-        "Quelle tradition transmettez-vous à vos enfants ?",
-        "Comment organisez-vous vos journées avec autant d'activités ?",
-        "Vos proches vous voient-ils assez souvent ?",
-        "Quel est votre rituel du dimanche ?",
-        "Vous souvenez-vous de votre premier concert ?",
-        "Qu'est-ce que vous transmettez à vos enfants ?",
-        "Votre partenaire vous aide-t-elle dans vos choix ?",
-        "Vous fêtez les anniversaires comment ?",
-        "Quel est votre repas réconfort ?",
-        "Vous avez des animaux ?",
-        "Que faites-vous pour décompresser ?",
-        "Votre plus beau cadeau reçu ?",
-        "Une tradition que vous tenez à garder ?",
-        "Bonjour Fisco ! Racontez-nous votre matinée idéale.",
-        "Votre histoire est incroyable — pour ceux qui la découvrent ?",
-        "Vous êtes en couple ? Comment gérez-vous la vie privée ?",
-        "Vos enfants, s'ils écoutent votre musique, vous en pensez quoi ?",
-        "Quel plat vous rappelle votre arrivée à Nice ?",
-        "Vous avez un club de football. Vos proches s'y intéressent ?",
-        "Qu'est-ce qui vous fait rire, dans la vie ?",
-        "Votre plus beau souvenir de ces dernières années ?",
-        "Un conseil aux parents qui nous regardent ?",
-        "Qu'est-ce qui vous rend heureux, tout simplement ?",
-    ],
-    mtv: [
-        "Quel visuel de ta carrière te représente le mieux ?",
-        "Tu suivrais une tendance qui ne te ressemble pas ?",
-        "Quel clip aimerais-tu retourner aujourd'hui ?",
-        "La mode t'a-t-elle changé ?",
-        "Ton clip le plus cher, il a coûté combien ?",
-        "Quel artiste a le meilleur style visuel selon toi ?",
-        "Tu réalises tes propres clips ?",
-        "Un visuel iconique qui t'a inspiré ?",
-        "La mode influence-t-elle ta musique ou l'inverse ?",
-        "Tu ferais un documentaire sur ta vie ?",
-        "Quel accessoire ne te quitte jamais ?",
-        "Un défilé auquel tu rêves d'assister ?",
-        "Ton avis sur les tendances TikTok ?",
-        "Ton clip préféré de tous les temps ?",
-        "Quelle couleur te représente ?",
-        "Tu te vois designer une collection pour qui ?",
-        "MTV ! Ton style, c'est quoi la signature Fisco ?",
-        "Quel clip de ta carrière te représente le mieux ?",
-        "Ton influence sur la jeunesse, tu la mesures comment ?",
-        "Michael Jackson ou Kanye West — quelle icône t'a le plus marqué ?",
-        "FOH-0, c'est de la mode ou une déclaration ?",
-        "Le prochain grand mouvement musical, il viendra d'où ?",
-        "Ton look d'aujourd'hui, tu l'as choisi comment ?",
-        "Entre Tiakola, Gazo et Josman, lequel va exploser à l'international ?",
-        "Tu te vois où dans dix ans ?",
-        "Un message pour les fans qui te suivent depuis le début ?",
-    ],
-    booskap: [
-        "Qui domine le rap français en ce moment, objectivement ?",
-        "Les certifications ont-elles encore une valeur ?",
-        "Le rap français vieillit-il bien ?",
-        "Tu conseillerais à un jeune de signer en major aujourd'hui ?",
-        "Ton classement des meilleurs albums rap FR de la décennie ?",
-        "Tu signerais chez un major aujourd'hui ?",
-        "Les certifications françaises, ça veut encore dire quoi ?",
-        "Le rap français s'américanise trop ?",
-        "Tu suis les chiffres de tes concurrents ?",
-        "Un projet français récent qui t'a surpris ?",
-        "Le rap conscient a-t-il disparu ?",
-        "Tu ferais un album 100% en featuring français ?",
-        "Quel producteur français mérite plus de lumière ?",
-        "Le live est-il devenu plus important que le disque ?",
-        "Un rappeur retraité que tu aimerais faire revenir ?",
-        "Où sera le rap français dans dix ans ?",
-        "Booska-P ! Pour ceux qui suivent pas, t'en es où là ?",
-        "Le rap français en 2024, il se porte comment selon toi ?",
-        "Ton rapport à Booba, Jul et Damso — c'est quoi la vérité aujourd'hui ?",
-        "T'as quitté la France pour les Bahamas. C'est un abandon ?",
-        "Le prochain projet, il ressemble à quoi ?",
-        "Tu bosses avec des rappeurs français ou tu regardes que les US ?",
-        "C'est quoi le morceau dont t'es le plus fier ?",
-        "Les jeunes rappeurs qui montent, tu en écoutes ?",
-        "UNUHU Records, c'est un vrai label ou un side project ?",
-        "Un message pour la scène française ?",
-    ],
-    rapelite: [
-        "Tu prépares quelque chose que personne n'attend ?",
-        "Quel featuring te reste-t-il à faire ?",
-        "Ton prochain projet ressemblera à quoi ?",
-        "Tu as déjà la date de ta prochaine sortie ?",
-        "Tes prochaines dates, tu peux en dire plus ?",
-        "Tu prépares un projet surprise ?",
-        "Quel single tu sors en premier et pourquoi ?",
-        "Tu travailles avec qui en ce moment ?",
-        "Le calendrier des sorties, tu le stratèges comment ?",
-        "Un clip à venir dont tu es fier ?",
-        "Tu penses quoi des sorties surprise sans promo ?",
-        "Ton objectif de streams pour ce projet ?",
-        "Tu vises une certification particulière ?",
-        "Une collaboration bouclée que personne n'attend ?",
-        "Tu sors un projet par an ou tu prends ton temps ?",
-        "Une annonce à faire en exclusivité ?",
-        "Rapelite ! Actualité brûlante : qu'est-ce que tu prépares ?",
-        "Tu as annoncé des choses récemment. Tu peux préciser ?",
-        "Les chiffres de ton dernier projet, tu en es satisfait ?",
-        "Quelle place tu occupes dans le rap français aujourd'hui ?",
-        "Freeze Corleone t'a cité dans un couplet. Tu réponds ou tu laisses courir ?",
-        "Les certifications, ça compte encore pour toi ?",
-        "Kendrick Lamar ou Frank Ocean — tu choisis lequel pour ton prochain feat ?",
-        "Le streaming a changé quoi dans ta manière de sortir de la musique ?",
-        "Tu as des dates de prévues ?",
-        "Un scoop pour Rapelite avant de partir ?",
-    ],
-    rapunchline: [
-        "Quelle punchline de ta carrière est ta préférée ?",
-        "Tu écris encore à la main ?",
-        "Le clash a-t-il encore sa place dans le rap ?",
-        "Qui écrit les meilleures punchlines aujourd'hui ?",
-        "Le rappeur avec le meilleur flow actuellement ?",
-        "Un rappeur avec qui tu ne collaborerais jamais ?",
-        "Tu t'es déjà fait voler une punchline ?",
-        "Ta pire punchline, celle que tu regrettes ?",
-        "Le clash le plus marquant du rap français ?",
-        "Tu écris tes punchlines ou elles viennent seules ?",
-        "Un rappeur sous-coté techniquement ?",
-        "Le ghostwriting, c'est de la triche ?",
-        "Ton couplet préféré chez un autre ?",
-        "Tu réponds toujours aux clashs ou parfois tu laisses ?",
-        "La punchline la plus dure jamais écrite sur toi ?",
-        "Une rime impossible que tu as réussi à placer ?",
-        "Rapunchline ! Ta meilleure punchline, tu l'assumes laquelle ?",
-        "On dit que t'es plus un businessman qu'un rappeur. Réponse ?",
-        "Entre SCH, Ninho et Damso, qui a la meilleure plume selon toi ?",
-        "T'as déjà écrit pour quelqu'un d'autre ?",
-        "Ta punchline préférée signée Booba ou Orelsan ?",
-        "Si tu devais clasher Kaine Dubois demain, tu commences par quoi ?",
-        "On t'a vu plusieurs fois avec Diddy. Tu t'expliques ?",
-        "Le rap conscient ou le rap d'ambiance ?",
-        "T'as combien de sons non sortis dans tes disques durs ?",
-        "Un truc que personne ne sait sur toi ?",
-    ],
-    clique: [
-        "Que reste-t-il à conquérir quand on a déjà tout ?",
-        "La musique vous a-t-elle sauvé ou enfermé ?",
-        "Qu'est-ce que vous ne pardonnerez jamais ?",
-        "Qui êtes-vous quand personne ne regarde ?",
-        "Qu'est-ce que la solitude vous a appris que la foule ne pourra jamais vous apprendre ?",
-        "Créez-vous par nécessité ou par plaisir ?",
-        "Le succès a-t-il rendu votre art plus difficile ?",
-        "Que reste-t-il de l'enfant de la forêt en vous ?",
-        "Avez-vous peur d'être oublié ?",
-        "La musique vous sauve-t-elle encore ?",
-        "Qu'est-ce que vous ne pardonnez pas ?",
-        "Le luxe vous a-t-il déçu ?",
-        "Que cherchez-vous encore ?",
-        "Vous sentez-vous français ?",
-        "Quelle œuvre auriez-vous aimé créer ?",
-        "Si vous n'aviez jamais fait de musique, vous seriez qui ?",
-        "Fisco, commençons simplement : qui êtes-vous devenu ?",
-        "Votre enfance hors du monde a façonné quel regard sur la société ?",
-        "Vous créez pour vous ou pour être entendu ?",
-        "Qu'est-ce qu'un artiste doit à son public, selon vous ?",
-        "La réussite matérielle vous a-t-elle apporté ce que vous cherchiez ?",
-        "Quel rapport entretenez-vous avec la langue française ?",
-        "Vous sentez-vous appartenir à une génération, à un mouvement ?",
-        "Qu'est-ce qui vous effraie encore aujourd'hui ?",
-        "Le silence, l'isolement — vous y retournez parfois volontairement ?",
-        "Si vous deviez arrêter demain, auriez-vous dit l'essentiel ?",
-    ],
-    cliquetv: [
-        "Quelle œuvre d'un autre auriez-vous aimé signer ?",
-        "Votre rapport au silence ?",
-        "Quel artiste vous intimide encore ?",
-        "Comment savez-vous qu'un morceau est terminé ?",
-        "Comment définissez-vous votre esthétique ?",
-        "Quel projet vous a le plus coûté humainement ?",
-        "Vous collaborez avec des artistes d'autres disciplines ?",
-        "Que pensez-vous de la scène française actuelle ?",
-        "Un lieu culturel qui vous inspire ?",
-        "Vous collectionnez quelque chose ?",
-        "La création vous vient plutôt le jour ou la nuit ?",
-        "Quelle image vous représente le mieux ?",
-        "Un artiste contemporain que vous admirez ?",
-        "Comment gérez-vous l'attente du public ?",
-        "Le beau, c'est quoi pour vous ?",
-        "Quel serait votre projet rêvé, sans contrainte ?",
-        "Clique TV ! Votre actualité, résumez-la nous.",
-        "Vous êtes entrepreneur, artiste, propriétaire de club. Comment on tient tout ça ?",
-        "La mode et la musique, même combat chez vous ?",
-        "Quel regard portez-vous sur la scène culturelle française ?",
-        "Un projet qui vous tient particulièrement à cœur ?",
-        "Le succès à l'international, c'est une obsession ?",
-        "Qu'est-ce que vous écoutez en ce moment, vraiment ?",
-        "Vous inspirez beaucoup de jeunes. Vous le vivez comment ?",
-        "Si vous deviez exporter un seul artiste français, Stromae ou Damso ?",
-        "Votre définition du style ?",
-    ],
-    skyrock: [
-        "Ton son préféré à jouer en concert ?",
-        "Tu penses à quoi juste avant de monter sur scène ?",
-        "Le morceau que tu ne joues jamais en live ?",
-        "Un message aux jeunes qui écrivent dans leur chambre ?",
-        "Tu passes quand en Planète Rap ?",
-        "Ton morceau qui marche le mieux en club ?",
-        "Tu dédicaces ce son à qui ?",
-        "Le premier rap que tu as entendu de ta vie ?",
-        "Tu préfères les petites salles ou les stades ?",
-        "Ton meilleur souvenir de concert en France ?",
-        "Tu prépares une tournée des Zéniths ?",
-        "Un son de ton album que personne n'a assez écouté ?",
-        "Quel featuring français tu veux absolument faire ?",
-        "Tu écoutes tes propres sons en voiture ?",
-        "Un message aux auditeurs de banlieue ?",
-        "Tu reviens quand nous voir ?",
-        "Skyrock, premier sur le rap ! Tu salues les auditeurs ?",
-        "Ton nouveau son, tu nous le présentes ?",
-        "T'écoutais Skyrock quand t'étais plus jeune ?",
-        "Un freestyle pour les auditeurs, ça te dit ?",
-        "C'est quoi ton rapport au public français aujourd'hui ?",
-        "Tu passes quand en concert en France ?",
-        "Ton plus gros souvenir de scène ?",
-        "Quel son tu mets pour lancer une soirée ?",
-        "Un conseil pour les jeunes qui envoient leurs sons partout ?",
-        "Dernier mot pour ceux qui t'écoutent en voiture là ?",
-    ],
-    planeterap: [
-        "Raconte la création du morceau le plus personnel du projet.",
-        "Quel titre a failli ne pas sortir ?",
-        "Tu as travaillé avec qui sur ce projet ?",
-        "Ce projet, tu le referais pareil ?",
-        "Tu invites qui demain dans l'émission ?",
-        "Raconte la genèse du premier titre du projet.",
-        "Quel morceau a été le plus dur à finir ?",
-        "Tu as enregistré ce projet où ?",
-        "Le titre de l'album, il vient d'où ?",
-        "Un morceau coupé au dernier moment ?",
-        "Ton featuring le plus surprenant sur ce projet ?",
-        "La pochette, qui l'a conçue ?",
-        "Combien de temps as-tu mis à faire ce projet ?",
-        "Un son que tu joueras en live en priorité ?",
-        "Qu'est-ce que ce projet dit de toi aujourd'hui ?",
-        "Ton mot pour ceux qui l'écoutent en boucle ?",
-        "Planète Rap, toute la semaine avec toi ! Ça représente quoi ?",
-        "Tu nous présentes ton projet morceau par morceau ?",
-        "Qui tu invites cette semaine dans l'émission ?",
-        "Raconte-nous la création de ton titre le plus personnel.",
-        "Un freestyle inédit pour Planète Rap ?",
-        "Tes invités surprises, tu les as choisis comment ?",
-        "Ce projet, il arrive à quel moment de ta vie ?",
-        "Un titre que tu n'as pas mis sur le projet et que tu regrettes ?",
-        "Tu dédies ce projet à qui ?",
-        "Message aux auditeurs pour finir la semaine ?",
-    ],
-    generations: [
-        "Qu'est-ce que tu dois à ta ville ?",
-        "Comment on garde les mêmes amis après le succès ?",
-        "Tu crois encore à l'ascension sociale par la musique ?",
-        "Que dirais-tu à ceux qui n'y croient plus ?",
-        "Tu restes en contact avec ta ville d'origine ?",
-        "Comment tu aides les jeunes artistes concrètement ?",
-        "Le rap peut-il changer des vies selon toi ?",
-        "Un souvenir de tes débuts qui te fait sourire ?",
-        "Tu te sens une responsabilité envers les quartiers ?",
-        "Un projet associatif qui te tient à cœur ?",
-        "Le sport et la musique, même école de vie ?",
-        "Tu écoutes quoi quand tu doutes ?",
-        "Un morceau qui t'a aidé à tenir ?",
-        "Que dirais-tu à un jeune qui veut abandonner ?",
-        "Tu crois au talent ou au travail ?",
-        "Ton message à la nouvelle génération ?",
-        "Générations ! Comment ça va, l'artiste ?",
-        "Ton actu, tu la résumes comment ?",
-        "Les cultures urbaines aujourd'hui, elles vont où ?",
-        "Tu restes connecté au terrain, aux quartiers ?",
-        "La nouvelle vague — Tiakola, Werenoi, Zola — laquelle t'impressionne le plus ?",
-        "Ton parcours peut inspirer. Tu dirais quoi aux jeunes ?",
-        "La radio, ça compte encore pour un artiste comme toi ?",
-        "Ton morceau qui passe le mieux en soirée ?",
-        "Tu prépares quoi pour la suite ?",
-        "Un shout-out à faire ?",
-    ],
-    mouv: [
-        "La musique doit-elle éduquer ou divertir ?",
-        "Comment voyez-vous l'avenir du métier d'artiste ?",
-        "La création peut-elle rester libre dans ce système ?",
-        "Qu'est-ce qui vous révolte encore ?",
-        "La musique doit-elle être politique ?",
-        "Comment tu regardes la place des femmes dans le rap ?",
-        "Ton rapport à l'écologie avec ton train de vie ?",
-        "Le streaming rémunère-t-il correctement les artistes ?",
-        "Que penses-tu de l'IA dans la création musicale ?",
-        "La culture doit-elle être subventionnée ?",
-        "Ton rapport aux médias traditionnels ?",
-        "Comment tu t'informes ?",
-        "Quelle cause te touche vraiment ?",
-        "La méritocratie existe-t-elle en musique ?",
-        "Un livre qui t'a marqué ?",
-        "Que veux-tu transmettre par ta musique ?",
-        "Mouv' ! On aime creuser : ton processus créatif, il ressemble à quoi ?",
-        "Tu te sens représentatif d'une jeunesse française ?",
-        "Le service public et le rap, ça matche selon toi ?",
-        "Quelle place pour l'engagement dans ta musique ?",
-        "Tu lis ? Tu t'inspires d'autre chose que de la musique ?",
-        "Comment tu vois l'évolution du rap français ces dix dernières années ?",
-        "Un son de toi qu'on a mal compris ?",
-        "Tu as une responsabilité envers ceux qui t'écoutent ?",
-        "Le succès international change ton écriture ?",
-        "Qu'est-ce que tu veux raconter dans les années qui viennent ?",
-    ],
-    konbini: [
-        "Studio à 3h ou studio à 15h ?",
-        "Ton premier salaire ou ton premier disque d'or ?",
-        "Écrire ou enregistrer ?",
-        "Nice ou Nassau ?",
-        "Studio ou scène ?",
-        "Argent ou reconnaissance ?",
-        "Solo ou featuring ?",
-        "Texte écrit ou impro ?",
-        "Été ou hiver ?",
-        "Mer ou montagne ?",
-        "Rap français ou rap US ?",
-        "Vinyle ou playlist ?",
-        "Café ou thé ?",
-        "Tournée mondiale ou résidence unique ?",
-        "Nuit blanche ou grasse matinée ?",
-        "Ta vie d'avant ou ta vie d'aujourd'hui ?",
-        "Fast & Curious : sucré ou salé ?",
-        "Studio de nuit ou studio de jour ?",
-        "Paris ou Nassau ?",
-        "Un featuring français ou un featuring américain ?",
-        "Album ou single ?",
-        "Instagram ou TikTok ?",
-        "Le luxe ou la discrétion ?",
-        "Vinyle ou streaming ?",
-        "Scène ou studio ?",
-        "Si tu devais tout recommencer : la forêt ou la célébrité ?",
-    ],
-    brut: [
-        "Que pensez-vous de l'évasion fiscale, y compris la vôtre ?",
-        "Quelle est votre responsabilité vis-à-vis de vos fans ?",
-        "Les artistes doivent-ils s'exprimer sur la politique ?",
-        "Quel héritage voulez-vous laisser ?",
-        "Que pensez-vous des inégalités en France ?",
-        "Quel regard portez-vous sur l'exil fiscal ?",
-        "La santé mentale des artistes, on en parle assez ?",
-        "Comment vivez-vous l'exposition permanente ?",
-        "Quelle cause défendriez-vous publiquement ?",
-        "Que diriez-vous à ceux qui n'ont pas eu votre chance ?",
-        "L'argent rend-il vraiment libre ?",
-        "Que pensez-vous du traitement médiatique des rappeurs ?",
-        "Quel changement voudriez-vous voir dans la société ?",
-        "Votre parcours est-il reproductible ?",
-        "La réussite est-elle une question de chance ?",
-        "Quel est votre combat ?",
-        "En une phrase, qui êtes-vous ?",
-        "Quel message voulez-vous faire passer avec votre musique ?",
-        "Votre enfance isolée, qu'est-ce qu'elle vous a appris sur la société ?",
-        "Vous engagez-vous sur des causes ? Lesquelles ?",
-        "Que pensez-vous de la représentation des jeunes dans les médias ?",
-        "La réussite doit-elle s'accompagner de responsabilités ?",
-        "Qu'est-ce qui vous révolte aujourd'hui ?",
-        "Votre parcours peut-il inspirer ceux qui n'ont rien ?",
-        "Quelle est votre plus grande fierté ?",
-        "Un message à celles et ceux qui vous regardent ?",
-    ],
-    lecode: [
-        "Comment abordez-vous la construction d'un refrain ?",
-        "Votre rapport au tempo a-t-il évolué ?",
-        "Quel morceau vous a demandé le plus de réécritures ?",
-        "Comment choisissez-vous vos producteurs ?",
-        "Expliquez la progression harmonique de votre dernier single.",
-        "Comment structurez-vous un couplet ?",
-        "Vos refrains viennent-ils avant ou après les couplets ?",
-        "Quelle est votre méthode d'enregistrement ?",
-        "Vous travaillez sur combien de versions par morceau ?",
-        "Le mixage, vous y participez ?",
-        "Quelle référence cachée personne n'a relevée ?",
-        "Votre usage des silences dans un morceau ?",
-        "Comment choisissez-vous l'ordre des titres ?",
-        "Un morceau construit autour d'une contrainte précise ?",
-        "Votre rapport aux outros et interludes ?",
-        "Qu'est-ce qu'un bon texte, techniquement ?",
-        "Le Code décrypte : expliquez-nous la structure de votre dernier album.",
-        "Cette métaphore récurrente dans vos textes, elle vient d'où ?",
-        "Comment choisissez-vous vos productions ?",
-        "Votre écriture a changé entre UNUHU et #0000ff. Pourquoi ?",
-        "Le titre '#0000ff' — expliquez ce choix.",
-        "Quelle influence a eu votre isolement sur votre imaginaire ?",
-        "Vous travaillez seul ou en équipe sur les textes ?",
-        "Un morceau que personne n'a compris comme vous le vouliez ?",
-        "Le rapport entre votre musique et votre image publique ?",
-        "Quel est votre projet le plus abouti, techniquement ?",
-    ],
-    thebridge: [
-        "Quelle erreur font les artistes français à l'international ?",
-        "Le marché américain vous a-t-il changé ?",
-        "Comment on garde son identité en s'exportant ?",
-        "Quel marché vous reste-t-il à conquérir ?",
-        "Comment on décroche un feat avec un artiste US ?",
-        "Le management américain fonctionne différemment ?",
-        "Tu enregistres en anglais avec un coach ?",
-        "Le public US comprend-il ton univers ?",
-        "Quel marché étranger t'a le plus surpris ?",
-        "Tu adaptes tes clips selon les pays ?",
-        "Le rap africain va-t-il dépasser le rap français ?",
-        "Tu ferais une tournée US complète ?",
-        "Qu'est-ce qui manque au rap français pour exporter ?",
-        "Un label américain t'a déjà approché ?",
-        "Le streaming a-t-il aplati les frontières ?",
-        "Ton objectif : Grammy ou Victoire de la Musique ?",
-        "The Bridge ! Tu fais le lien entre la France et les US. Comment ?",
-        "Ton feat américain, il s'est monté comment concrètement ?",
-        "Ce qui bloque les rappeurs français aux États-Unis, c'est quoi ?",
-        "Tu enregistres différemment selon le marché visé ?",
-        "L'industrie américaine, elle t'a accueilli comment ?",
-        "Tu rêves d'amener Travis Scott ou Central Cee sur un son en français. Lequel ?",
-        "La barrière de la langue, c'est un vrai obstacle ?",
-        "Tu conseillerais quoi à un rappeur français qui veut percer là-bas ?",
-        "Le rap français peut-il devenir global comme l'afrobeat ?",
-        "Ton objectif américain, c'est quoi exactement ?",
-    ],
-    cko: [
-        "Vous assumez tout ce que vous avez fait pour en arriver là ?",
-        "Qui avez-vous sacrifié en chemin ?",
-        "Vos chiffres sont-ils honnêtes ?",
-        "Qu'est-ce que vous ne direz jamais publiquement ?",
-        "Tes impôts, tu les payes où exactement ?",
-        "On dit que ton label exploite ses artistes. Réponse ?",
-        "Tu as déjà menti en interview ?",
-        "Ton succès, c'est le talent ou le réseau ?",
-        "Tu assumes d'avoir profité de ta relation avec Jenna ?",
-        "Combien tu payes tes artistes UNUHU réellement ?",
-        "Tu te sens redevable envers quelqu'un ?",
-        "Le pseudocide, tu as manipulé tes fans ?",
-        "Tu ferais quoi si tu perdais tout demain ?",
-        "Une décision dont tu as honte ?",
-        "Tu crois vraiment à ce que tu racontes dans tes sons ?",
-        "Qu'est-ce que tu caches au public ?",
-        "CKO, on parle cash : t'as gagné combien avec ton dernier projet ?",
-        "Pourquoi t'as vraiment quitté la France ?",
-        "On dit que tu snobes la scène française. Vrai ou faux ?",
-        "Booba t'a visé publiquement à l'époque. C'est réglé entre vous ?",
-        "Ton business, c'est propre à 100% ?",
-        "T'assumes ton train de vie face à ceux qui galèrent ?",
-        "Le pseudocide, beaucoup ont trouvé ça irrespectueux. Tu réponds ?",
-        "Tu te sens légitime dans le rap ou t'es juste un businessman ?",
-        "Falltos t'a tout donné au début. Il touche quoi sur ta réussite aujourd'hui ?",
-        "Une vérité que t'as jamais dite en interview ?",
-    ],
-    gqfr: [
-        "Le luxe a-t-il encore un sens aujourd'hui ?",
-        "Quelle pièce de votre garde-robe raconte votre histoire ?",
-        "Vous suivez la mode ou vous la subissez ?",
-        "FOH-0 dans dix ans, ça ressemble à quoi ?",
-        "Comment votre style a-t-il évolué depuis vos débuts ?",
-        "Quelle pièce résume le mieux FOH-0 ?",
-        "Vous dessinez vous-même vos collections ?",
-        "Le streetwear a-t-il tué le luxe classique ?",
-        "Votre rapport aux montres, aux bijoux ?",
-        "Quel artiste s'habille le mieux selon vous ?",
-        "Vous suivez les codes ou vous les cassez ?",
-        "Une erreur de style que vous regrettez ?",
-        "Comment choisissez-vous vos tenues de scène ?",
-        "Le sur-mesure ou le prêt-à-porter ?",
-        "Un designer avec qui vous rêvez de collaborer ?",
-        "Que portera-t-on dans dix ans ?",
-        "GQ : votre style a beaucoup évolué. Racontez.",
-        "FOH-0, quelle est l'intention derrière la marque ?",
-        "Entre Virgil Abloh et Rick Owens, quelle vision vous parle le plus ?",
-        "Le luxe, c'est une revanche ou un plaisir ?",
-        "Votre pièce préférée dans votre garde-robe ?",
-        "Comment définiriez-vous l'élégance ?",
-        "Vous suivez la Fashion Week ? Vous y trouvez quoi ?",
-        "Mode et musique, même processus créatif ?",
-        "Un conseil style pour ceux qui débutent ?",
-        "Que porterez-vous dans dix ans ?",
-    ],
-    quotidien: [
-        "Vous regardez encore la télévision française ?",
-        "Que répondez-vous à ceux qui disent que vous avez fui ?",
-        "Votre image publique correspond-elle à ce que vous êtes ?",
-        "Vous reviendriez vivre en France dans quelles conditions ?",
-        "Vous vous sentez encore concerné par la France ?",
-        "Comment réagissez-vous aux critiques sur votre exil ?",
-        "Le rap français est-il devenu un business comme un autre ?",
-        "Vous suivez l'actualité politique française ?",
-        "Que pensez-vous du traitement des artistes par les médias ?",
-        "Vous seriez prêt à revenir vivre en France ?",
-        "Quelle image avez-vous de vous-même ?",
-        "Vous vous censurez parfois ?",
-        "Quel est votre rapport à la célébrité ?",
-        "Un moment où vous avez voulu tout arrêter ?",
-        "Que pensez-vous des réseaux sociaux ?",
-        "Une question qu'on ne vous pose jamais ?",
-        "Bonsoir Fisco ! Votre histoire est sidérante. Résumez-la nous.",
-        "Vous vivez aux Bahamas — fiscalement, comment ça se passe ?",
-        "Vous possédez un club de football américain. Pourquoi ?",
-        "Que répondez-vous à ceux qui critiquent votre exil ?",
-        "Votre rapport à la France aujourd'hui, c'est quoi ?",
-        "Vous avez simulé votre mort. Vous assumez ce choix ?",
-        "L'argent vous a-t-il changé ? Soyez honnête.",
-        "Que pensez-vous du débat public en France actuellement ?",
-        "Vous êtes une icône pour beaucoup de jeunes. Ça vous pèse ?",
-        "Un mot de la fin pour nos téléspectateurs ?",
-    ],
-    tf1jt: [
-        "Que représente la France pour vous aujourd'hui ?",
-        "Quel message pour ceux qui doutent de leur avenir ?",
-        "Votre réussite est-elle transposable ?",
-        "Que diriez-vous à vos parents s'ils vous voyaient ?",
-        "Combien d'emplois votre activité représente-t-elle ?",
-        "Quel message adressez-vous aux jeunes en difficulté ?",
-        "Vous investissez en France malgré votre installation à l'étranger ?",
-        "Comment expliquez-vous votre succès à ceux qui ne vous connaissent pas ?",
-        "Le sport professionnel, c'est un engagement durable pour vous ?",
-        "Vous soutenez des associations ? Lesquelles ?",
-        "Quel regard portez-vous sur votre génération ?",
-        "Votre réussite est-elle un modèle ?",
-        "Vous craignez la redescente ?",
-        "Quelle est votre vision pour les dix prochaines années ?",
-        "Qu'aimeriez-vous corriger dans votre image publique ?",
-        "Un dernier mot pour les Français ?",
-        "Bonsoir. Pour nos téléspectateurs qui vous découvrent, qui êtes-vous ?",
-        "Votre parcours est hors du commun. Racontez-nous l'essentiel.",
-        "Vous employez combien de personnes aujourd'hui ?",
-        "Que répondez-vous à ceux qui s'interrogent sur votre installation à l'étranger ?",
-        "Votre musique s'adresse-t-elle à toute la France ?",
-        "Vous investissez dans le sport. C'est une passion ou un placement ?",
-        "Quel regard portez-vous sur la jeunesse française ?",
-        "Vous soutenez des causes ? Lesquelles ?",
-        "Qu'aimeriez-vous que les Français retiennent de vous ?",
-        "Un message pour ceux qui nous regardent ce soir ?",
-    ],
-    m6_1945: [
-        "Quelle a été votre décision d'entrepreneur la plus difficile ?",
-        "Vous licencieriez un proche si nécessaire ?",
-        "Comment évaluez-vous un investissement ?",
-        "Quel échec vous a le plus appris ?",
-        "Comment gère-t-on autant d'entreprises en parallèle ?",
-        "Votre secret pour rester organisé ?",
-        "Un échec dont vous avez tiré une leçon ?",
-        "Vous déléguez facilement ?",
-        "Quel a été votre meilleur investissement ?",
-        "Vous conseilleriez à un jeune de se lancer ?",
-        "Comment gardez-vous la motivation ?",
-        "Votre entourage professionnel, vous l'avez construit comment ?",
-        "Le télétravail, la gestion à distance, ça marche pour vous ?",
-        "Un domaine dans lequel vous aimeriez investir ?",
-        "Votre définition de la réussite ?",
-        "Un dernier conseil ?",
-        "Bonsoir ! Votre actualité en quelques mots ?",
-        "Votre histoire personnelle est incroyable. Vous la racontez souvent ?",
-        "Comment gère-t-on un empire à votre âge ?",
-        "Vous êtes un modèle de réussite. Ça vous plaît, cette étiquette ?",
-        "Quel conseil donneriez-vous à un jeune entrepreneur ?",
-        "Votre quotidien ressemble à quoi, concrètement ?",
-        "La célébrité, c'est plus un poids ou un moteur ?",
-        "Vos projets pour les mois à venir ?",
-        "Un regret dans votre parcours ?",
-        "Le mot de la fin ?",
-    ],
+// ─── LES QUESTIONS DES MÉDIAS ───────────────────────────────────────────────
+// Une question dépend de trois choses : le média (qui tutoie ou vouvoie, et qui
+// a son terrain), le sujet que tu as choisi sur le plateau, et l'état réel de
+// ta vie — on ne te demande pas pourquoi tu n'as pas d'enfants quand tu en as.
+// Aucune question ne revient deux fois dans une carrière.
+const VOIX_MEDIA = { "akademiks": "tu", "bigboy": "tu", "booskap": "tu", "breakfast": "tu", "brut": "vous", "budden": "tu", "cko": "tu", "clique": "vous", "cliquetv": "vous", "colbert": "vous", "drinkchamps": "tu", "generations": "tu", "gqfr": "vous", "hot97": "tu", "kimmel": "tu", "konbini": "tu", "lecode": "vous", "m6_1945": "vous", "mouv": "tu", "planeterap": "tu", "quotidien": "vous", "rapelite": "tu", "rapunchline": "tu", "skyrock": "tu", "tf1jt": "vous", "thebridge": "tu", "tonight": "tu", "vladtv": "tu" };
+const REGISTRE_MEDIA = { "akademiks": "cash", "bigboy": "rapus", "booskap": "rapfr", "breakfast": "rapus", "brut": "culturefr", "budden": "rapus", "cko": "rapfr", "clique": "culturefr", "cliquetv": "culturefr", "colbert": "grandus", "drinkchamps": "cash", "generations": "rapfr", "gqfr": "culturefr", "hot97": "rapus", "kimmel": "grandus", "konbini": "culturefr", "lecode": "rapfr", "m6_1945": "infofr", "mouv": "culturefr", "planeterap": "rapfr", "quotidien": "infofr", "rapelite": "rapfr", "rapunchline": "rapfr", "skyrock": "rapfr", "tf1jt": "infofr", "thebridge": "rapfr", "tonight": "grandus", "vladtv": "cash" };
+// Les conditions auxquelles une question peut être attachée.
+const QF = {
+    enfants: g => (g.children || []).length > 0,
+    sansEnfant: g => (g.children || []).length === 0,
+    couple: g => !!(g.romance && g.romance.partner),
+    seul: g => !(g.romance && g.romance.partner),
+    foi: g => !!g.faithDone,
+    sansFoi: g => !g.faithDone,
+    elite: g => !!g.elite,
+    exElite: g => !!g.exElite,
+    boycott: g => !!g.boycott,
+    prison: g => !!g.inPrison,
+    clash: g => !!g.activeClash,
+    proces: g => !!g.activeTrial,
+    tournee: g => !!(g.activeTour || g.detailedTour),
+    film: g => (g.filmography || []).length > 0,
+    serie: g => (g.seriesography || []).length > 0,
+    grammy: g => (g.grammyHistory || []).some(h => (h.winsCount || 0) > 0),
+    sansGrammy: g => !(g.grammyHistory || []).some(h => (h.winsCount || 0) > 0),
+    riche: g => (g.money || 0) >= 50000000,
+    fauche: g => (g.money || 0) < 1000000,
+    veteran: g => (g.careerYears || 0) >= 10,
+    jeune: g => (g.careerYears || 0) < 6,
+    label: g => (g.unuhuRoster || []).length > 0,
+    addict: g => (g.addictions || []).length > 0,
+    deuil: g => !!g.grief,
+    resistance: g => !!g.inResistance,
+    conspi: g => !!g.conspiracist,
+    nael: g => !!g.nael,
 };
+const BANQUE_QUESTIONS = [
+    { i: "q_musique_tu_0", q: "Tu écris où, exactement ? Studio, voiture, téléphone ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_1", q: "Tu commences par quoi : la prod, une phrase, une idée de refrain ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_2", q: "Un morceau, tu sais à quel moment qu'il est fini ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_3", q: "Tu jettes beaucoup ? Genre, sur dix morceaux, il en sort combien ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_4", q: "Tu écoutes tes anciens projets ou tu peux plus ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_5", q: "Y'a un morceau à toi que tu regrettes d'avoir sorti ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_6", q: "Tu bosses mieux la nuit ou le matin ? Sincèrement.", t: "musique", v: "tu" },
+    { i: "q_musique_tu_7", q: "C'est quoi le plus dur : écrire, enregistrer, ou décider de sortir ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_8", q: "T'as déjà sorti un morceau que t'aimais pas, juste parce qu'il allait marcher ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_9", q: "Tu te relis beaucoup ou tu gardes la première version ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_10", q: "Un couplet, tu mets combien de temps en vrai ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_11", q: "Tu travailles avec les mêmes prods depuis le début ou tu changes ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_12", q: "T'as besoin de quoi dans une cabine pour être bien ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_13", q: "La voix, tu la travailles ou tu prends ce qui sort ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_14", q: "Tu fais écouter à qui en premier ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_15", q: "Quelqu'un a déjà réussi à te faire changer un texte ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_16", q: "Tu écris sur quoi quand t'as rien à raconter ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_17", q: "Le silence, dans un morceau, tu t'en sers ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_18", q: "C'est quoi un bon refrain, pour toi ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_19", q: "Tu penses à qui quand t'écris ? À personne ou à quelqu'un de précis ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_20", q: "Tu fais de l'autotune par choix ou par confort ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_21", q: "On reconnaît un morceau à toi à quoi, selon toi ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_22", q: "T'as peur de te répéter ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_23", q: "Tu te forces à sortir de ta zone ou tu assumes de rester où t'es bon ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_24", q: "Une prod qu'on t'a proposée et que t'as refusée, tu la regrettes ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_25", q: "Tu composes toi-même ou tu prends ce qu'on t'envoie ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_26", q: "T'as déjà volé une idée à quelqu'un ? Même petite ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_27", q: "Tu lis quoi en ce moment ? Ça ressort dans les textes ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_28", q: "Un morceau marche et tu sais pas pourquoi : ça te rend fou ou tu t'en fous ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_29", q: "Le mixage, c'est toi qui tranches ou tu fais confiance ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_30", q: "Tu te remets en question après une mauvaise critique ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_31", q: "Tu travailles avec un carnet ou tout est dans le téléphone ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_32", q: "T'as déjà écrit un morceau entier et jamais osé l'enregistrer ?", t: "musique", v: "tu" },
+    { i: "q_musique_tu_33", q: "Après toutes ces années, t'as encore peur avant de sortir un projet ?", t: "musique", v: "tu", s: "veteran" },
+    { i: "q_musique_tu_34", q: "T'as déjà l'impression de savoir ce que tu fais ou tu improvises ?", t: "musique", v: "tu", s: "jeune" },
+    { i: "q_musique_tu_35", q: "Tu produis les autres pareil que tu te produis toi ?", t: "musique", v: "tu", s: "label" },
+    { i: "q_musique_tu_36", q: "Les morceaux, tu les écris différemment quand tu sais que tu vas les jouer ?", t: "musique", v: "tu", s: "tournee" },
+    { i: "q_musique_tu_37", q: "Ta foi a changé ta manière d'écrire ou seulement ce que t'écris ?", t: "musique", v: "tu", s: "foi" },
+    { i: "q_musique_tu_38", q: "Y'a des sujets que tu t'interdis dans tes textes ?", t: "musique", v: "tu", s: "sansFoi" },
+    { i: "q_musique_tu_39", q: "Tu arrives à écrire en ce moment ?", t: "musique", v: "tu", s: "deuil" },
+    { i: "q_musique_tu_40", q: "Tu crois que tu écris mieux ou moins bien quand t'es pas net ?", t: "musique", v: "tu", s: "addict" },
+    { i: "q_musique_tu_41", q: "T'écris là où tu es ?", t: "musique", v: "tu", s: "prison" },
+    { i: "q_musique_tu_42", q: "T'as combien de morceaux dans le disque dur, là, maintenant ?", t: "musique", v: "tu", r: ["cash"] },
+    { i: "q_musique_tu_43", q: "Tu paies tes prods combien, en vrai ?", t: "musique", v: "tu", r: ["cash"] },
+    { i: "q_musique_tu_44", q: "Y'a des ghostwriters dans ta discographie ? Réponds vraiment.", t: "musique", v: "tu", r: ["cash"] },
+    { i: "q_musique_tu_45", q: "Tu bosses avec des gens que t'aimes pas si le morceau est bon ?", t: "musique", v: "tu", r: ["cash"] },
+    { i: "q_musique_tu_46", q: "Y'a un morceau que t'aurais dû garder pour toi ?", t: "musique", v: "tu", r: ["rapus"] },
+    { i: "q_musique_tu_47", q: "T'as déjà senti un morceau mort dès la première écoute en studio ?", t: "musique", v: "tu", r: ["rapus"] },
+    { i: "q_musique_tu_48", q: "Le rap français, techniquement, il a progressé ou il tourne en rond ?", t: "musique", v: "tu", r: ["rapfr"] },
+    { i: "q_musique_tu_49", q: "Tu te considères comme un technicien ou comme un auteur ?", t: "musique", v: "tu", r: ["rapfr"] },
+    { i: "q_musique_tu_50", q: "Y'a encore des gens qui kickent pour kicker ? Ça t'intéresse ?", t: "musique", v: "tu", r: ["rapfr"] },
+    { i: "q_musique_tu_51", q: "La plume, aujourd'hui, ça compte encore pour le public ?", t: "musique", v: "tu", r: ["rapfr"] },
+    { i: "q_musique_tu_52", q: "Est-ce que tu considères ce que tu fais comme de la littérature ?", t: "musique", v: "tu", r: ["culturefr"] },
+    { i: "q_musique_tu_53", q: "Tu travailles la forme ou tu cherches l'émotion d'abord ?", t: "musique", v: "tu", r: ["culturefr"] },
+    { i: "q_musique_tu_54", q: "Tu ferais un son juste pour que ça devienne un son de vidéo ?", t: "musique", v: "tu", r: ["genz"] },
+    { i: "q_musique_tu_55", q: "Tu regardes les commentaires sous tes clips ?", t: "musique", v: "tu", r: ["genz"] },
+    { i: "q_business_tu_0", q: "T'as appris la gestion où, toi ?", t: "business", v: "tu" },
+    { i: "q_business_tu_1", q: "Tu lis les contrats en entier ou tu fais confiance ?", t: "business", v: "tu" },
+    { i: "q_business_tu_2", q: "La première fois que t'as signé un truc sans comprendre, ça t'a coûté combien ?", t: "business", v: "tu" },
+    { i: "q_business_tu_3", q: "Tu délègues ou tu veux tout valider ?", t: "business", v: "tu" },
+    { i: "q_business_tu_4", q: "C'est quoi la décision business dont t'es le plus fier ?", t: "business", v: "tu" },
+    { i: "q_business_tu_5", q: "Et celle que tu referais pas ?", t: "business", v: "tu" },
+    { i: "q_business_tu_6", q: "Tu bosses avec de la famille ? C'est une bonne idée ?", t: "business", v: "tu" },
+    { i: "q_business_tu_7", q: "T'as déjà viré quelqu'un que t'aimais bien ?", t: "business", v: "tu" },
+    { i: "q_business_tu_8", q: "Un business qui marche, c'est une bonne idée ou une bonne équipe ?", t: "business", v: "tu" },
+    { i: "q_business_tu_9", q: "Tu te verses un salaire ou tu laisses tout dans la boîte ?", t: "business", v: "tu" },
+    { i: "q_business_tu_10", q: "T'as peur de perdre ce que t'as construit ?", t: "business", v: "tu" },
+    { i: "q_business_tu_11", q: "Qu'est-ce qui rapporte le plus : la musique ou le reste ?", t: "business", v: "tu" },
+    { i: "q_business_tu_12", q: "Tu refuses des partenariats ? Sur quels critères ?", t: "business", v: "tu" },
+    { i: "q_business_tu_13", q: "Un investisseur te propose beaucoup pour une partie du contrôle : tu dis quoi ?", t: "business", v: "tu" },
+    { i: "q_business_tu_14", q: "Tu prends combien de risques avec ton propre argent ?", t: "business", v: "tu" },
+    { i: "q_business_tu_15", q: "Tu sais combien tu dépenses par mois ?", t: "business", v: "tu" },
+    { i: "q_business_tu_16", q: "T'as un plan si tout s'arrête demain ?", t: "business", v: "tu" },
+    { i: "q_business_tu_17", q: "Tu veux transmettre ça à qui ?", t: "business", v: "tu" },
+    { i: "q_business_tu_18", q: "T'as déjà menti sur des chiffres pour que ça passe mieux ?", t: "business", v: "tu" },
+    { i: "q_business_tu_19", q: "Tu te vois rester patron dans dix ans ?", t: "business", v: "tu" },
+    { i: "q_business_tu_20", q: "Signer un artiste, tu regardes quoi en premier ?", t: "business", v: "tu", s: "label" },
+    { i: "q_business_tu_21", q: "Un de tes artistes perce plus que toi : ça te fait quoi ?", t: "business", v: "tu", s: "label" },
+    { i: "q_business_tu_22", q: "À partir de quel montant l'argent arrête de changer ta vie ?", t: "business", v: "tu", s: "riche" },
+    { i: "q_business_tu_23", q: "T'es dans une mauvaise passe financière ? On en parle ?", t: "business", v: "tu", s: "fauche" },
+    { i: "q_business_tu_24", q: "On dit que tes contrats se signent plus vite que ceux des autres. Pourquoi ?", t: "business", v: "tu", s: "elite" },
+    { i: "q_business_tu_25", q: "La foi et le business, ça se parle chez toi ?", t: "business", v: "tu", s: "foi" },
+    { i: "q_business_tu_26", q: "Tes sociétés tournent sans toi en ce moment ?", t: "business", v: "tu", s: "prison" },
+    { i: "q_business_tu_27", q: "Une procédure en cours, ça fait fuir les partenaires ?", t: "business", v: "tu", s: "proces" },
+    { i: "q_business_tu_28", q: "T'as combien de salariés, là, tout de suite ?", t: "business", v: "tu", r: ["cash"] },
+    { i: "q_business_tu_29", q: "Ton business le plus rentable, c'est lequel ? Et le plus bidon ?", t: "business", v: "tu", r: ["cash"] },
+    { i: "q_business_tu_30", q: "Tu paies tes impôts où ?", t: "business", v: "tu", r: ["cash"] },
+    { i: "q_business_tu_31", q: "Combien t'as perdu sur ta pire idée ?", t: "business", v: "tu", r: ["cash"] },
+    { i: "q_business_tu_32", q: "On dit que t'as racheté des parts à quelqu'un qui pouvait pas refuser. Vrai ?", t: "business", v: "tu", r: ["cash"] },
+    { i: "q_business_tu_33", q: "Tu te vois comme un artiste qui fait du business ou l'inverse ?", t: "business", v: "tu", r: ["rapus"] },
+    { i: "q_business_tu_34", q: "Les rappeurs français se font encore avoir sur les contrats ?", t: "business", v: "tu", r: ["rapfr"] },
+    { i: "q_business_tu_35", q: "L'indépendance, c'est un vrai choix ou un argument marketing ?", t: "business", v: "tu", r: ["rapfr"] },
+    { i: "q_business_tu_36", q: "T'as déjà conseillé un plus jeune de pas signer ?", t: "business", v: "tu", r: ["rapfr"] },
+    { i: "q_business_tu_37", q: "Peut-on créer librement quand on gère des sociétés ?", t: "business", v: "tu", r: ["culturefr"] },
+    { i: "q_business_tu_38", q: "Le mot « empire », il te gêne ou il te plaît ?", t: "business", v: "tu", r: ["culturefr"] },
+    { i: "q_business_tu_39", q: "Tu lancerais un truc juste parce que ça buzze ?", t: "business", v: "tu", r: ["genz"] },
+    { i: "q_clash_tu_0", q: "Qu'est-ce qu'on raconte sur toi qui est faux et que tu veux corriger là ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_1", q: "Tu lis ce qu'on écrit sur toi ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_2", q: "Y'a une critique qui t'a vraiment touché ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_3", q: "On dit que t'as changé. Tu réponds quoi ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_4", q: "T'as des ennemis ou juste des gens qui t'aiment pas ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_5", q: "Tu pardonnes ou tu oublies rien ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_6", q: "Quelqu'un t'a trahi et tu lui reparles quand même ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_7", q: "Tu réponds toujours ou t'as appris à te taire ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_8", q: "T'as déjà regretté une punchline sur quelqu'un ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_9", q: "Qu'est-ce qui te fait sortir de tes gonds en interview ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_10", q: "Les gens qui te défendent, ils te défendent bien ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_11", q: "Tu te sens incompris ou juste mal lu ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_12", q: "T'as déjà voulu tout arrêter à cause de ce qu'on disait ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_13", q: "Si on te traite d'arrogant, tu dis quoi ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_14", q: "On dit que tu te prends pour plus que ce que t'es.", t: "clash", v: "tu" },
+    { i: "q_clash_tu_15", q: "Tes détracteurs ont-ils déjà eu raison sur un truc ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_16", q: "Tu te défends pour toi ou pour ta famille ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_17", q: "Tu bloques les gens ou tu laisses dire ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_18", q: "Un journaliste t'a-t-il déjà planté ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_19", q: "Tu crois que ta réputation est méritée ?", t: "clash", v: "tu" },
+    { i: "q_clash_tu_20", q: "Le clash en cours, tu le termines comment ?", t: "clash", v: "tu", s: "clash" },
+    { i: "q_clash_tu_21", q: "Tu regrettes de l'avoir lancé ?", t: "clash", v: "tu", s: "clash" },
+    { i: "q_clash_tu_22", q: "On te boycotte. Tu en veux à qui exactement ?", t: "clash", v: "tu", s: "boycott" },
+    { i: "q_clash_tu_23", q: "T'as compris pourquoi ça t'est tombé dessus ?", t: "clash", v: "tu", s: "boycott" },
+    { i: "q_clash_tu_24", q: "On dit que t'es protégé. Tu dis quoi ?", t: "clash", v: "tu", s: "elite" },
+    { i: "q_clash_tu_25", q: "On dit que tu t'es fait sortir. C'est ça la vérité ?", t: "clash", v: "tu", s: "exElite" },
+    { i: "q_clash_tu_26", q: "On te présente comme un type qui crache dans la soupe.", t: "clash", v: "tu", s: "resistance" },
+    { i: "q_clash_tu_27", q: "On te colle une étiquette de complotiste. Tu l'acceptes ?", t: "clash", v: "tu", s: "conspi" },
+    { i: "q_clash_tu_28", q: "Ta conversion, beaucoup pensent que c'est une image. Tu réponds quoi ?", t: "clash", v: "tu", s: "foi" },
+    { i: "q_clash_tu_29", q: "On dit que le procès te donne enfin ce que tu mérites.", t: "clash", v: "tu", s: "proces" },
+    { i: "q_clash_tu_30", q: "Tu réponds quoi à ceux qui disent que t'as eu ce que tu cherchais ?", t: "clash", v: "tu", s: "prison" },
+    { i: "q_clash_tu_31", q: "Jamais récompensé : c'est un hasard ou on t'évite ?", t: "clash", v: "tu", s: "sansGrammy" },
+    { i: "q_clash_tu_32", q: "Nomme la personne du game que tu peux pas voir. Là, maintenant.", t: "clash", v: "tu", r: ["cash"] },
+    { i: "q_clash_tu_33", q: "On dit que tes chiffres sont gonflés. Tu réponds quoi ?", t: "clash", v: "tu", r: ["cash"] },
+    { i: "q_clash_tu_34", q: "T'as des dossiers sur des gens ? Tu t'en servirais ?", t: "clash", v: "tu", r: ["cash"] },
+    { i: "q_clash_tu_35", q: "Qui t'a manqué de respect et s'en est tiré ?", t: "clash", v: "tu", r: ["cash"] },
+    { i: "q_clash_tu_36", q: "Si tu devais clasher quelqu'un demain, c'est qui ?", t: "clash", v: "tu", r: ["cash"] },
+    { i: "q_clash_tu_37", q: "On dit que t'as rien à faire dans cette conversation. Tu réponds quoi ?", t: "clash", v: "tu", r: ["rapus"] },
+    { i: "q_clash_tu_38", q: "Qui dans ce game te doit des excuses ?", t: "clash", v: "tu", r: ["rapus"] },
+    { i: "q_clash_tu_39", q: "On dit que t'as oublié d'où tu viens depuis que t'es parti.", t: "clash", v: "tu", r: ["rapfr"] },
+    { i: "q_clash_tu_40", q: "Les rappeurs français qui te copient, tu les nommes ?", t: "clash", v: "tu", r: ["rapfr"] },
+    { i: "q_clash_tu_41", q: "T'es plus dans le game ou t'es au-dessus ? Parce que les deux se disent.", t: "clash", v: "tu", r: ["rapfr"] },
+    { i: "q_clash_tu_42", q: "Certains disent que tu fais plus de rap. Ça te vexe ?", t: "clash", v: "tu", r: ["rapfr"] },
+    { i: "q_clash_tu_43", q: "Tu es devenu un symbole pour des gens que tu n'as pas choisis. Ça te gêne ?", t: "clash", v: "tu", r: ["culturefr"] },
+    { i: "q_clash_tu_44", q: "Est-ce qu'on t'a enfermé dans un rôle ?", t: "clash", v: "tu", r: ["culturefr"] },
+    { i: "q_clash_tu_45", q: "Les gens te clashent en ligne tous les jours. Tu fais comment ?", t: "clash", v: "tu", r: ["genz"] },
+    { i: "q_perso_tu_0", q: "Tu dors combien d'heures par nuit, honnêtement ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_1", q: "T'as des amis d'avant ou tout le monde est parti ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_2", q: "C'est quoi une bonne journée pour toi ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_3", q: "Tu te sens seul parfois ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_4", q: "Qui t'appelle quand ça va mal ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_5", q: "Tu fais quoi quand t'es pas en train de bosser ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_6", q: "T'as peur de quoi, concrètement ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_7", q: "Tu te vois où dans dix ans ? Pas la carrière, la vie.", t: "perso", v: "tu" },
+    { i: "q_perso_tu_8", q: "Tu sais te reposer ou tu culpabilises ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_9", q: "T'as déjà pleuré à cause de ce métier ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_10", q: "Tu te fais confiance ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_11", q: "Qu'est-ce que t'aimerais qu'on dise de toi quand tu seras plus là ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_12", q: "T'as une routine ou chaque jour est différent ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_13", q: "Tu cuisines ? Tu sais faire quoi ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_14", q: "Le luxe, ça t'a rendu heureux ou juste confortable ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_15", q: "T'as gardé un truc de ta vie d'avant que personne comprend ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_16", q: "Tu te sens vieux ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_17", q: "Tu te soignes quand t'es malade ou tu laisses passer ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_18", q: "Le sport, c'est de la discipline ou de la fuite ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_19", q: "Tu sais dire non ?", t: "perso", v: "tu" },
+    { i: "q_perso_tu_20", q: "Comment on tient un couple avec cette vie-là ?", t: "perso", v: "tu", s: "couple" },
+    { i: "q_perso_tu_21", q: "Elle te dit la vérité, elle, ou elle te ménage ?", t: "perso", v: "tu", s: "couple" },
+    { i: "q_perso_tu_22", q: "Célibataire, c'est un choix ou une conséquence ?", t: "perso", v: "tu", s: "seul" },
+    { i: "q_perso_tu_23", q: "Tu cherches quelqu'un ou t'as arrêté de chercher ?", t: "perso", v: "tu", s: "seul" },
+    { i: "q_perso_tu_24", q: "Être père, ça t'a changé quoi exactement ?", t: "perso", v: "tu", s: "enfants" },
+    { i: "q_perso_tu_25", q: "Tes enfants comprennent ce que tu fais ?", t: "perso", v: "tu", s: "enfants" },
+    { i: "q_perso_tu_26", q: "Tu voudrais qu'ils fassent de la musique ?", t: "perso", v: "tu", s: "enfants" },
+    { i: "q_perso_tu_27", q: "T'es un père présent ? Réponds vraiment.", t: "perso", v: "tu", s: "enfants" },
+    { i: "q_perso_tu_28", q: "Tu veux des enfants un jour ?", t: "perso", v: "tu", s: "sansEnfant" },
+    { i: "q_perso_tu_29", q: "Qu'est-ce qui te retient de fonder une famille ?", t: "perso", v: "tu", s: "sansEnfant" },
+    { i: "q_perso_tu_30", q: "Tu consommes encore ?", t: "perso", v: "tu", s: "addict" },
+    { i: "q_perso_tu_31", q: "Qui t'a dit en premier que ça allait trop loin ?", t: "perso", v: "tu", s: "addict" },
+    { i: "q_perso_tu_32", q: "Tu tiens comment en ce moment ?", t: "perso", v: "tu", s: "deuil" },
+    { i: "q_perso_tu_33", q: "La prière, ça change quoi dans une journée ?", t: "perso", v: "tu", s: "foi" },
+    { i: "q_perso_tu_34", q: "Tu vas à l'assemblée toutes les semaines ?", t: "perso", v: "tu", s: "foi" },
+    { i: "q_perso_tu_35", q: "Tu crois en quelque chose ?", t: "perso", v: "tu", s: "sansFoi" },
+    { i: "q_perso_tu_36", q: "Tu reçois des visites ?", t: "perso", v: "tu", s: "prison" },
+    { i: "q_perso_tu_37", q: "Tu referais tout pareil ?", t: "perso", v: "tu", s: "veteran" },
+    { i: "q_perso_tu_38", q: "T'arrives encore à être surpris par quelque chose ?", t: "perso", v: "tu", s: "riche" },
+    { i: "q_perso_tu_39", q: "La tournée te coûte quoi, en dehors de la fatigue ?", t: "perso", v: "tu", s: "tournee" },
+    { i: "q_perso_tu_40", q: "T'es devenu le grand frère de quelqu'un. Tu gères ça comment ?", t: "perso", v: "tu", s: "nael" },
+    { i: "q_perso_tu_41", q: "Tu sors encore en boîte ou c'est fini ?", t: "perso", v: "tu", r: ["cash"] },
+    { i: "q_perso_tu_42", q: "Tu dépenses combien par mois en conneries ?", t: "perso", v: "tu", r: ["cash"] },
+    { i: "q_perso_tu_43", q: "T'as combien de maisons ?", t: "perso", v: "tu", r: ["cash"] },
+    { i: "q_perso_tu_44", q: "Qui te remet à ta place quand il faut ?", t: "perso", v: "tu", r: ["rapus"] },
+    { i: "q_perso_tu_45", q: "Tu reviens voir ta famille combien de fois par an ?", t: "perso", v: "tu", r: ["rapfr"] },
+    { i: "q_perso_tu_46", q: "T'as gardé des potes de quartier ?", t: "perso", v: "tu", r: ["rapfr"] },
+    { i: "q_perso_tu_47", q: "Qu'est-ce que la célébrité t'a volé ?", t: "perso", v: "tu", r: ["culturefr"] },
+    { i: "q_perso_tu_48", q: "Est-ce que tu t'aimes ?", t: "perso", v: "tu", r: ["culturefr"] },
+    { i: "q_perso_tu_49", q: "Quelle est la chose la plus simple qui te rend heureux ?", t: "perso", v: "tu", r: ["culturefr"] },
+    { i: "q_perso_tu_50", q: "Tu passes combien de temps sur ton téléphone ?", t: "perso", v: "tu", r: ["genz"] },
+    { i: "q_perso_tu_51", q: "Tu lis les messages des fans ?", t: "perso", v: "tu", r: ["genz"] },
+    { i: "q_engage_tu_0", q: "Pourquoi cette cause-là et pas une autre ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_1", q: "Tu donnes de l'argent ou tu donnes du temps ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_2", q: "T'as peur qu'on dise que c'est de la com' ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_3", q: "Un artiste doit-il prendre position ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_4", q: "T'as déjà perdu des partenaires à cause de tes prises de position ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_5", q: "Tu te sens légitime pour parler de ça ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_6", q: "Qu'est-ce que tu demandes concrètement à ceux qui t'écoutent ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_7", q: "Tu crois qu'un morceau peut changer quelque chose ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_8", q: "T'as été aidé par quelqu'un, toi, quand t'en avais besoin ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_9", q: "Le silence des autres artistes, ça te dérange ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_10", q: "Tu t'engagerais en politique ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_11", q: "C'est quoi la limite entre s'engager et donner des leçons ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_12", q: "Tu fais des choses que personne ne sait ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_13", q: "On t'a déjà demandé de te taire sur ce sujet ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_14", q: "Si ça te coûtait ta carrière, tu continuerais ?", t: "engage", v: "tu" },
+    { i: "q_engage_tu_15", q: "Ta foi, c'est le moteur ou c'est autre chose ?", t: "engage", v: "tu", s: "foi" },
+    { i: "q_engage_tu_16", q: "Tu fais ça pour tes enfants ou pour les autres ?", t: "engage", v: "tu", s: "enfants" },
+    { i: "q_engage_tu_17", q: "Tu peux défendre une cause de là où tu es ?", t: "engage", v: "tu", s: "elite" },
+    { i: "q_engage_tu_18", q: "Tu te bats contre quoi, exactement ?", t: "engage", v: "tu", s: "resistance" },
+    { i: "q_engage_tu_19", q: "Donner quand on a beaucoup, c'est un effort ou pas vraiment ?", t: "engage", v: "tu", s: "riche" },
+    { i: "q_engage_tu_20", q: "Tu te sers de ton label pour ça ?", t: "engage", v: "tu", s: "label" },
+    { i: "q_engage_tu_21", q: "Ça te rapporte quoi, concrètement, de parler de ça ?", t: "engage", v: "tu", r: ["cash"] },
+    { i: "q_engage_tu_22", q: "Le rap français est-il devenu trop sage politiquement ?", t: "engage", v: "tu", r: ["rapfr"] },
+    { i: "q_engage_tu_23", q: "Tu crois que le public attend ça de toi ?", t: "engage", v: "tu", r: ["rapfr"] },
+    { i: "q_engage_tu_24", q: "Est-ce qu'on peut faire de l'art engagé sans être didactique ?", t: "engage", v: "tu", r: ["culturefr"] },
+    { i: "q_engage_tu_25", q: "Qu'est-ce qui te met vraiment en colère aujourd'hui ?", t: "engage", v: "tu", r: ["culturefr"] },
+    { i: "q_engage_tu_26", q: "Tu te définirais comme militant ?", t: "engage", v: "tu", r: ["culturefr"] },
+    { i: "q_engage_tu_27", q: "Comment on parle de ça à des gens de quinze ans ?", t: "engage", v: "tu", r: ["genz"] },
+    { i: "q_engage_tu_28", q: "Parler, ça t'a déjà coûté plus que ça t'a rapporté ?", t: "engage", v: "tu", r: ["rapus"] },
+    { i: "q_origines_tu_0", q: "C'était quoi, ta maison, quand t'étais gamin ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_1", q: "Tu te souviens du premier morceau qui t'a retourné ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_2", q: "T'étais bon à l'école ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_3", q: "Qui t'a dit en premier que t'avais un truc ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_4", q: "Tes parents ont compris ce que tu voulais faire ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_5", q: "Tu voulais faire quoi avant la musique ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_6", q: "T'as commencé par quoi : écrire ou rapper ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_7", q: "Le premier studio où t'as mis les pieds, c'était comment ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_8", q: "T'avais un plan B ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_9", q: "Qu'est-ce que t'as fait comme boulot avant ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_10", q: "Y'avait de l'argent chez toi ou pas du tout ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_11", q: "T'as grandi avec de la musique à la maison ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_12", q: "Ton quartier, tu y retournes ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_13", q: "Qu'est-ce que t'as appris dehors que t'as pas appris chez toi ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_14", q: "T'as été élevé sévèrement ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_15", q: "Y'a quelqu'un de ton enfance que t'aimerais revoir ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_16", q: "Tu te revois à quinze ans, tu lui dis quoi ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_17", q: "Qu'est-ce qui t'a fait partir ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_18", q: "La France, c'est quoi pour toi aujourd'hui ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_19", q: "T'es nostalgique ou pas du tout ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_20", q: "Y'a un prof qui a compté ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_21", q: "Le premier argent que t'as gagné avec la musique, t'en as fait quoi ?", t: "origines", v: "tu" },
+    { i: "q_origines_tu_22", q: "Ta famille a réagi comment à ta conversion ?", t: "origines", v: "tu", s: "foi" },
+    { i: "q_origines_tu_23", q: "Tu élèves tes enfants comme on t'a élevé ?", t: "origines", v: "tu", s: "enfants" },
+    { i: "q_origines_tu_24", q: "Tu penses à ceux qui sont plus là ?", t: "origines", v: "tu", s: "deuil" },
+    { i: "q_origines_tu_25", q: "T'as commencé il y a longtemps. Le milieu a changé comment ?", t: "origines", v: "tu", s: "veteran" },
+    { i: "q_origines_tu_26", q: "T'avais combien sur toi quand t'es arrivé dans ce game ?", t: "origines", v: "tu", r: ["cash"] },
+    { i: "q_origines_tu_27", q: "T'as fait des trucs que tu racontes pas ?", t: "origines", v: "tu", r: ["cash"] },
+    { i: "q_origines_tu_28", q: "T'écoutais quoi comme rap français quand t'étais petit ?", t: "origines", v: "tu", r: ["rapfr"] },
+    { i: "q_origines_tu_29", q: "T'aurais percé si t'étais resté en France ?", t: "origines", v: "tu", r: ["rapfr"] },
+    { i: "q_origines_tu_30", q: "Nice, ça t'a appris quoi que Paris aurait pas appris ?", t: "origines", v: "tu", r: ["rapfr"] },
+    { i: "q_origines_tu_31", q: "Qu'est-ce qui, de ton enfance, se retrouve encore dans ce que tu fais ?", t: "origines", v: "tu", r: ["culturefr"] },
+    { i: "q_origines_tu_32", q: "Le déracinement, c'est une douleur ou une force ?", t: "origines", v: "tu", r: ["culturefr"] },
+    { i: "q_origines_tu_33", q: "Ton accent vient d'où ? Tout le monde pose la question.", t: "origines", v: "tu", r: ["rapus"] },
+    { i: "q_origines_tu_34", q: "T'avais quoi comme rêve à dix ans ?", t: "origines", v: "tu", r: ["genz"] },
+    { i: "q_promo_tu_0", q: "Raconte ce qu'il y a sur ce projet pour ceux qui l'ont pas encore mis.", t: "promo", v: "tu" },
+    { i: "q_promo_tu_1", q: "C'est quoi le morceau qu'il faut écouter en premier ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_2", q: "T'as mis combien de temps à le faire ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_3", q: "C'est quoi le titre que personne va comprendre tout de suite ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_4", q: "Y'a des invités ? Tu les as choisis comment ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_5", q: "Ce projet, il ressemble à quoi comparé au précédent ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_6", q: "Tu l'as sorti maintenant pour une raison précise ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_7", q: "T'es content du résultat ou t'aurais besoin de deux mois de plus ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_8", q: "Le titre du projet, il vient d'où ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_9", q: "T'avais quoi en tête en commençant ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_10", q: "Y'a un morceau que t'as failli enlever ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_11", q: "Tu l'as fait écouter à qui avant tout le monde ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_12", q: "Il y a un clip qui arrive ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_13", q: "C'est quoi le morceau que tu vas jouer en premier sur scène ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_14", q: "Ceux qui t'écoutent depuis le début vont y trouver quoi ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_15", q: "Et ceux qui te découvrent, ils commencent par où ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_16", q: "Tu t'attends à quoi en chiffres ? Sois honnête.", t: "promo", v: "tu" },
+    { i: "q_promo_tu_17", q: "Si ce projet marche pas, tu fais quoi ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_18", q: "T'as écrit ça dans quel état d'esprit ?", t: "promo", v: "tu" },
+    { i: "q_promo_tu_19", q: "Tu le défends sur scène à partir de quand ?", t: "promo", v: "tu", s: "tournee" },
+    { i: "q_promo_tu_20", q: "Tes artistes sont dessus ?", t: "promo", v: "tu", s: "label" },
+    { i: "q_promo_tu_21", q: "On entend ta foi dedans ?", t: "promo", v: "tu", s: "foi" },
+    { i: "q_promo_tu_22", q: "Tu le sors en plein boycott. C'est un choix ?", t: "promo", v: "tu", s: "boycott" },
+    { i: "q_promo_tu_23", q: "Tu penses aux récompenses quand tu fais un projet comme ça ?", t: "promo", v: "tu", s: "grammy" },
+    { i: "q_promo_tu_24", q: "Tu l'as financé toi-même ? Ça t'a coûté combien ?", t: "promo", v: "tu", r: ["cash"] },
+    { i: "q_promo_tu_25", q: "Tu vises quoi en première semaine ?", t: "promo", v: "tu", r: ["cash"] },
+    { i: "q_promo_tu_26", q: "C'est celui-là que tu veux qu'on retienne ?", t: "promo", v: "tu", r: ["rapus"] },
+    { i: "q_promo_tu_27", q: "Tu le places où dans ta discographie ?", t: "promo", v: "tu", r: ["rapfr"] },
+    { i: "q_promo_tu_28", q: "C'est un projet de rap ou tu t'en éloignes encore ?", t: "promo", v: "tu", r: ["rapfr"] },
+    { i: "q_promo_tu_29", q: "Qu'est-ce que tu as cherché à dire avec ce disque ?", t: "promo", v: "tu", r: ["culturefr"] },
+    { i: "q_promo_tu_30", q: "Il y a une unité, ou c'est une collection de morceaux ?", t: "promo", v: "tu", r: ["culturefr"] },
+    { i: "q_promo_tu_31", q: "Y'a un son fait pour devenir un trend ?", t: "promo", v: "tu", r: ["genz"] },
+    { i: "q_crise_tu_0", q: "Tu veux dire quoi aux gens qui ont suivi cette histoire de loin ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_1", q: "T'as compris pourquoi ça a pris cette ampleur ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_2", q: "Tu reconnais une part de responsabilité ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_3", q: "Si c'était à refaire, tu ferais quoi autrement ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_4", q: "T'as parlé à ceux que ça a touchés ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_5", q: "Pourquoi t'as mis autant de temps à t'exprimer ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_6", q: "T'as été mal conseillé ou t'as décidé seul ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_7", q: "Qu'est-ce qui a été déformé dans ce qu'on a raconté ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_8", q: "Tu t'excuses ou tu t'expliques ? C'est pas pareil.", t: "crise", v: "tu" },
+    { i: "q_crise_tu_9", q: "Ça t'a coûté quoi, humainement ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_10", q: "T'as pensé à arrêter ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_11", q: "Qu'est-ce que tu dis à ceux qui te défendent depuis le début ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_12", q: "Et à ceux qui t'ont lâché ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_13", q: "Tu veux que ça se termine comment ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_14", q: "T'as appris quelque chose dans cette histoire ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_15", q: "Comment ta famille a vécu ça ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_16", q: "T'as dormi, ces derniers mois ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_17", q: "Y'a une version des faits qu'on n'a jamais entendue ?", t: "crise", v: "tu" },
+    { i: "q_crise_tu_18", q: "Tu en veux aux marques qui t'ont lâché ?", t: "crise", v: "tu", s: "boycott" },
+    { i: "q_crise_tu_19", q: "Tu reprendrais avec eux s'ils revenaient demain ?", t: "crise", v: "tu", s: "boycott" },
+    { i: "q_crise_tu_20", q: "Tu peux parler de l'affaire ou ton avocat te l'interdit ?", t: "crise", v: "tu", s: "proces" },
+    { i: "q_crise_tu_21", q: "Qu'est-ce que tu veux dire à ceux qui t'attendent dehors ?", t: "crise", v: "tu", s: "prison" },
+    { i: "q_crise_tu_22", q: "Tu te soignes ?", t: "crise", v: "tu", s: "addict" },
+    { i: "q_crise_tu_23", q: "On dit que tu t'en tires toujours. Pourquoi, selon toi ?", t: "crise", v: "tu", s: "elite" },
+    { i: "q_crise_tu_24", q: "Tu as perdu tes appuis. C'est ça qui a tout déclenché ?", t: "crise", v: "tu", s: "exElite" },
+    { i: "q_crise_tu_25", q: "Ta foi t'a aidé à traverser ça ou elle a rendu ça plus dur ?", t: "crise", v: "tu", s: "foi" },
+    { i: "q_crise_tu_26", q: "Tu veux mettre fin au clash ici, maintenant ?", t: "crise", v: "tu", s: "clash" },
+    { i: "q_crise_tu_27", q: "Qu'est-ce que ça t'a coûté en argent, ce truc ?", t: "crise", v: "tu", r: ["cash"] },
+    { i: "q_crise_tu_28", q: "Y'a des gens qui ont profité de ta chute. Tu les nommes ?", t: "crise", v: "tu", r: ["cash"] },
+    { i: "q_crise_tu_29", q: "Si tu pouvais revenir sur une seule chose, ce serait laquelle ?", t: "crise", v: "tu", r: ["rapus"] },
+    { i: "q_crise_tu_30", q: "Le game t'a soutenu ou tout le monde s'est planqué ?", t: "crise", v: "tu", r: ["rapfr"] },
+    { i: "q_crise_tu_31", q: "T'as reçu des appels de collègues ? Lesquels ?", t: "crise", v: "tu", r: ["rapfr"] },
+    { i: "q_crise_tu_32", q: "Peut-on revenir de quelque chose comme ça ?", t: "crise", v: "tu", r: ["culturefr"] },
+    { i: "q_crise_tu_33", q: "Qu'est-ce que cette période t'a appris sur les gens ?", t: "crise", v: "tu", r: ["culturefr"] },
+    { i: "q_crise_tu_34", q: "Les réseaux t'ont démoli. T'as regardé ou pas ?", t: "crise", v: "tu", r: ["genz"] },
+    { i: "q_annonce_tu_0", q: "T'as demandé à venir. Vas-y, on t'écoute.", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_1", q: "Pourquoi tu l'annonces ici et pas ailleurs ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_2", q: "Depuis combien de temps tu gardes ça ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_3", q: "Qui était au courant avant ce soir ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_4", q: "Ça change quoi pour ceux qui te suivent ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_5", q: "C'est une bonne nouvelle ou tu prépares les gens à quelque chose ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_6", q: "T'as hésité avant de le rendre public ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_7", q: "Ça arrive quand, concrètement ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_8", q: "T'as peur de la réaction ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_9", q: "C'est la plus grosse annonce de ta carrière ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_10", q: "Y'a une suite derrière cette annonce ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_11", q: "Tu l'annonces pour toi ou parce qu'on t'a poussé ?", t: "annonce", v: "tu" },
+    { i: "q_annonce_tu_12", q: "Les dates, c'est pour quand ?", t: "annonce", v: "tu", s: "tournee" },
+    { i: "q_annonce_tu_13", q: "Un nouveau nom chez toi ?", t: "annonce", v: "tu", s: "label" },
+    { i: "q_annonce_tu_14", q: "Elle l'annonce avec toi, ou tu parles seul ?", t: "annonce", v: "tu", s: "couple" },
+    { i: "q_annonce_tu_15", q: "C'est une annonce qui touche ta foi ?", t: "annonce", v: "tu", s: "foi" },
+    { i: "q_annonce_tu_16", q: "C'est l'annonce d'une fin ?", t: "annonce", v: "tu", s: "veteran" },
+    { i: "q_annonce_tu_17", q: "Les chiffres de ce deal, tu les donnes ou pas ?", t: "annonce", v: "tu", r: ["cash"] },
+    { i: "q_annonce_tu_18", q: "Bon, on annonce quoi exactement ce soir ?", t: "annonce", v: "tu", r: ["rapus"] },
+    { i: "q_annonce_tu_19", q: "Tu l'annonces en premier à un média français. C'est un message ?", t: "annonce", v: "tu", r: ["rapfr"] },
+    { i: "q_annonce_tu_20", q: "Pourquoi maintenant ?", t: "annonce", v: "tu", r: ["culturefr"] },
+    { i: "q_annonce_tu_21", q: "Tu veux que les gens fassent quoi après avoir entendu ça ?", t: "annonce", v: "tu", r: ["genz"] },
+    { i: "q_musique_vous_0", q: "Comment travaillez-vous, concrètement ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_1", q: "Vous écrivez tous les jours ou seulement quand ça vient ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_2", q: "Un disque, pour vous, ça commence par quoi ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_3", q: "Savez-vous reconnaître un bon morceau avant qu'il ne sorte ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_4", q: "Qu'est-ce qui vous rend le plus nerveux au moment d'une sortie ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_5", q: "Vous écoutez-vous ? Vos propres disques, je veux dire.", t: "musique", v: "vous" },
+    { i: "q_musique_vous_6", q: "Travaillez-vous seul ou entouré ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_7", q: "Est-ce que le succès a changé votre façon d'écrire ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_8", q: "Qu'est-ce que vous cherchez quand vous entrez en studio ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_9", q: "Diriez-vous que vous êtes un perfectionniste ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_10", q: "Combien de temps un album vous prend-il vraiment ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_11", q: "Y a-t-il une chanson que vous ne jouerez plus jamais ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_12", q: "Qu'est-ce qui vous donne encore envie d'écrire ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_13", q: "Faites-vous une différence entre ce qui vous plaît et ce qui va marcher ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_14", q: "Qui ose vous dire que c'est mauvais ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_15", q: "Votre voix a-t-elle changé avec les années ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_16", q: "Écrivez-vous pour être compris ou pour être ressenti ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_17", q: "Est-ce que vous vous imposez des règles quand vous écrivez ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_18", q: "Qu'avez-vous appris en studio que personne ne vous avait appris avant ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_19", q: "Après tout ce temps, le trac existe encore ?", t: "musique", v: "vous", s: "veteran" },
+    { i: "q_musique_vous_20", q: "Une récompense change-t-elle la manière de travailler ensuite ?", t: "musique", v: "vous", s: "grammy" },
+    { i: "q_musique_vous_21", q: "La scène vous apprend-elle des choses sur vos propres chansons ?", t: "musique", v: "vous", s: "tournee" },
+    { i: "q_musique_vous_22", q: "Écrit-on une chanson comme on écrit un film ?", t: "musique", v: "vous", s: "film" },
+    { i: "q_musique_vous_23", q: "Revendiquez-vous une filiation artistique ?", t: "musique", v: "vous", r: ["culturefr"] },
+    { i: "q_musique_vous_24", q: "Le mot « artiste », vous l'acceptez pour vous ?", t: "musique", v: "vous", r: ["culturefr"] },
+    { i: "q_musique_vous_25", q: "Pour le grand public : expliquez-nous comment naît une chanson.", t: "musique", v: "vous", r: ["infofr"] },
+    { i: "q_musique_vous_26", q: "Vos textes sont-ils autobiographiques ?", t: "musique", v: "vous", r: ["infofr"] },
+    { i: "q_musique_vous_27", q: "Qu'est-ce qu'il y a de plus dur à faire : un disque qu'on écoute, ou un disque qu'on garde ?", t: "musique", v: "vous", r: ["grandus"] },
+    { i: "q_musique_vous_28", q: "Vous arrive-t-il de ne plus savoir si un morceau est bon ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_29", q: "Quelle place laissez-vous au hasard ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_30", q: "Travaillez-vous dans le silence ou dans le bruit ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_31", q: "Qu'est-ce qu'une chanson ratée, selon vous ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_32", q: "Écrivez-vous encore à la main ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_33", q: "Qu'avez-vous abandonné en cours de route ?", t: "musique", v: "vous" },
+    { i: "q_musique_vous_34", q: "Vos disques se répondent-ils entre eux ?", t: "musique", v: "vous", r: ["culturefr"] },
+    { i: "q_musique_vous_35", q: "Combien de personnes travaillent sur un album comme le vôtre ?", t: "musique", v: "vous", r: ["infofr"] },
+    { i: "q_musique_vous_36", q: "Qu'est-ce qui vous surprend encore en studio ?", t: "musique", v: "vous", r: ["grandus"] },
+    { i: "q_musique_vous_37", q: "Produire quelqu'un d'autre, est-ce le même métier ?", t: "musique", v: "vous", s: "label" },
+    { i: "q_business_vous_0", q: "Comment êtes-vous passé de la musique aux affaires ?", t: "business", v: "vous" },
+    { i: "q_business_vous_1", q: "Vous considérez-vous comme un chef d'entreprise ?", t: "business", v: "vous" },
+    { i: "q_business_vous_2", q: "Qui vous conseille sur les décisions importantes ?", t: "business", v: "vous" },
+    { i: "q_business_vous_3", q: "Avez-vous déjà failli tout perdre ?", t: "business", v: "vous" },
+    { i: "q_business_vous_4", q: "Quelle est la part de chance dans ce que vous avez bâti ?", t: "business", v: "vous" },
+    { i: "q_business_vous_5", q: "Comment choisissez-vous vos associés ?", t: "business", v: "vous" },
+    { i: "q_business_vous_6", q: "L'argent change-t-il les gens autour de vous ?", t: "business", v: "vous" },
+    { i: "q_business_vous_7", q: "Vous fixez-vous une limite à ne pas dépasser ?", t: "business", v: "vous" },
+    { i: "q_business_vous_8", q: "Vos activités créent combien d'emplois ?", t: "business", v: "vous" },
+    { i: "q_business_vous_9", q: "Que répondez-vous à ceux qui trouvent ça indécent ?", t: "business", v: "vous" },
+    { i: "q_business_vous_10", q: "Avez-vous un conseil pour quelqu'un qui démarre sans rien ?", t: "business", v: "vous" },
+    { i: "q_business_vous_11", q: "Êtes-vous un bon patron ? Vraiment ?", t: "business", v: "vous" },
+    { i: "q_business_vous_12", q: "Votre fortune, vous la regardez encore ?", t: "business", v: "vous", s: "riche" },
+    { i: "q_business_vous_13", q: "Signer des artistes, est-ce de la générosité ou du calcul ?", t: "business", v: "vous", s: "label" },
+    { i: "q_business_vous_14", q: "Vos réussites doivent-elles quelque chose à vos relations ?", t: "business", v: "vous", s: "elite" },
+    { i: "q_business_vous_15", q: "Payez-vous vos impôts en France ?", t: "business", v: "vous", r: ["infofr"] },
+    { i: "q_business_vous_16", q: "Vos sociétés sont-elles domiciliées à l'étranger ? Pourquoi ?", t: "business", v: "vous", r: ["infofr"] },
+    { i: "q_business_vous_17", q: "Peut-on être artiste et patron sans se trahir ?", t: "business", v: "vous", r: ["culturefr"] },
+    { i: "q_business_vous_18", q: "Dans vos sociétés, que dirigez-vous réellement vous-même ?", t: "business", v: "vous", r: ["grandus"] },
+    { i: "q_business_vous_19", q: "L'argent rend-il les chansons plus difficiles à écrire ?", t: "business", v: "vous", r: ["grandus"] },
+    { i: "q_business_vous_20", q: "Qu'est-ce qui vous a le plus manqué au départ : l'argent ou les conseils ?", t: "business", v: "vous" },
+    { i: "q_business_vous_21", q: "Refusez-vous des propositions ? Sur quels critères ?", t: "business", v: "vous" },
+    { i: "q_business_vous_22", q: "Comment vérifiez-vous qu'on ne vous trompe pas ?", t: "business", v: "vous" },
+    { i: "q_business_vous_23", q: "Vos activités vous laissent-elles du temps pour créer ?", t: "business", v: "vous" },
+    { i: "q_business_vous_24", q: "Qu'est-ce qu'un bon associé ?", t: "business", v: "vous" },
+    { i: "q_business_vous_25", q: "Avez-vous un modèle, quelqu'un dont vous suivez le parcours ?", t: "business", v: "vous" },
+    { i: "q_business_vous_26", q: "Êtes-vous prêt à perdre de l'argent pour une idée à laquelle vous croyez ?", t: "business", v: "vous" },
+    { i: "q_business_vous_27", q: "Comment décide-t-on d'arrêter quelque chose qui ne marche pas ?", t: "business", v: "vous" },
+    { i: "q_business_vous_28", q: "Le succès commercial abîme-t-il la crédibilité ?", t: "business", v: "vous", r: ["culturefr"] },
+    { i: "q_business_vous_29", q: "Combien de personnes vivent de vos activités ?", t: "business", v: "vous", r: ["infofr"] },
+    { i: "q_business_vous_30", q: "Après tant d'années, déléguez-vous enfin ?", t: "business", v: "vous", s: "veteran" },
+    { i: "q_business_vous_31", q: "Un label indépendant peut-il encore exister aujourd'hui ?", t: "business", v: "vous", s: "label" },
+    { i: "q_clash_vous_0", q: "Que répondez-vous à vos détracteurs ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_1", q: "Les critiques vous atteignent-elles encore ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_2", q: "Avez-vous le sentiment d'être mal compris ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_3", q: "Est-ce que votre image vous échappe ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_4", q: "Vous arrive-t-il de regretter une sortie publique ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_5", q: "Diriez-vous que la presse vous a été juste ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_6", q: "Qu'est-ce qu'on vous reproche le plus souvent, et est-ce fondé ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_7", q: "Avez-vous déjà porté plainte contre quelqu'un pour ce qu'il a dit ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_8", q: "Comment protège-t-on ses proches de tout ça ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_9", q: "Vous êtes mis à l'écart depuis des mois. Qu'en dites-vous ?", t: "clash", v: "vous", s: "boycott" },
+    { i: "q_clash_vous_10", q: "On évoque des protections dont vous bénéficieriez.", t: "clash", v: "vous", s: "elite" },
+    { i: "q_clash_vous_11", q: "Comment vivez-vous cette procédure ?", t: "clash", v: "vous", s: "proces" },
+    { i: "q_clash_vous_12", q: "Assumez-vous les propos qu'on vous prête ?", t: "clash", v: "vous", s: "conspi" },
+    { i: "q_clash_vous_13", q: "Vos prises de position choquent une partie du public. Les assumez-vous ?", t: "clash", v: "vous", r: ["infofr"] },
+    { i: "q_clash_vous_14", q: "Beaucoup vous reprochent d'avoir quitté la France. Que leur dites-vous ?", t: "clash", v: "vous", r: ["infofr"] },
+    { i: "q_clash_vous_15", q: "Peut-on encore se tromper publiquement aujourd'hui ?", t: "clash", v: "vous", r: ["culturefr"] },
+    { i: "q_clash_vous_16", q: "Tout le monde a un avis sur vous. En lisez-vous quelque chose ?", t: "clash", v: "vous", r: ["grandus"] },
+    { i: "q_clash_vous_17", q: "Qu'est-ce qui vous blesse le plus : la critique ou l'indifférence ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_18", q: "Répondez-vous, ou laissez-vous dire ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_19", q: "Vos proches lisent-ils ce qu'on écrit sur vous ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_20", q: "Avez-vous changé d'avis sur quelqu'un qui vous attaquait ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_21", q: "Y a-t-il une rumeur que vous aimeriez enterrer ce soir ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_22", q: "Pensez-vous qu'on vous juge sur votre travail ou sur votre personne ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_23", q: "Le pardon, est-ce quelque chose que vous pratiquez ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_24", q: "Qu'auriez-vous aimé qu'on vous dise en face ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_25", q: "Avez-vous déjà eu tort publiquement ?", t: "clash", v: "vous" },
+    { i: "q_clash_vous_26", q: "La polémique est-elle devenue un passage obligé ?", t: "clash", v: "vous", r: ["culturefr"] },
+    { i: "q_clash_vous_27", q: "Comprenez-vous que certains de vos propos choquent ?", t: "clash", v: "vous", r: ["infofr"] },
+    { i: "q_clash_vous_28", q: "Est-il possible d'ignorer tout cela ?", t: "clash", v: "vous", r: ["grandus"] },
+    { i: "q_clash_vous_29", q: "Avec l'âge, les attaques font-elles moins mal ?", t: "clash", v: "vous", s: "veteran" },
+    { i: "q_clash_vous_30", q: "Les récompenses vous ont-elles protégé des critiques ?", t: "clash", v: "vous", s: "grammy" },
+    { i: "q_perso_vous_0", q: "Qui êtes-vous quand les caméras s'éteignent ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_1", q: "Vous sentez-vous libre ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_2", q: "Comment protégez-vous votre vie privée ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_3", q: "Quelle est la dernière fois où vous avez été vraiment heureux ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_4", q: "Avez-vous des amis en dehors du métier ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_5", q: "Que faites-vous de vos journées sans travail ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_6", q: "Est-ce que la célébrité vous pèse ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_7", q: "Qu'est-ce que vous auriez fait si tout cela n'était pas arrivé ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_8", q: "Vous considérez-vous comme quelqu'un d'heureux ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_9", q: "De quoi êtes-vous le plus fier, en dehors de votre carrière ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_10", q: "Comment préserve-t-on une relation sous les regards ?", t: "perso", v: "vous", s: "couple" },
+    { i: "q_perso_vous_11", q: "Comment élève-t-on un enfant dans ce monde-là ?", t: "perso", v: "vous", s: "enfants" },
+    { i: "q_perso_vous_12", q: "Que leur direz-vous quand ils voudront comprendre ?", t: "perso", v: "vous", s: "enfants" },
+    { i: "q_perso_vous_13", q: "La famille, c'est un projet pour vous ?", t: "perso", v: "vous", s: "sansEnfant" },
+    { i: "q_perso_vous_14", q: "Votre foi, comment l'a-t-on accueillie autour de vous ?", t: "perso", v: "vous", s: "foi" },
+    { i: "q_perso_vous_15", q: "Comment traverse-t-on une période comme celle-là ?", t: "perso", v: "vous", s: "deuil" },
+    { i: "q_perso_vous_16", q: "Avec le recul, qu'auriez-vous fait autrement ?", t: "perso", v: "vous", s: "veteran" },
+    { i: "q_perso_vous_17", q: "Vous vivez à l'étranger. Vos proches sont-ils restés en France ?", t: "perso", v: "vous", r: ["infofr"] },
+    { i: "q_perso_vous_18", q: "Les Français vous connaissent-ils vraiment, selon vous ?", t: "perso", v: "vous", r: ["infofr"] },
+    { i: "q_perso_vous_19", q: "Qu'est-ce qui vous reste quand on vous enlève tout le reste ?", t: "perso", v: "vous", r: ["culturefr"] },
+    { i: "q_perso_vous_20", q: "À quoi ressemble une journée normale chez vous ?", t: "perso", v: "vous", r: ["grandus"] },
+    { i: "q_perso_vous_21", q: "Vous traite-t-on encore comme quelqu'un d'ordinaire ?", t: "perso", v: "vous", r: ["grandus"] },
+    { i: "q_perso_vous_22", q: "Qu'est-ce qui vous empêche de dormir ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_23", q: "Avez-vous appris à vous reposer ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_24", q: "Qui vous dit la vérité ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_25", q: "Votre réussite vous a-t-elle éloigné de quelqu'un ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_26", q: "Qu'est-ce qui vous fait rire en ce moment ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_27", q: "Avez-vous peur de vieillir ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_28", q: "Que gardez-vous pour vous seul ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_29", q: "Si vous deviez tout recommencer ailleurs, le feriez-vous ?", t: "perso", v: "vous" },
+    { i: "q_perso_vous_30", q: "Vous sentez-vous en paix ?", t: "perso", v: "vous", r: ["culturefr"] },
+    { i: "q_perso_vous_31", q: "Vos enfants vivent-ils une vie normale ?", t: "perso", v: "vous", s: "enfants" },
+    { i: "q_perso_vous_32", q: "Vous reconnaissez-vous dans l'image qu'on donne de vous ?", t: "perso", v: "vous", r: ["grandus"] },
+    { i: "q_perso_vous_33", q: "Avez-vous demandé de l'aide ?", t: "perso", v: "vous", s: "addict" },
+    { i: "q_perso_vous_34", q: "L'argent vous a-t-il rendu méfiant ?", t: "perso", v: "vous", s: "riche" },
+    { i: "q_engage_vous_0", q: "Pourquoi vous être engagé sur ce sujet ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_1", q: "Un artiste a-t-il un devoir d'exemplarité ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_2", q: "Quelle action concrète menez-vous ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_3", q: "Craignez-vous la récupération politique ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_4", q: "Vos prises de position vous ont-elles coûté quelque chose ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_5", q: "Que répondez-vous à ceux qui vous trouvent donneur de leçons ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_6", q: "Souhaitez-vous que cela laisse une trace après vous ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_7", q: "Vous sentez-vous entendu par les pouvoirs publics ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_8", q: "Votre foi guide-t-elle vos engagements ?", t: "engage", v: "vous", s: "foi" },
+    { i: "q_engage_vous_9", q: "Transmettez-vous cet engagement à vos enfants ?", t: "engage", v: "vous", s: "enfants" },
+    { i: "q_engage_vous_10", q: "Appelleriez-vous vos auditeurs à agir, ici, maintenant ?", t: "engage", v: "vous", r: ["infofr"] },
+    { i: "q_engage_vous_11", q: "Vous engageriez-vous en politique un jour ?", t: "engage", v: "vous", r: ["infofr"] },
+    { i: "q_engage_vous_12", q: "L'engagement est-il devenu un argument de carrière ?", t: "engage", v: "vous", r: ["culturefr"] },
+    { i: "q_engage_vous_13", q: "Pourquoi cette cause, et pourquoi maintenant ?", t: "engage", v: "vous", r: ["grandus"] },
+    { i: "q_engage_vous_14", q: "Qu'est-ce qui vous a ouvert les yeux sur ce sujet ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_15", q: "Avez-vous rencontré ceux que vous défendez ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_16", q: "Peut-on agir sans faire de bruit ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_17", q: "Qu'attendez-vous des institutions ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_18", q: "Y a-t-il un combat que vous avez abandonné ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_19", q: "Qu'est-ce qui vous donne de l'espoir ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_20", q: "Un artiste peut-il rester neutre aujourd'hui ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_21", q: "Comment mesure-t-on l'utilité d'un engagement ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_22", q: "Vous arrive-t-il de douter de ce que vous défendez ?", t: "engage", v: "vous" },
+    { i: "q_engage_vous_23", q: "L'art doit-il servir à quelque chose ?", t: "engage", v: "vous", r: ["culturefr"] },
+    { i: "q_engage_vous_24", q: "Que demandez-vous concrètement à ceux qui nous regardent ?", t: "engage", v: "vous", r: ["infofr"] },
+    { i: "q_engage_vous_25", q: "Qu'est-ce qui vous a décidé à parler ?", t: "engage", v: "vous", r: ["grandus"] },
+    { i: "q_engage_vous_26", q: "Donner, est-ce suffisant ?", t: "engage", v: "vous", s: "riche" },
+    { i: "q_engage_vous_27", q: "Votre label porte-t-il ce combat ?", t: "engage", v: "vous", s: "label" },
+    { i: "q_origines_vous_0", q: "D'où venez-vous, exactement ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_1", q: "Quelle était l'ambiance chez vous, enfant ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_2", q: "Vos parents vous ont-ils soutenu ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_3", q: "À quel moment avez-vous su que ce serait votre vie ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_4", q: "Qu'avez-vous emporté de votre jeunesse ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_5", q: "Avez-vous connu la précarité ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_6", q: "Que reste-t-il du garçon que vous étiez ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_7", q: "Retournez-vous sur les lieux de votre enfance ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_8", q: "Vous sentez-vous encore français ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_9", q: "Votre famille a-t-elle compris votre parcours spirituel ?", t: "origines", v: "vous", s: "foi" },
+    { i: "q_origines_vous_10", q: "Racontez-vous votre enfance à vos enfants ?", t: "origines", v: "vous", s: "enfants" },
+    { i: "q_origines_vous_11", q: "Qu'est-ce qui vous a poussé à quitter la France ?", t: "origines", v: "vous", r: ["infofr"] },
+    { i: "q_origines_vous_12", q: "Que diriez-vous aux jeunes qui viennent du même endroit que vous ?", t: "origines", v: "vous", r: ["infofr"] },
+    { i: "q_origines_vous_13", q: "Quelle est la première image qui vous vient de votre enfance ?", t: "origines", v: "vous", r: ["culturefr"] },
+    { i: "q_origines_vous_14", q: "À quoi ressemblait votre maison, enfant ?", t: "origines", v: "vous", r: ["grandus"] },
+    { i: "q_origines_vous_15", q: "Qui vous a appris à travailler ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_16", q: "Quel souvenir d'enfance revient le plus souvent ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_17", q: "Y a-t-il eu un moment de bascule ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_18", q: "Qu'est-ce que vos parents n'ont jamais compris ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_19", q: "Avez-vous eu peur de ne pas y arriver ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_20", q: "Que diriez-vous à l'enfant que vous étiez ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_21", q: "Qu'avez-vous dû désapprendre ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_22", q: "Le milieu d'où vous venez vous a-t-il aidé ou freiné ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_23", q: "Quel métier auriez-vous exercé autrement ?", t: "origines", v: "vous" },
+    { i: "q_origines_vous_24", q: "Vos origines sont-elles une matière pour votre travail ?", t: "origines", v: "vous", r: ["culturefr"] },
+    { i: "q_origines_vous_25", q: "Que reste-t-il de la France dans votre quotidien ?", t: "origines", v: "vous", r: ["infofr"] },
+    { i: "q_origines_vous_26", q: "Votre famille vous voit-elle encore comme avant ?", t: "origines", v: "vous", r: ["grandus"] },
+    { i: "q_origines_vous_27", q: "Vos enfants connaissent-ils d'où vous venez ?", t: "origines", v: "vous", s: "enfants" },
+    { i: "q_origines_vous_28", q: "La foi faisait-elle partie de votre enfance ?", t: "origines", v: "vous", s: "foi" },
+    { i: "q_promo_vous_0", q: "Parlez-nous de ce nouveau projet.", t: "promo", v: "vous" },
+    { i: "q_promo_vous_1", q: "Qu'est-ce qui le distingue de ce que vous avez fait avant ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_2", q: "Combien de temps y avez-vous consacré ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_3", q: "Par quel titre faut-il commencer ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_4", q: "Quel est le fil rouge de ce disque ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_5", q: "Avez-vous hésité avant de le sortir ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_6", q: "Qu'attendez-vous de ce projet ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_7", q: "Y a-t-il une chanson qui vous est plus chère que les autres ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_8", q: "À qui s'adresse ce disque ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_9", q: "Une tournée est-elle prévue ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_10", q: "Votre foi apparaît-elle dans ces chansons ?", t: "promo", v: "vous", s: "foi" },
+    { i: "q_promo_vous_11", q: "Comment ces morceaux prennent-ils vie sur scène ?", t: "promo", v: "vous", s: "tournee" },
+    { i: "q_promo_vous_12", q: "Expliquez-nous en quelques mots de quoi parle ce disque.", t: "promo", v: "vous", r: ["infofr"] },
+    { i: "q_promo_vous_13", q: "Quelle est l'intention artistique derrière ce projet ?", t: "promo", v: "vous", r: ["culturefr"] },
+    { i: "q_promo_vous_14", q: "Parlez-nous de ce nouveau disque.", t: "promo", v: "vous", r: ["grandus"] },
+    { i: "q_promo_vous_15", q: "Pourquoi fallait-il faire ce disque maintenant ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_16", q: "Quel titre vous a donné le plus de mal ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_17", q: "Avez-vous travaillé avec de nouvelles personnes ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_18", q: "Est-ce un disque de rupture ou de continuité ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_19", q: "Qu'aimeriez-vous qu'on en retienne dans dix ans ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_20", q: "Avez-vous changé quelque chose au dernier moment ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_21", q: "Comment choisit-on l'ordre des morceaux ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_22", q: "Qu'est-ce qui vous rend fier dans ce projet ?", t: "promo", v: "vous" },
+    { i: "q_promo_vous_23", q: "Quelle est la tonalité générale de ce disque ?", t: "promo", v: "vous", r: ["culturefr"] },
+    { i: "q_promo_vous_24", q: "En quelques mots, à qui s'adresse ce disque ?", t: "promo", v: "vous", r: ["infofr"] },
+    { i: "q_promo_vous_25", q: "Qu'est-ce qui change par rapport au précédent ?", t: "promo", v: "vous", r: ["grandus"] },
+    { i: "q_promo_vous_26", q: "Vos enfants l'ont-ils écouté ?", t: "promo", v: "vous", s: "enfants" },
+    { i: "q_promo_vous_27", q: "Vos artistes y participent-ils ?", t: "promo", v: "vous", s: "label" },
+    { i: "q_crise_vous_0", q: "Vous souhaitiez vous exprimer. Nous vous écoutons.", t: "crise", v: "vous" },
+    { i: "q_crise_vous_1", q: "Comprenez-vous l'émotion que cela a suscitée ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_2", q: "Reconnaissez-vous une erreur ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_3", q: "Avez-vous quelque chose à dire à ceux qui se sont sentis blessés ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_4", q: "Pourquoi avoir gardé le silence si longtemps ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_5", q: "Qu'est-ce qui, dans ce qui a été rapporté, est faux ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_6", q: "Comment vos proches ont-ils vécu cette période ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_7", q: "Est-ce que cela a changé votre rapport au métier ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_8", q: "Comment comptez-vous reconstruire ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_9", q: "Comprenez-vous les marques qui ont pris leurs distances ?", t: "crise", v: "vous", s: "boycott" },
+    { i: "q_crise_vous_10", q: "Que pouvez-vous nous dire de la procédure en cours ?", t: "crise", v: "vous", s: "proces" },
+    { i: "q_crise_vous_11", q: "Votre foi vous a-t-elle aidé ?", t: "crise", v: "vous", s: "foi" },
+    { i: "q_crise_vous_12", q: "En une phrase : que voulez-vous dire aux Français ce soir ?", t: "crise", v: "vous", r: ["infofr"] },
+    { i: "q_crise_vous_13", q: "Démentez-vous formellement ce qui a été écrit ?", t: "crise", v: "vous", r: ["infofr"] },
+    { i: "q_crise_vous_14", q: "Une réputation, cela se répare-t-il ?", t: "crise", v: "vous", r: ["culturefr"] },
+    { i: "q_crise_vous_15", q: "Vous avez demandé à venir vous expliquer. Allez-y.", t: "crise", v: "vous", r: ["grandus"] },
+    { i: "q_crise_vous_16", q: "Qu'auriez-vous aimé dire plus tôt ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_17", q: "Vous êtes-vous senti seul dans cette période ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_18", q: "Qui vous a soutenu quand personne ne le faisait ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_19", q: "Avez-vous envisagé de tout arrêter ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_20", q: "Qu'avez-vous appris sur le fonctionnement des médias ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_21", q: "Est-ce que vous vous en voulez ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_22", q: "Comment expliquez-vous l'emballement ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_23", q: "Souhaitez-vous que l'on tourne la page ce soir ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_24", q: "Y a-t-il quelque chose que vous ne direz jamais publiquement ?", t: "crise", v: "vous" },
+    { i: "q_crise_vous_25", q: "Peut-on sortir grandi d'une épreuve pareille ?", t: "crise", v: "vous", r: ["culturefr"] },
+    { i: "q_crise_vous_26", q: "Présentez-vous des excuses ce soir, oui ou non ?", t: "crise", v: "vous", r: ["infofr"] },
+    { i: "q_crise_vous_27", q: "Qu'est-ce que les gens n'ont pas compris ?", t: "crise", v: "vous", r: ["grandus"] },
+    { i: "q_crise_vous_28", q: "Comment l'avez-vous expliqué à vos enfants ?", t: "crise", v: "vous", s: "enfants" },
+    { i: "q_crise_vous_29", q: "Une carrière survit-elle à ce genre de chose ?", t: "crise", v: "vous", s: "veteran" },
+    { i: "q_annonce_vous_0", q: "Vous avez une annonce à faire. Nous vous écoutons.", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_1", q: "Pourquoi avoir choisi ce moment ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_2", q: "Qu'est-ce que cela change pour votre public ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_3", q: "Est-ce une décision mûrie depuis longtemps ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_4", q: "Quelles seront les prochaines étapes ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_5", q: "Attendiez-vous ce moment ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_6", q: "Faut-il y voir la fin de quelque chose ?", t: "annonce", v: "vous", s: "veteran" },
+    { i: "q_annonce_vous_7", q: "S'agit-il d'une annonce personnelle ?", t: "annonce", v: "vous", s: "couple" },
+    { i: "q_annonce_vous_8", q: "Pouvez-vous le redire clairement, pour ceux qui nous rejoignent ?", t: "annonce", v: "vous", r: ["infofr"] },
+    { i: "q_annonce_vous_9", q: "Vous avez une annonce à faire. La parole est à vous.", t: "annonce", v: "vous", r: ["grandus"] },
+    { i: "q_annonce_vous_10", q: "Depuis combien de temps gardiez-vous cela pour vous ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_11", q: "Qui était dans la confidence ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_12", q: "Pourquoi nous l'annoncer à nous plutôt qu'ailleurs ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_13", q: "Craignez-vous la réaction du public ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_14", q: "Est-ce une bonne nouvelle, de votre point de vue ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_15", q: "Qu'est-ce que cela va changer dans votre quotidien ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_16", q: "Y aura-t-il d'autres annonces dans les semaines qui viennent ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_17", q: "Avez-vous hésité jusqu'au dernier moment ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_18", q: "Qu'aimeriez-vous que l'on retienne de cette annonce ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_19", q: "Est-ce l'aboutissement de quelque chose ?", t: "annonce", v: "vous" },
+    { i: "q_annonce_vous_20", q: "Pourquoi ce moment précis ?", t: "annonce", v: "vous", r: ["culturefr"] },
+    { i: "q_annonce_vous_21", q: "Cette décision vous ressemble-t-elle ?", t: "annonce", v: "vous", r: ["culturefr"] },
+    { i: "q_annonce_vous_22", q: "Pouvez-vous confirmer l'information devant nos téléspectateurs ?", t: "annonce", v: "vous", r: ["infofr"] },
+    { i: "q_annonce_vous_23", q: "Qu'est-ce que cela signifie concrètement ?", t: "annonce", v: "vous", r: ["infofr"] },
+    { i: "q_annonce_vous_24", q: "Alors, que nous annoncez-vous ?", t: "annonce", v: "vous", r: ["grandus"] },
+    { i: "q_annonce_vous_25", q: "Est-ce lié à votre label ?", t: "annonce", v: "vous", s: "label" },
+    { i: "q_annonce_vous_26", q: "Cela concerne-t-il la tournée ?", t: "annonce", v: "vous", s: "tournee" },
+    { i: "q_annonce_vous_27", q: "Faut-il y voir un adieu ?", t: "annonce", v: "vous", s: "veteran" }
+];
+// Les questions à trou : déclinées sur ce que ta carrière contient vraiment.
+const MODELES_QUESTIONS = [
+    { i: "m_0", q: "Sur « {x} », tu as travaillé comment ?", t: "musique", v: "tu", slot: "sortie" },
+    { i: "m_1", q: "« {x} », tu le réécoutes aujourd'hui ?", t: "musique", v: "tu", slot: "sortie" },
+    { i: "m_2", q: "Y'a un morceau de « {x} » que t'aurais dû enlever ?", t: "musique", v: "tu", slot: "projet" },
+    { i: "m_3", q: "« {x} », c'est le projet dont t'es le plus fier ?", t: "musique", v: "tu", slot: "projet" },
+    { i: "m_4", q: "Que représente « {x} » dans votre parcours ?", t: "musique", v: "vous", slot: "sortie" },
+    { i: "m_5", q: "« {x} » a-t-il été bien compris ?", t: "musique", v: "vous", slot: "sortie" },
+    { i: "m_6", q: "Les gens comparent déjà ça à « {x} ». Ça te va ?", t: "promo", v: "tu", slot: "passe" },
+    { i: "m_7", q: "Faut-il écouter « {x} » avant celui-ci ?", t: "promo", v: "vous", slot: "passe" },
+    { i: "m_8", q: "On dit que « {x} » était calculé pour les chiffres. Vrai ?", t: "clash", v: "tu", r: ["cash"], slot: "sortie" },
+    { i: "m_9", q: "Certains disent que t'as jamais fait mieux que « {x} ». Ça te vexe ?", t: "clash", v: "tu", slot: "passe" },
+    { i: "m_10", q: "« {x} », tu l'as fait dans quelle période de ta vie ?", t: "origines", v: "tu", slot: "sortie" },
+    { i: "m_11", q: "« {x} », tu étais où dans ta tête à ce moment-là ?", t: "perso", v: "tu", slot: "sortie" },
+    { i: "m_12", q: "C'est lié à « {x} », ce que tu viens annoncer ?", t: "annonce", v: "tu", slot: "sortie" },
+    { i: "m_13", q: "Sur « {x} », tu as enregistré combien de morceaux pour n'en garder que ceux-là ?", t: "musique", v: "tu", slot: "projet" },
+    { i: "m_14", q: "Comment avez-vous ordonné les morceaux de « {x} » ?", t: "musique", v: "vous", slot: "projet" },
+    { i: "m_15", q: "Après « {x} », t'avais encore quelque chose à prouver ?", t: "promo", v: "tu", slot: "projet" },
+    { i: "m_16", q: "Certains considèrent « {x} » comme votre sommet. Est-ce un compliment ?", t: "clash", v: "vous", slot: "projet" },
+    { i: "m_17", q: "{x}, ça marche vraiment ou c'est de l'affichage ?", t: "business", v: "tu", slot: "marque" },
+    { i: "m_18", q: "Tu passes combien de temps par semaine sur {x} ?", t: "business", v: "tu", slot: "marque" },
+    { i: "m_19", q: "{x} te rapporte combien, honnêtement ?", t: "business", v: "tu", r: ["cash"], slot: "marque" },
+    { i: "m_20", q: "Tu vendrais {x} si on y mettait le prix ?", t: "business", v: "tu", slot: "marque" },
+    { i: "m_21", q: "Comment est née {x} ?", t: "business", v: "vous", slot: "marque" },
+    { i: "m_22", q: "{x} vous survivra-t-elle ?", t: "business", v: "vous", slot: "marque" },
+    { i: "m_23", q: "On dit que {x} marche grâce à ton nom et pas grâce au produit.", t: "clash", v: "tu", slot: "marque" },
+    { i: "m_24", q: "Il y a quelque chose qui arrive chez {x} ?", t: "promo", v: "tu", slot: "marque" },
+    { i: "m_25", q: "Tu te sers de {x} pour défendre ce que tu défends ?", t: "engage", v: "tu", slot: "marque" },
+    { i: "m_26", q: "{x}, ça te laisse quel souvenir ?", t: "perso", v: "tu", slot: "ville" },
+    { i: "m_27", q: "Tu te verrais vivre à {x} ?", t: "perso", v: "tu", slot: "ville_ailleurs" },
+    { i: "m_28", q: "Qu'est-ce que {x} t'a appris ?", t: "origines", v: "tu", slot: "ville" },
+    { i: "m_29", q: "Tu joues à {x} bientôt ?", t: "promo", v: "tu", slot: "ville_ailleurs" },
+    { i: "m_30", q: "Que gardez-vous de {x} ?", t: "perso", v: "vous", slot: "ville" },
+    { i: "m_31", q: "{x} te ressemble en quoi ?", t: "perso", v: "tu", slot: "enfant" },
+    { i: "m_32", q: "Qu'est-ce que tu veux transmettre à {x} ?", t: "perso", v: "tu", slot: "enfant" },
+    { i: "m_33", q: "{x} t'a déjà posé une question à laquelle t'as pas su répondre ?", t: "perso", v: "tu", slot: "enfant" },
+    { i: "m_34", q: "Que souhaitez-vous à {x} ?", t: "perso", v: "vous", slot: "enfant" },
+    { i: "m_35", q: "Tu fais ça pour un monde où {x} vivra mieux ?", t: "engage", v: "tu", slot: "enfant" },
+    { i: "m_36", q: "{x}, tu l'as signé pourquoi ?", t: "business", v: "tu", slot: "artiste" },
+    { i: "m_37", q: "Tu laisses {x} faire ce qu'il veut ou tu diriges ?", t: "business", v: "tu", slot: "artiste" },
+    { i: "m_38", q: "{x} est sur le projet ?", t: "promo", v: "tu", slot: "artiste" },
+    { i: "m_39", q: "Qu'avez-vous vu chez {x} que les autres n'ont pas vu ?", t: "business", v: "vous", slot: "artiste" },
+    { i: "m_40", q: "« {x} », c'était une envie ou une opportunité ?", t: "business", v: "tu", slot: "film" },
+    { i: "m_41", q: "Tu referais du cinéma après « {x} » ?", t: "promo", v: "tu", slot: "film" },
+    { i: "m_42", q: "« {x} » a divisé. Tu l'assumes ?", t: "clash", v: "tu", slot: "film" },
+    { i: "m_43", q: "Qu'avez-vous appris en réalisant « {x} » ?", t: "business", v: "vous", slot: "film" },
+    { i: "m_44", q: "« {x} », ça t'a pris combien de temps ?", t: "business", v: "tu", slot: "serie" },
+    { i: "m_45", q: "Il y a une suite à « {x} » ?", t: "promo", v: "tu", slot: "serie" },
+    { i: "m_46", q: "Pourquoi avoir produit « {x} » ?", t: "business", v: "vous", slot: "serie" },
+    { i: "m_47", q: "« {x} », c'était ta meilleure tournée ?", t: "promo", v: "tu", slot: "tournee" },
+    { i: "m_48", q: "Qu'est-ce qui t'est resté de « {x} » ?", t: "perso", v: "tu", slot: "tournee" },
+    { i: "m_49", q: "« {x} » vous a-t-elle changé ?", t: "promo", v: "vous", slot: "tournee" }
+];
+function valeursSlot(gs, slot) {
+    const net = a => {
+        const v = [], w = {};
+        for (const x of a) {
+            if (typeof x !== "string")
+                continue;
+            const y = x.trim();
+            if (!y || y.length > 46 || w[y])
+                continue;
+            w[y] = 1;
+            v.push(y);
+        }
+        return v;
+    };
+    // Les sorties précédentes : on ne compare jamais un projet à lui-même.
+    const anciennes = () => {
+        const d = [...(gs.discography || [])].sort((a, b) => (b.releaseDate || 0) - (a.releaseDate || 0));
+        return d.slice(1, 19).map(x => x && x.title);
+    };
+    // « projet » = ce qui contient plusieurs morceaux. Un single n'en a qu'un, et
+    // certains de leurs titres sont aussi des noms de marques : on ne demande pas
+    // quel morceau enlever de « Bahasco ».
+    if (slot === "projet")
+        return net((gs.discography || [])
+            .filter(d => d && (d.type === "album" || d.type === "EP" || d.type === "mixtape") && ((d.tracks || d.trackBreakdown || []).length > 1))
+            .slice(0, 14).map(d => d.title));
+    if (slot === "sortie")
+        return net((gs.discography || []).slice(0, 18).map(d => d.title));
+    if (slot === "passe")
+        return net(anciennes());
+    if (slot === "marque") {
+        const v = (gs.soldBusinesses || {});
+        return ["Bahasco", "FOH-0", "UNUHU Records"].filter((_, i) => !v[["bahasco", "foh0", "unuhu"][i]]);
+    }
+    if (slot === "ville")
+        return net((gs.visitedCities || []).slice(0, 16));
+    if (slot === "ville_ailleurs")
+        return net((gs.visitedCities || []).filter(v => v !== gs.currentCity).slice(0, 16));
+    if (slot === "enfant")
+        return net((gs.children || []).map(c => c && c.name));
+    if (slot === "artiste")
+        return net((gs.unuhuRoster || []).map(a => a && (a.name || a.artist)));
+    if (slot === "film")
+        return net((gs.filmography || []).map(f => f && f.title));
+    if (slot === "serie")
+        return net((gs.seriesography || []).map(f => f && f.title));
+    if (slot === "tournee")
+        return net((gs.tourHistory || []).map(t => t && (t.name || t.title)));
+    return [];
+}
+// Tout ce qui peut encore être demandé sur ce plateau, sur ce sujet.
+function questionsDispo(gs, outletId, sujet) {
+    const voix = VOIX_MEDIA[outletId] || "tu";
+    const reg = REGISTRE_MEDIA[outletId] || "rapfr";
+    const vues = new Set(gs.questionsVues || []);
+    const out = [];
+    for (let k = 0; k < BANQUE_QUESTIONS.length; k++) {
+        const q = BANQUE_QUESTIONS[k];
+        if (q.v !== voix || q.t !== sujet)
+            continue;
+        if (q.r && q.r.indexOf(reg) < 0)
+            continue;
+        if (q.s) {
+            const f = QF[q.s];
+            if (!f)
+                continue;
+            let ok = false;
+            try {
+                ok = !!f(gs);
+            }
+            catch (e) {
+                ok = false;
+            }
+            if (!ok)
+                continue;
+        }
+        if (!vues.has(q.i))
+            out.push({ id: q.i, q: q.q });
+    }
+    for (let k = 0; k < MODELES_QUESTIONS.length; k++) {
+        const m = MODELES_QUESTIONS[k];
+        if (m.v !== voix || m.t !== sujet)
+            continue;
+        if (m.r && m.r.indexOf(reg) < 0)
+            continue;
+        const vals = valeursSlot(gs, m.slot);
+        for (let n = 0; n < vals.length; n++) {
+            const id = m.i + "|" + vals[n];
+            if (!vues.has(id))
+                out.push({ id, q: m.q.replace("{x}", vals[n]) });
+        }
+    }
+    return out;
+}
+function tirerQuestion(gs, outletId, sujet) {
+    const l = questionsDispo(gs, outletId, sujet);
+    if (!l.length)
+        return null;
+    return l[Math.floor(Math.random() * l.length)];
+}
 const INTERVIEW_TOPICS = [
     { id: "musique", label: "Ta musique et ton processus", emoji: "🎵", effect: "Valorise ton prochain projet",
         apply: g => ({ lyricBonus: 6, rep: 1.0 }) },
@@ -20011,10 +20085,10 @@ const INIT = {
     objectives: [], objectivesDone: [], timeline: [], grief: null, callbacks: [],
     healthAspects: { voice: 88, body: 85, sleep: 80, mind: 82 },
     activeTrial: null, trialHistory: [], hangoutHistory: [], clipography: [
-        { id: "clip_cassez", date: new Date(2023, 4, 12).getTime(), track: "Cassez vous", project: "#0000ff", director: "Réalisateur star", concept: "Tournage de rue", location: "Nice", guests: [], views: 148000000, quality: 88, viral: true, legacy: true },
+        { id: "clip_cassez", date: new Date(2023, 4, 12).getTime(), track: "Cassez vous", project: "Tecktonik", director: "Réalisateur star", concept: "Tournage de rue", location: "Nice", guests: [], views: 148000000, quality: 88, viral: true, legacy: true },
         { id: "clip_etudes_colors", date: new Date(2023, 1, 22).getTime(), track: "Études", project: "#0000ff", director: "COLORS", concept: "A COLORS SHOW", location: "Berlin", guests: [], views: 116000000, quality: 92, viral: true, legacy: true, colors: true, fullTitle: "Fisco - Études | A COLORS SHOW" },
         { id: "clip_laissez", date: new Date(2023, 2, 3).getTime(), track: "Laissez moi", project: "#0000ff", director: "Cinéaste de renom", concept: "Clip narratif", location: "Nassau", guests: [], views: 90000000, quality: 90, viral: true, legacy: true },
-        { id: "clip_maisnan", date: new Date(2023, 3, 20).getTime(), track: "Mais Nan", project: "#0000ff", director: "Réalisateur star", concept: "Démonstration de luxe", location: "Nice", guests: [], views: 77000000, quality: 85, viral: true, legacy: true },
+        { id: "clip_maisnan", date: new Date(2023, 3, 20).getTime(), track: "Mais Nan", project: "UNUHU", director: "Réalisateur star", concept: "Démonstration de luxe", location: "Nice", guests: [], views: 77000000, quality: 85, viral: true, legacy: true },
     ],
     tourHistory: [], activeTour: null,
     filmography: [],
@@ -20023,13 +20097,13 @@ const INIT = {
     deathAge: null, lastDeathWarning: null, lastCriticalWarning: null,
     deceased: [], lastDeathCheckYear: null,
     casinoBiggestWin: 0, casinoBestMult: 0, casinoTotalLost: 0, wasDeepOverdraft: false,
-    storyLapsed: [], squadCheckYear: null, lastTaxYear: null, history: [], staff: [], inflation: 1, pendingRollout: null, activeCrisis: null, lastCrisisYear: null, lastInflYear: null, answeredQuestions: {}, mediaYear: null, mediaThisYear: 0, playerGen: 0, extraPlayers: [], clubCollapsed: false, pressMemory: { scandals: 0, integrity: 0, broken: 0, generous: 0, lastDossier: null }, vdlmHistory: [VDLM_2022], lastVdlmYear: null, revelationWon: true, lastHelpTs: null, lastHelpDate: null,
+    storyLapsed: [], squadCheckYear: null, lastTaxYear: null, history: [], staff: [], inflation: 1, pendingRollout: null, activeCrisis: null, lastCrisisYear: null, lastInflYear: null, answeredQuestions: {}, questionsVues: [], mediaYear: null, mediaThisYear: 0, playerGen: 0, extraPlayers: [], clubCollapsed: false, pressMemory: { scandals: 0, integrity: 0, broken: 0, generous: 0, lastDossier: null }, vdlmHistory: [VDLM_2022], lastVdlmYear: null, revelationWon: true, lastHelpTs: null, lastHelpDate: null,
     foh0ThisYear: 0, foh0Year: null, drinksThisYear: 0, drinksYear: null,
     inPrison: false, prisonUntil: null, prisonReason: null,
     majorEventsSeen: [], lastMajorYear: null, majorThisYear: 0, majorQuotaYear: null, majorQuota: 0,
     // Aucun événement ne se répète dans une même partie : on garde trace de tout ce qui est sorti.
     seenEvents: {}, seenFillerKeys: {},
-    brandsBanned: false, festivalBanned: false, boycott: false,
+    brandsBanned: false, festivalBanned: false, boycott: false, boycottLevel: 0,
     politicalProtection: false, tourBanUntil: null, indieBanUntil: null, debt: 0,
     foh0Collections: [],
     bahascoDrinks: [{
@@ -20119,6 +20193,25 @@ function fameActivite(gs) {
         a += 3;
     return Math.min(20, a);
 }
+// Un boycott n'est pas un interrupteur. Il s'installe d'un coup, puis il s'use :
+// les marques reviennent une par une, les radios te remettent en rotation sans
+// l'annoncer, et un jour plus personne ne se souvient pourquoi on t'évitait.
+// 100 = la campagne bat son plein. 0 = c'est fini.
+function intensiteBoycott(gs) {
+    if (!gs || !gs.boycott)
+        return 0;
+    const v = (gs.boycottLevel == null) ? 100 : gs.boycottLevel;
+    return Math.max(0, Math.min(1, v / 100));
+}
+// Combien de points d'intensité partent chaque jour. Ce que tu vaux encore
+// décide de la vitesse : on pardonne vite à qui le public n'a pas lâché.
+function vitesseDegel(gs) {
+    if (gs.rep >= 60)
+        return 0.42;
+    if (gs.rep < 30)
+        return 0.18;
+    return 0.30;
+}
 function fameSocle(gs) {
     if (!gs)
         return 0;
@@ -20150,7 +20243,7 @@ function fameSocle(gs) {
     if (gs.inResistance)
         socle -= 14;
     if (gs.boycott)
-        socle -= 10;
+        socle -= Math.max(2, Math.round(10 * intensiteBoycott(gs)));
     if (gs.inPrison)
         socle -= 8;
     const plancher = fidele ? 38 + fidele * 7 : 0;
@@ -20176,7 +20269,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "117";
+const VERSION_JEU = "121";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -20225,7 +20318,40 @@ function capStreams(next) {
 // Le plafond de streams, le plafond de célébrité, le palier du cercle et la
 // réparation des couples s'appliquent d'eux-mêmes à chaque geste du joueur.
 // Reste une correction rétroactive, qui n'a de sens qu'une seule fois.
-const VERSION_EQUILIBRE = 2;
+const VERSION_EQUILIBRE = 3;
+// Où se trouve réellement un morceau : on cherche dans toute la discographie.
+function projetDuMorceau(titre, disco) {
+    if (!titre || !Array.isArray(disco))
+        return null;
+    const t = String(titre).trim().toLowerCase();
+    for (let i = 0; i < disco.length; i++) {
+        const d = disco[i];
+        if (!d)
+            continue;
+        const pistes = d.tracks || d.trackBreakdown || [];
+        for (let k = 0; k < pistes.length; k++) {
+            const pt = pistes[k] && pistes[k].title;
+            if (pt && String(pt).trim().toLowerCase() === t)
+                return d.title;
+        }
+    }
+    return null;
+}
+function recalerClips(clips, disco) {
+    if (!Array.isArray(clips) || !Array.isArray(disco))
+        return clips;
+    let change = false;
+    const out = clips.map(c => {
+        if (!c || !c.track)
+            return c;
+        const vrai = projetDuMorceau(c.track, disco);
+        if (!vrai || vrai === c.project)
+            return c;
+        change = true;
+        return { ...c, project: vrai };
+    });
+    return change ? out : clips;
+}
 function reprendrePartie(next) {
     if (!next || typeof next !== "object")
         return next;
@@ -20238,6 +20364,10 @@ function reprendrePartie(next) {
         && repris.money < -130000000) {
         repris.money = -130000000;
     }
+    // Un clip appartient au projet qui contient vraiment le morceau. Deux d'entre
+    // eux étaient mal rattachés, et la liste vit dans la sauvegarde : on répare
+    // les parties déjà commencées au lieu de ne corriger que les neuves.
+    repris.clipography = recalerClips(repris.clipography, repris.discography);
     return repris;
 }
 function gameReducer(state, action) {
@@ -20366,6 +20496,17 @@ function gameReducerInner(state, action) {
             const h = action.hours || 2;
             const newDate = addHours(state.currentDate, h);
             const dayChanged = new Date(state.currentDate).getDate() !== new Date(newDate).getDate();
+            // ── LE BOYCOTT SE DÉLITE TOUT SEUL ──
+            // Personne ne décrète la fin d'un boycott : il s'épuise. Chaque jour qui
+            // passe en enlève un peu, et le cercle, lui, n'a jamais rien à subir.
+            let boycottOn = state.boycott, boycottLevel = (state.boycottLevel == null ? (state.boycott ? 100 : 0) : state.boycottLevel);
+            if (boycottOn && !state.elite) {
+                boycottLevel = Math.max(0, boycottLevel - vitesseDegel(state) * (h / 24));
+                if (boycottLevel <= 0) {
+                    boycottOn = false;
+                    boycottLevel = 0;
+                }
+            }
             let newMoney = state.money;
             let newClubBudget = state.clubBudget;
             let deepOverdraft = state.wasDeepOverdraft;
@@ -20656,11 +20797,12 @@ function gameReducerInner(state, action) {
                     }).sort((a, b) => a.position - b.position);
                 }
                 // ── TOP SNEP : marché français, où Fisco écrase tout ──
-                const snepBoost = state.boycott ? 0.35 : 1; // un boycott majeur le fait reculer
+                const kBoy = intensiteBoycott(state); // un boycott majeur le fait reculer
+                const snepBoost = 1 - 0.65 * kBoy;
                 const sumM = new Date(newDate).getMonth() + 1, sumY = new Date(newDate).getFullYear();
                 const snepTracks = [...allTracks]
                     .map(e => {
-                    let p = e.points * 2.6 * snepBoost + (state.boycott ? 0 : 22);
+                    let p = e.points * 2.6 * snepBoost + 22 * (1 - kBoy);
                     // Un titre relancé par une tendance n'atteint le podium français qu'exceptionnellement
                     if (e.revived && e.label !== "Bahamas")
                         p *= 0.72;
@@ -20680,7 +20822,7 @@ function gameReducerInner(state, action) {
                     return age <= 400 && (d.type === "album" || d.type === "EP");
                 })
                     .map(d => ({ id: d.id, label: d.title, title: d.title, streams: d.streams,
-                    snepPoints: d.streams * (state.boycott ? 0.4 : 1) }))
+                    snepPoints: d.streams * (1 - 0.6 * intensiteBoycott(state)) }))
                     .sort((a, b) => b.snepPoints - a.snepPoints)
                     .slice(0, 20)
                     .map((e, i) => ({ ...e, position: i + 1 }));
@@ -20733,7 +20875,7 @@ function gameReducerInner(state, action) {
                 });
                 billboard = { week: newWeek, songsChart, albumsChart: albumEntries, snepTracks, snepAlbums };
             }
-            return { ...state, currentDate: newDate, money: newMoney, clubBudget: newClubBudget, wasDeepOverdraft: deepOverdraft, discography, billboard, rivals, careerYears, businesses, unuhuRoster, foh0Contracts, bahascoContracts, bahascoDrinks, foh0Collections, endedRuns };
+            return { ...state, currentDate: newDate, money: newMoney, clubBudget: newClubBudget, wasDeepOverdraft: deepOverdraft, discography, billboard, rivals, careerYears, businesses, unuhuRoster, foh0Contracts, bahascoContracts, bahascoDrinks, foh0Collections, endedRuns, boycott: boycottOn, boycottLevel };
         }
         case "PROMOTE_UNKNOWN": {
             const rels = { ...state.relations };
@@ -20910,6 +21052,13 @@ function gameReducerInner(state, action) {
                 soldBusinesses: { ...state.soldBusinesses, san_jose: { soldValue: 0, soldDate: state.currentDate, buybackBase: 0, collapsed: true, noBuyback: true } },
                 businesses: { ...state.businesses, san_jose: { ...state.businesses.san_jose, revenue: 0 } } };
         case "ANSWER_QUESTION": {
+            // Une question posée ne revient jamais de toute la carrière, quel que
+            // soit le média sur lequel elle avait été posée.
+            const deja = state.questionsVues || [];
+            if (action.qid && deja.indexOf(action.qid) < 0)
+                return { ...state, questionsVues: [...deja, action.qid] };
+            if (action.qid)
+                return state;
             const prev = state.answeredQuestions || {};
             const list = prev[action.outletId] || [];
             return { ...state, answeredQuestions: { ...prev, [action.outletId]: [...list, action.question] } };
@@ -21592,6 +21741,7 @@ function gameReducerInner(state, action) {
                 next.docLeaked = false;
             if (action.act === "clearBoycott") {
                 next.boycott = false;
+                next.boycottLevel = 0;
                 next.brandsBanned = false;
             }
             if (action.act === "clearPress")
@@ -22178,8 +22328,16 @@ function gameReducerInner(state, action) {
         case "SET_BOYCOTT":
             // Le cercle protège des campagnes de boycott : elles ne prennent jamais vraiment
             if (action.value && state.elite)
-                return { ...state, boycott: false, rep: Math.min(100, state.rep + 3) };
-            return { ...state, boycott: action.value };
+                return { ...state, boycott: false, boycottLevel: 0, rep: Math.min(100, state.rep + 3) };
+            return { ...state, boycott: action.value, boycottLevel: action.value ? 100 : 0 };
+        // Une bonne interview ne fait pas disparaître un boycott d'un claquement de
+        // doigts : elle fait tomber d'un cran ce qu'il te reste à encaisser.
+        case "EASE_BOYCOTT": {
+            if (!state.boycott)
+                return state;
+            const reste = Math.max(0, (state.boycottLevel == null ? 100 : state.boycottLevel) - (action.amount || 30));
+            return { ...state, boycottLevel: reste, boycott: reste > 0 };
+        }
         case "SET_DEBT":
             return { ...state, money: 0, debt: action.value };
         case "CASINO_RESULT":
@@ -23519,6 +23677,8 @@ function FiscoGame() {
     const [fastYear, setFastYear] = (0, react_1.useState)(false);
     // Un objectif déjà signalé ne réaffiche pas sa fenêtre à chaque semaine.
     const storyAvertiRef = (0, react_1.useRef)({});
+    // On ne t'annonce jamais la fin d'un boycott : on la remarque.
+    const boycottRef = (0, react_1.useRef)(null);
     const advanceTimeSafe = (0, react_1.useCallback)((hours) => {
         // Une date de tournée prévue ce soir doit être jouée avant toute chose
         const cd = concertDue(gsRef.current);
@@ -23907,7 +24067,7 @@ function FiscoGame() {
         if (cal && cal.id === "fisc") { /* géré par le bloc Fisc "0" ci-dessus */ }
         else if (cal) {
             if (cal.id === "grammy" && gs.lastGrammyYear !== d.getFullYear()) {
-                if (gs.awardsBanned || (gs.boycott && !gs.elite)) {
+                if (gs.awardsBanned || (intensiteBoycott(gs) >= 0.45 && !gs.elite)) {
                     setCalAlert({ emoji: "🚫", title: "Grammy Awards — écarté",
                         desc: "En pleine période de boycott, l'académie ne retient ta candidature dans aucune catégorie cette année. Tu regardes la cérémonie de loin." });
                     dispatch({ type: "RECORD_GRAMMY", result: { year: d.getFullYear(), results: [], winsCount: 0, project: null, boycotted: true }, repGain: 0, moneyGain: 0 });
@@ -23928,7 +24088,7 @@ function FiscoGame() {
                 }
             }
             else if (cal.id === "vdlm" && gs.lastVdlmYear !== d.getFullYear()) {
-                if (gs.awardsBanned || (gs.boycott && !gs.elite)) {
+                if (gs.awardsBanned || (intensiteBoycott(gs) >= 0.45 && !gs.elite)) {
                     setCalAlert({ emoji: "🚫", title: "Victoires de la Musique — écarté",
                         desc: "Le boycott dont tu fais l'objet te prive de toute nomination cette année. L'académie française préfère ne pas prendre de risque." });
                     dispatch({ type: "RECORD_VDLM", result: { year: d.getFullYear(), results: [], winsCount: 0, project: null, boycotted: true } });
@@ -25554,6 +25714,15 @@ function FiscoGame() {
             setCalAlert({ emoji: "📺", title: "Le cycle retombe",
                 desc: `${c.subject ? `**${c.subject}** quitte les unes` : "La séquence s'achève"} aussi brutalement qu'elle avait commencé.\n\nPersonne ne commente ce changement d'orientation. Une autre actualité prend toute la place dès le lendemain.\n\nC'est ainsi que ça fonctionne, et tu sais désormais que ça n'a jamais fonctionné autrement.` });
         }
+        // ── LA FIN D'UN BOYCOTT ──────────────────────────────────────────────
+        if (phase === "game" && !ending) {
+            const avant = boycottRef.current;
+            boycottRef.current = !!gs.boycott;
+            if (avant === true && !gs.boycott) {
+                setCalAlert({ emoji: "🕊️", title: "Le boycott est derrière toi", majeur: true,
+                    desc: "Aucun communiqué, aucune excuse, aucun article pour le dire.\n\nUne enseigne te recontacte pour une campagne. Une radio te remet en rotation sans prévenir. Une salle que tu avais rayée de ta liste te propose trois dates.\n\nLes gens qui t'évitaient ont simplement **arrêté de le faire**, et aucun d'eux ne se souvient d'avoir commencé." });
+            }
+        }
         // ── LES NOMINATIONS, VINGT JOURS AVANT ───────────────────────────────
         // La cérémonie tombe le 4 février : l'Académie annonce le 15 janvier. Ce
         // qui est annoncé ici est exactement ce qui se jouera — les nominations
@@ -25561,7 +25730,7 @@ function FiscoGame() {
         if (phase === "game" && !ending && d.getMonth() === 0 && d.getDate() === 15
             && !(gs.grammyNoms && gs.grammyNoms.year === d.getFullYear())
             && (gs.lastGrammyYear || 0) < d.getFullYear()) {
-            const ecarte = !!(gs.awardsBanned || (gs.boycott && !gs.elite));
+            const ecarte = !!(gs.awardsBanned || (intensiteBoycott(gs) >= 0.45 && !gs.elite));
             const noms = ecarte ? { year: d.getFullYear(), cats: [], project: null } : nominerGrammy(gs);
             dispatch({ type: "SET_GRAMMY_NOMS", noms });
             const retenues = noms.cats.filter(c => c.nominated);
@@ -26284,7 +26453,7 @@ function FiscoGame() {
         // bouton "+1 semaine" pourrait rester bloqué indéfiniment.
         const festivalDue = isFestivalWeek(gs.currentDate)
             && gs.lastFestivalYear !== new Date(gs.currentDate).getFullYear()
-            && !gs.boycott && !gs.festivalBanned && !festivalSuspended(gs) && !(gs.soldBusinesses || {}).bahasco;
+            && intensiteBoycott(gs) < 0.4 && !gs.festivalBanned && !festivalSuspended(gs) && !(gs.soldBusinesses || {}).bahasco;
         // En mode « passer l'année », les cérémonies et les annonces se règlent toutes
         // seules et sont consignées dans la frise : seule la mort interrompt la course.
         if (fastYear) {
@@ -27909,7 +28078,10 @@ function FiscoGame() {
     const [playerSort, setPlayerSort] = (0, react_1.useState)("rating_desc");
     const [mediaFilter, setMediaFilter] = (0, react_1.useState)("");
     const [mediaZone, setMediaZone] = (0, react_1.useState)("Tous");
-    const [currentQuestion, setCurrentQuestion] = (0, react_1.useState)("");
+    // La liste des médias ne défile plus dans son coin : sur téléphone, le doigt
+    // y restait prisonnier et on ne descendait jamais jusqu'au choix du sujet.
+    const [mediaPlus, setMediaPlus] = (0, react_1.useState)(false);
+    const [currentQuestion, setCurrentQuestion] = (0, react_1.useState)(null);
     const [kitTerm, setKitTerm] = (0, react_1.useState)({ years: 4, label: "4 ans", mult: 1.15 });
     const [artistFilter, setArtistFilter] = (0, react_1.useState)("");
     const [artistTerm, setArtistTerm] = (0, react_1.useState)({ years: 3, label: "3 ans", mult: 1.2 });
@@ -29252,8 +29424,8 @@ function FiscoGame() {
         }
         if (kind === "interview") {
             dispatch({ type: "MEDIA_APPEARANCE" });
-            if (interviewOutlet.talk && currentQuestion)
-                dispatch({ type: "ANSWER_QUESTION", outletId: interviewOutlet.id, question: currentQuestion });
+            if (interviewOutlet.talk && currentQuestion && currentQuestion.id)
+                dispatch({ type: "ANSWER_QUESTION", outletId: interviewOutlet.id, qid: currentQuestion.id });
             const outlet = interviewOutlet, topic = interviewTopic;
             const mods = topic.apply(gs);
             const quality = Math.min(100, effortScore);
@@ -29280,8 +29452,11 @@ function FiscoGame() {
             }
             if (mods.defuse && !backfired && quality >= 45) {
                 if (gs.boycott) {
-                    dispatch({ type: "SET_BOYCOTT", value: false });
-                    extra = "Le mouvement de boycott s'essouffle enfin.";
+                    const chute = Math.round(18 + quality / 3);
+                    const reste = Math.max(0, (gs.boycottLevel == null ? 100 : gs.boycottLevel) - chute);
+                    dispatch({ type: "EASE_BOYCOTT", amount: chute });
+                    extra = reste <= 0 ? "Le mouvement de boycott s'essouffle enfin."
+                        : `Le boycott recule nettement — il te colle encore à ${Math.round(reste)}%.`;
                 }
                 else {
                     dispatch({ type: "APPLY", effects: { romance: { suspicion: -20 } } });
@@ -34871,6 +35046,14 @@ function FiscoGame() {
                 })),
                 react_1.default.createElement("button", { disabled: !festivalPick.lineup.length, onClick: () => runFestival(festivalPick.budget, festivalPick.lineup), style: { width: "100%", padding: "12px", background: !festivalPick.lineup.length ? "rgba(255,255,255,.05)" : "linear-gradient(135deg,rgba(230,172,86,.35),rgba(214,110,60,.3))", border: "1px solid rgba(230,180,99,.5)", color: !festivalPick.lineup.length ? "rgba(255,255,255,.25)" : "#f2c379", borderRadius: 8, fontFamily: "'Bebas Neue',cursive", fontSize: 15, letterSpacing: 2, cursor: !festivalPick.lineup.length ? "not-allowed" : "pointer" } }, "\uD83D\uDE80 LANCER LE FESTIVAL"))),
             react_1.default.createElement("button", { onClick: () => { setFestivalModal(false); setFestivalPick({ budget: null, lineup: [] }); }, style: { width: "100%", marginTop: 10, padding: "9px", background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.5)", borderRadius: 8, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 11, cursor: "pointer", boxShadow: RELIEF } }, "Annuler")))) : null;
+    // Younes est joignable à tout moment. Il regarde la partie telle qu'elle est
+    // et dit quoi faire cette semaine — ce n'est pas un menu d'aide, c'est lui.
+    const BtnYounes = (gs.sofFini && !gs.younesParti) ? (react_1.default.createElement("button", { className: "qa-btn", onClick: () => {
+            const a = appelerYounes(gs);
+            setConseil({ id: "appel_" + gs.currentDate, genre: "tu l'as appelé", titre: a.titre, texte: a.texte });
+        }, style: { ...studioBtnStyle, width: "100%",
+            background: "linear-gradient(180deg,rgba(230,180,99,.14),rgba(230,180,99,.04))",
+            border: "1px solid rgba(230,180,99,.28)", color: "#ffd79b" } }, "\uD83D\uDCDE APPELER YOUNES \u2014 qu'est-ce que je fais ?")) : null;
     const FreeTextOv = freeTextModal ? (react_1.default.createElement("div", { style: { position: "fixed", inset: 0, zIndex: 275, background: "rgba(4,9,26,.85)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" } },
         react_1.default.createElement("div", { style: { maxWidth: 380, width: "100%", maxHeight: "88vh", overflowY: "auto", background: "linear-gradient(135deg,#0b1a2e,#132840)", border: "1px solid rgba(230,180,99,.3)", borderRadius: 14, padding: "16px 14px" } },
             react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 } },
@@ -34890,51 +35073,76 @@ function FiscoGame() {
                 })(),
                 react_1.default.createElement("input", { value: mediaFilter, onChange: e => setMediaFilter(e.target.value), placeholder: "\uD83D\uDD0D Rechercher un m\u00E9dia\u2026", style: { ...inputStyle, marginBottom: 7, fontSize: 12 } }),
                 react_1.default.createElement("div", { style: { display: "flex", gap: 5, marginBottom: 8 } }, ["Tous", "US", "FR"].map(z => (react_1.default.createElement("button", { key: z, onClick: () => setMediaZone(z), style: { flex: 1, padding: "5px", background: mediaZone === z ? "rgba(242,195,121,.2)" : "rgba(255,255,255,.04)", border: mediaZone === z ? "1px solid rgba(242,195,121,.45)" : "1px solid rgba(255,255,255,.1)", color: mediaZone === z ? "#f2c379" : "rgba(255,255,255,.5)", borderRadius: 6, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, z === "US" ? "🇺🇸 US" : z === "FR" ? "🇫🇷 FR" : "Tous")))),
-                react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 4, marginBottom: 12, maxHeight: 190, overflowY: "auto" } }, INTERVIEW_OUTLETS
-                    .filter(o => mediaZone === "Tous" || o.zone === mediaZone)
-                    .filter(o => o.name.toLowerCase().includes(mediaFilter.toLowerCase()))
-                    .map(o => {
-                    const all = MEDIA_QUESTIONS[o.id] || [];
-                    const done = (gs.answeredQuestions || {})[o.id] || [];
-                    const exhausted = o.talk && all.length > 0 && done.length >= all.length;
-                    return (react_1.default.createElement("button", { key: o.id, disabled: exhausted, onClick: () => {
-                            setInterviewOutlet(o);
-                            const all = MEDIA_QUESTIONS[o.id] || [];
-                            const done = (gs.answeredQuestions || {})[o.id] || [];
-                            const left = all.filter(q => !done.includes(q));
-                            setCurrentQuestion(left.length ? left[Math.floor(Math.random() * left.length)] : "");
-                        }, style: { padding: "8px 10px", opacity: exhausted ? .4 : 1, background: interviewOutlet.id === o.id ? "rgba(242,195,121,.18)" : "rgba(255,255,255,.03)", border: interviewOutlet.id === o.id ? "1px solid rgba(242,195,121,.5)" : "1px solid rgba(255,255,255,.08)", borderRadius: 8, cursor: exhausted ? "not-allowed" : "pointer", textAlign: "left" } },
-                        react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } },
-                            react_1.default.createElement("span", { style: { fontSize: 11, fontWeight: 700, color: interviewOutlet.id === o.id ? "#f2c379" : "rgba(255,255,255,.8)" } },
-                                o.emoji,
-                                " ",
-                                o.name),
-                            react_1.default.createElement("span", { style: { fontSize: 8, color: o.talk ? "rgba(232,150,60,.8)" : "rgba(124,224,164,.8)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" } }, o.talk ? "interview" : "apparition")),
-                        react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(255,255,255,.5)", lineHeight: 1.45, marginTop: 3 } }, o.spec),
-                        react_1.default.createElement("div", { style: { fontSize: 8, color: exhausted ? "#f0756a" : "rgba(255,255,255,.33)", marginTop: 3, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, exhausted ? "✕ Tu as déjà répondu à toutes leurs questions" : `${o.reach} · risque ${Math.round(o.risk * 100)}% · portée ×${o.socialMult}`)));
+                (() => {
+                    const tous = INTERVIEW_OUTLETS
+                        .filter(o => mediaZone === "Tous" || o.zone === mediaZone)
+                        .filter(o => o.name.toLowerCase().includes(mediaFilter.toLowerCase()))
+                        .sort((a, b) => (b.id === interviewOutlet.id ? 1 : 0) - (a.id === interviewOutlet.id ? 1 : 0));
+                    const vus = mediaPlus ? tous : tous.slice(0, 5);
+                    const caches = tous.length - vus.length;
+                    return (react_1.default.createElement(react_1.default.Fragment, null,
+                        react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 4, marginBottom: caches > 0 ? 6 : 12 } }, vus.map(o => {
+                            const exhausted = false;
+                            return (react_1.default.createElement("button", { key: o.id, onClick: () => {
+                                    setInterviewOutlet(o);
+                                    setCurrentQuestion(o.talk ? tirerQuestion(gs, o.id, interviewTopic.id) : null);
+                                }, style: { padding: "8px 10px", opacity: 1, background: interviewOutlet.id === o.id ? "rgba(242,195,121,.18)" : "rgba(255,255,255,.03)", border: interviewOutlet.id === o.id ? "1px solid rgba(242,195,121,.5)" : "1px solid rgba(255,255,255,.08)", borderRadius: 8, cursor: exhausted ? "not-allowed" : "pointer", textAlign: "left" } },
+                                react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } },
+                                    react_1.default.createElement("span", { style: { fontSize: 11, fontWeight: 700, color: interviewOutlet.id === o.id ? "#f2c379" : "rgba(255,255,255,.8)" } },
+                                        o.emoji,
+                                        " ",
+                                        o.name),
+                                    react_1.default.createElement("span", { style: { fontSize: 8, color: o.talk ? "rgba(232,150,60,.8)" : "rgba(124,224,164,.8)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" } }, o.talk ? "interview" : "apparition")),
+                                react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(255,255,255,.5)", lineHeight: 1.45, marginTop: 3 } }, o.spec),
+                                react_1.default.createElement("div", { style: { fontSize: 8, color: "rgba(255,255,255,.33)", marginTop: 3, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, `${o.reach} · risque ${Math.round(o.risk * 100)}% · portée ×${o.socialMult}`)));
+                        })),
+                        caches > 0 && (react_1.default.createElement("button", { onClick: () => setMediaPlus(true), style: { width: "100%", padding: "7px", marginBottom: 12, background: "rgba(255,255,255,.04)", border: "1px dashed rgba(255,255,255,.18)", color: "rgba(255,255,255,.55)", borderRadius: 8, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                            "\u25BE Voir les ",
+                            caches,
+                            " autre",
+                            caches > 1 ? "s" : "",
+                            " m\u00E9dia",
+                            caches > 1 ? "s" : ""))));
+                })(),
+                react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(240,201,138,.5)", letterSpacing: 2, marginBottom: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, "DE QUOI TU PARLES \u2014 \u00C0 TOI DE CHOISIR"),
+                react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 4, marginBottom: 12 } }, INTERVIEW_TOPICS.map(t => {
+                    const actif = interviewTopic.id === t.id;
+                    return (react_1.default.createElement("button", { key: t.id, onClick: () => {
+                            setInterviewTopic(t);
+                            setCurrentQuestion(interviewOutlet.talk ? tirerQuestion(gs, interviewOutlet.id, t.id) : null);
+                        }, style: { padding: "7px 10px", background: actif ? "rgba(242,195,121,.18)" : "rgba(255,255,255,.03)", border: actif ? "1px solid rgba(242,195,121,.5)" : "1px solid rgba(255,255,255,.08)", borderRadius: 8, cursor: "pointer", textAlign: "left" } },
+                        react_1.default.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: actif ? "#f2c379" : "rgba(255,255,255,.8)" } },
+                            t.emoji,
+                            " ",
+                            t.label),
+                        react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(255,255,255,.4)", marginTop: 2, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, t.effect)));
                 })),
                 react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(255,255,255,.45)", fontStyle: "italic", marginBottom: 8, lineHeight: 1.5 } }, interviewOutlet.talk
                     ? "Plus ta réponse est développée et travaillée, meilleur sera l'accueil. Une réponse bâclée sur un média risqué peut se retourner contre toi."
                     : "Simple apparition : pas de questions piège, pas besoin de préparer tes mots. Tu te contentes d'être là."))),
             freeTextModal === "interview" && interviewOutlet.talk && (() => {
-                var _a;
-                const qs = MEDIA_QUESTIONS[interviewOutlet.id] || [];
-                if (!qs.length)
-                    return null;
+                const restantes = questionsDispo(gs, interviewOutlet.id, interviewTopic.id).length;
                 return (react_1.default.createElement(react_1.default.Fragment, null,
-                    react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(240,201,138,.5)", letterSpacing: 2, marginBottom: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, "QUESTION POS\u00C9E"),
+                    react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(240,201,138,.5)", letterSpacing: 2, marginBottom: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                        "QUESTION POS\u00C9E \u00B7 ",
+                        interviewTopic.emoji,
+                        " ",
+                        interviewTopic.label.toUpperCase()),
                     react_1.default.createElement("div", { style: { background: "rgba(242,195,121,.07)", border: "1px solid rgba(242,195,121,.25)", borderRadius: 9, padding: "10px 12px", marginBottom: 9 } },
-                        react_1.default.createElement("div", { style: { fontSize: 12, color: "rgba(255,255,255,.9)", lineHeight: 1.55, fontStyle: "italic" } },
+                        currentQuestion && currentQuestion.q ? (react_1.default.createElement("div", { style: { fontSize: 12, color: "rgba(255,255,255,.9)", lineHeight: 1.55, fontStyle: "italic" } },
                             "\u00AB ",
-                            currentQuestion,
-                            " \u00BB"),
-                        react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(255,255,255,.35)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", marginTop: 7 } },
-                            interviewOutlet.emoji,
-                            " ",
-                            interviewOutlet.name,
-                            " \u00B7 ",
-                            qs.length - (((_a = gs.answeredQuestions) === null || _a === void 0 ? void 0 : _a[interviewOutlet.id]) || []).length,
-                            " question(s) restante(s)"))));
+                            currentQuestion.q,
+                            " \u00BB")) : (react_1.default.createElement("div", { style: { fontSize: 12, color: "rgba(255,255,255,.62)", lineHeight: 1.55, fontStyle: "italic" } }, "Ils n'ont plus rien \u00E0 te demander l\u00E0-dessus. Le micro est ouvert : dis ce que tu veux.")),
+                        react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginTop: 7 } },
+                            react_1.default.createElement("span", { style: { fontSize: 9, color: "rgba(255,255,255,.35)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                interviewOutlet.emoji,
+                                " ",
+                                interviewOutlet.name,
+                                " \u00B7 ",
+                                restantes,
+                                " jamais pos\u00E9e",
+                                restantes > 1 ? "s" : ""),
+                            restantes > 1 && (react_1.default.createElement("button", { onClick: () => setCurrentQuestion(tirerQuestion(gs, interviewOutlet.id, interviewTopic.id)), style: { background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.14)", color: "rgba(255,255,255,.55)", borderRadius: 7, padding: "3px 8px", fontSize: 9, cursor: "pointer", whiteSpace: "nowrap", fontFamily: "'Space Mono',monospace" } }, "\u21BB autre question"))))));
             })(),
             (freeTextModal !== "interview" || interviewOutlet.talk) && react_1.default.createElement("textarea", { value: freeTextValue, onChange: e => setFreeTextValue(e.target.value), placeholder: freeTextModal === "interview" ? "Ta réponse à la question…" : FREE_TEXT_MOMENTS[freeTextModal].placeholder, style: { ...inputStyle, minHeight: 95 } }),
             react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(255,255,255,.3)", marginTop: 6 } },
@@ -35700,7 +35908,7 @@ function FiscoGame() {
                         d.peakPosition))))))),
             infoTab === "snep" && (react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } },
                 react_1.default.createElement("div", { style: { fontFamily: "'Bebas Neue',cursive", fontSize: 16, letterSpacing: 2, color: "#7a9ee0" } }, "\uD83C\uDDEB\uD83C\uDDF7 TOP 20 SNEP \u2014 MARCH\u00C9 FRAN\u00C7AIS"),
-                react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(255,255,255,.35)", marginBottom: 2 } }, gs.boycott ? "⚠️ Boycott en cours — ton classement français en souffre nettement." : "Fisco domine le marché français depuis ses débuts."),
+                react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(255,255,255,.35)", marginBottom: 2 } }, gs.boycott ? `⚠️ Boycott en cours — intensité ${Math.round(intensiteBoycott(gs) * 100)}%. Ton classement français en souffre, un peu moins chaque mois.` : "Fisco domine le marché français depuis ses débuts."),
                 react_1.default.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 6 } },
                     react_1.default.createElement("button", { onClick: () => setSnepSub("songs"), style: { flex: 1, padding: "7px", background: snepSub === "songs" ? "rgba(122,158,224,.2)" : "rgba(255,255,255,.04)", border: snepSub === "songs" ? "1px solid rgba(122,158,224,.45)" : "1px solid rgba(255,255,255,.08)", color: snepSub === "songs" ? "#7a9ee0" : "rgba(255,255,255,.5)", borderRadius: 7, cursor: "pointer", fontSize: 11, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, "\uD83C\uDFB5 Singles"),
                     react_1.default.createElement("button", { onClick: () => setSnepSub("albums"), style: { flex: 1, padding: "7px", background: snepSub === "albums" ? "rgba(122,158,224,.2)" : "rgba(255,255,255,.04)", border: snepSub === "albums" ? "1px solid rgba(122,158,224,.45)" : "1px solid rgba(255,255,255,.08)", color: snepSub === "albums" ? "#7a9ee0" : "rgba(255,255,255,.5)", borderRadius: 7, cursor: "pointer", fontSize: 11, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, "\uD83D\uDCBF Albums")),
@@ -36859,6 +37067,7 @@ function FiscoGame() {
                                 react_1.default.createElement("span", null, x[2]))))),
                             (gs.eliteStrikes || 0) > 0 && (react_1.default.createElement("div", { style: { fontSize: 10, color: "#f09a93", marginTop: 4, fontStyle: "italic" } }, (gs.eliteStrikes || 0) === 1 ? "Un premier écart a été noté. Sois prudent."
                                 : "Deux écarts. Le prochain sera le dernier."))))),
+                    mainTab === "vie" && BtnYounes && (react_1.default.createElement("div", { style: { marginTop: 8, marginBottom: 4 } }, BtnYounes)),
                     mainTab === "vie" && (react_1.default.createElement("div", { style: { marginTop: 8, marginBottom: 4 } },
                         react_1.default.createElement("button", { className: "qa-btn", onClick: () => setMentalModal(true), style: { ...studioBtnStyle, width: "100%",
                                 background: (gs.addictions || []).length ? "linear-gradient(180deg,rgba(232,92,82,.16),rgba(232,92,82,.05))" : "linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.015))",
@@ -36878,8 +37087,35 @@ function FiscoGame() {
                             "\u2696\uFE0F MON PROC\u00C8S \u2014 ",
                             gs.activeTrial.title,
                             !gs.activeTrial.lawyer ? " · défense à constituer !" : ` · ${gs.activeTrial.momentum}%`))),
-                    mainTab === "reseaux" && (react_1.default.createElement("div", { style: { marginTop: 8 } },
-                        react_1.default.createElement("button", { className: "qa-btn", onClick: () => { setFreeTextValue(""); setFreeTextModal("interview"); }, style: { ...studioBtnStyle, width: "100%" } }, "\uD83C\uDF99\uFE0F ACCORDER UNE INTERVIEW (texte libre)"))),
+                    mainTab === "reseaux" && (react_1.default.createElement("div", { style: { marginTop: 8, display: "flex", flexDirection: "column", gap: 7 } },
+                        gs.boycott && (() => {
+                            const k = Math.round(intensiteBoycott(gs) * 100);
+                            const mois = Math.max(1, Math.round((gs.boycottLevel == null ? 100 : gs.boycottLevel) / (vitesseDegel(gs) * 30)));
+                            return (react_1.default.createElement("div", { style: { background: "rgba(240,117,106,.09)", border: "1px solid rgba(240,117,106,.3)", borderRadius: 10, padding: "10px 12px" } },
+                                react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 6 } },
+                                    react_1.default.createElement("span", { style: { fontSize: 11, fontWeight: 700, color: "#f09a93" } }, "\uD83D\uDEAB BOYCOTT EN COURS"),
+                                    react_1.default.createElement("span", { style: { fontSize: 9, color: "rgba(240,154,147,.8)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" } },
+                                        "intensit\u00E9 ",
+                                        k,
+                                        "%")),
+                                react_1.default.createElement("div", { style: { height: 5, borderRadius: 3, background: "rgba(255,255,255,.07)", overflow: "hidden", marginBottom: 7 } },
+                                    react_1.default.createElement("div", { style: { width: k + "%", height: "100%", background: "linear-gradient(90deg,#f0756a,#e8963c)" } })),
+                                react_1.default.createElement("div", { style: { fontSize: 10, lineHeight: 1.5, color: "rgba(255,255,255,.6)" } },
+                                    "Il s'use tout seul : encore ",
+                                    react_1.default.createElement("b", null,
+                                        mois,
+                                        " mois"),
+                                    " environ \u00E0 ce rythme. Une interview sur le sujet ",
+                                    react_1.default.createElement("b", null, "\u00AB D\u00E9samorcer la crise m\u00E9diatique \u00BB"),
+                                    ", sur un m\u00E9dia peu risqu\u00E9 et avec une r\u00E9ponse travaill\u00E9e, en enl\u00E8ve un gros morceau d'un coup.")));
+                        })(),
+                        react_1.default.createElement("button", { className: "qa-btn", onClick: () => {
+                                setFreeTextValue("");
+                                setMediaPlus(false);
+                                setCurrentQuestion(interviewOutlet.talk ? tirerQuestion(gs, interviewOutlet.id, interviewTopic.id) : null);
+                                setFreeTextModal("interview");
+                            }, style: { ...studioBtnStyle, width: "100%" } }, "\uD83C\uDF99\uFE0F ACCORDER UNE INTERVIEW (texte libre)"),
+                        BtnYounes)),
                     mainTab === "nightlife" && (react_1.default.createElement("div", { style: { marginTop: 8, display: "flex", gap: 6, flexWrap: "wrap" } },
                         react_1.default.createElement("button", { className: "qa-btn", onClick: () => setPartyModal(true), style: studioBtnStyle }, "\uD83E\uDD42 ORGANISER UNE SOIR\u00C9E"),
                         react_1.default.createElement("button", { className: "qa-btn", onClick: () => setHangoutModal(true), style: studioBtnStyle }, "\uD83E\uDD1D PASSER DU TEMPS AVEC QUELQU'UN"),
@@ -36923,7 +37159,7 @@ function FiscoGame() {
                         (() => {
                             const inWeek = isFestivalWeek(gs.currentDate);
                             const doneThisYear = gs.lastFestivalYear === new Date(gs.currentDate).getFullYear();
-                            const blocked = gs.boycott || gs.festivalBanned;
+                            const blocked = intensiteBoycott(gs) >= 0.4 || gs.festivalBanned;
                             const suspended = festivalSuspended(gs);
                             if ((gs.soldBusinesses || {}).bahasco)
                                 return react_1.default.createElement("button", { className: "qa-btn", disabled: true, style: { ...studioBtnStyle, opacity: .35, cursor: "not-allowed" } }, "\uD83D\uDD12 FESTIVAL (Bahasco vendue)");
@@ -37101,7 +37337,7 @@ function FiscoGame() {
                             items.push({ e: "🏛️", l: "Fisc \"0\"", d: inDays(nextOcc(1, 10)) });
                         if (gs.lastGrammyYear !== y)
                             items.push({ e: "🏆", l: "Grammy", d: inDays(nextOcc(2, 4)) });
-                        if (!(gs.soldBusinesses || {}).bahasco && !gs.boycott && gs.lastFestivalYear !== y) {
+                        if (!(gs.soldBusinesses || {}).bahasco && intensiteBoycott(gs) < 0.4 && gs.lastFestivalYear !== y) {
                             const w = festivalWindow(now);
                             items.push({ e: "🎪", l: "Festival", d: inDays(w.start >= now ? w.start : festivalWindow(new Date(y + 1, 0, 1).getTime()).start) });
                         }
