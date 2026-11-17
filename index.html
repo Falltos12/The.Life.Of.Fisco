@@ -18387,8 +18387,11 @@ const DISCOURS_GRAMMY = [
 function invitesApres(result) {
     const noms = [];
     (result && result.results || []).forEach(r => {
-        (r.rivaux || []).forEach(n => { n.split(" & ").forEach(x => { if (NOM_VERS_ID[x] && !noms.includes(x))
-            noms.push(x); }); });
+        (r.rivaux || []).forEach(n => {
+            const nom = typeof n === "string" ? n : ((n && n.nom) || "");
+            nom.split(" & ").forEach(x => { const y = x.trim(); if (NOM_VERS_ID[y] && !noms.includes(y))
+                noms.push(y); });
+        });
     });
     for (let i = noms.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -18582,6 +18585,225 @@ function titreProjet(nom, cat, annee) {
         .replace("{P}", tire(T_PERS, 3))
         .replace("{X}", tire(T_MASSE, 9));
 }
+// ── LE PALMARÈS RÉEL, 2024-2027 ──────────────────────────────────────────
+// Les nommés de ces quatre années ne sont pas tirés du casting : ils sont
+// posés ici, catégorie par catégorie. Le troisième champ marque le vainqueur
+// prévu — qui ne gagne que si Fisco ne gagne pas à sa place.
+const GRAMMY_PALMARES = {
+    2024: {
+        "Album de l'Année": [
+            ["Taylor Swift", "Midnights", 1], ["Jon Batiste", "World Music Radio"],
+            ["boygenius", "The Record"], ["Miley Cyrus", "Endless Summer Vacation"],
+            ["Lana Del Rey", "Did You Know That There's a Tunnel Under Ocean Blvd"], ["Janelle Monáe", "The Age of Pleasure"],
+            ["Olivia Rodrigo", "Guts"], ["SZA", "SOS"]
+        ],
+        "Chanson de l'Année": [
+            ["Billie Eilish", "What Was I Made For?", 1], ["Lana Del Rey", "A&W"],
+            ["Taylor Swift", "Anti-Hero"], ["Jon Batiste", "Butterfly"],
+            ["Dua Lipa", "Dance the Night"], ["Miley Cyrus", "Flowers"],
+            ["SZA", "Kill Bill"], ["Olivia Rodrigo", "Vampire"]
+        ],
+        "Meilleure Performance Rap": [
+            ["Killer Mike ft. André 3000 & Future", "Scientists & Engineers", 1], ["Baby Keem & Kendrick Lamar", "The Hillbillies"],
+            ["Black Thought", "Love Letter"], ["Drake & 21 Savage", "Rich Flex"],
+            ["Coi Leray", "Players"]
+        ],
+        "Meilleure Collaboration": [
+            ["Fisco & The Weeknd", "Laissez moi", 1], ["Lil Durk & J. Cole", "All My Life"],
+            ["Burna Boy & 21 Savage", "Sittin' on Top of the World"], ["Doja Cat", "Attention"],
+            ["Drake & 21 Savage", "Spin Bout U"]
+        ],
+        "Meilleure Chanson Rap": [
+            ["Killer Mike", "Scientists & Engineers", 1], ["Doja Cat", "Attention"],
+            ["Nicki Minaj & Ice Spice", "Barbie World"], ["Lil Uzi Vert", "Just Wanna Rock"],
+            ["Drake & 21 Savage", "Rich Flex"]
+        ],
+        "Meilleur Album Rap/Urbain": [
+            ["Killer Mike", "Michael", 1], ["Drake & 21 Savage", "Her Loss"],
+            ["Metro Boomin", "Heroes & Villains"], ["Nas", "King's Disease III"],
+            ["Travis Scott", "Utopia"]
+        ],
+        "Meilleur Album R&B": [
+            ["Victoria Monét", "Jaguar II", 1], ["Babyface", "Girls Night Out"],
+            ["Coco Jones", "What I Didn't Tell You"], ["Emily King", "Special Occasion"],
+            ["Summer Walker", "Clear 2: Soft Life"]
+        ],
+        "Meilleure Performance Live": [
+            ["Beyoncé", "Renaissance World Tour", 1], ["Taylor Swift", "The Eras Tour"],
+            ["Rihanna", "Super Bowl LVII"], ["Harry Styles", "Love On Tour"],
+            ["Bad Bunny", "Coachella 2023"]
+        ],
+        "Artiste masculin de l'Année": [
+            ["Jon Batiste", null, 1], ["Travis Scott", null],
+            ["Luke Combs", null], ["Peso Pluma", null],
+            ["Burna Boy", null]
+        ],
+    },
+    2025: {
+        "Album de l'Année": [
+            ["Beyoncé", "Cowboy Carter", 1], ["André 3000", "New Blue Sun"],
+            ["Sabrina Carpenter", "Short n' Sweet"], ["Charli XCX", "Brat"],
+            ["Jacob Collier", "Djesse Vol. 4"], ["Billie Eilish", "Hit Me Hard and Soft"],
+            ["Chappell Roan", "The Rise and Fall of a Midwest Princess"], ["Taylor Swift", "The Tortured Poets Department"]
+        ],
+        "Chanson de l'Année": [
+            ["Kendrick Lamar", "Not Like Us", 1], ["Shaboozey", "A Bar Song"],
+            ["Billie Eilish", "Birds of a Feather"], ["Lady Gaga & Bruno Mars", "Die with a Smile"],
+            ["Taylor Swift", "Fortnight"], ["Chappell Roan", "Good Luck, Babe!"],
+            ["Sabrina Carpenter", "Please Please Please"], ["Beyoncé", "Texas Hold 'Em"]
+        ],
+        "Meilleure Performance Rap": [
+            ["Kendrick Lamar", "Not Like Us", 1], ["Cardi B", "Enough (Miami)"],
+            ["Common & Pete Rock", "When the Sun Shines Again"], ["Doechii", "Nissan Altima"],
+            ["Eminem", "Houdini"], ["Future, Metro Boomin & Kendrick Lamar", "Like That"],
+            ["GloRilla", "Yeah Glo!"]
+        ],
+        "Meilleure Collaboration": [
+            ["Rapsody & Erykah Badu", "3:AM", 1], ["Jordan Adetunji", "Kehlani"],
+            ["Beyoncé & Shaboozey", "Spaghettii"], ["Future, Metro Boomin & The Weeknd", "We Still Don't Trust You"],
+            ["Latto", "Big Mama"]
+        ],
+        "Meilleure Chanson Rap": [
+            ["Kendrick Lamar", "Not Like Us", 1], ["Rapsody", "Asteroids"],
+            ["Kanye West & Ty Dolla $ign", "Carnival"], ["Future, Metro Boomin & Kendrick Lamar", "Like That"],
+            ["GloRilla", "Yeah Glo!"]
+        ],
+        "Meilleur Album Rap/Urbain": [
+            ["Doechii", "Alligator Bites Never Heal", 1], ["J. Cole", "Might Delete Later"],
+            ["Common & Pete Rock", "The Auditorium Vol. 1"], ["Eminem", "The Death of Slim Shady"],
+            ["Future & Metro Boomin", "We Don't Trust You"]
+        ],
+        "Meilleur Album R&B": [
+            ["Chris Brown", "11:11 (Deluxe)", 1], ["Lalah Hathaway", "Vantablack"],
+            ["Muni Long", "Revenge"], ["Lucky Daye", "Algorithm"],
+            ["Usher", "Coming Home"]
+        ],
+        "Meilleure Performance Live": [
+            ["Taylor Swift", "The Eras Tour", 1], ["Coldplay", "Music of the Spheres Tour"],
+            ["Olivia Rodrigo", "Guts World Tour"], ["Usher", "Super Bowl LVIII"],
+            ["Kendrick Lamar", "The Pop Out"]
+        ],
+        "Artiste masculin de l'Année": [
+            ["Kendrick Lamar", null, 1], ["Post Malone", null],
+            ["Shaboozey", null], ["Benson Boone", null],
+            ["Chris Stapleton", null]
+        ],
+    },
+    2026: {
+        "Album de l'Année": [
+            ["Bad Bunny", "DeBÍ TiRAR MáS FOToS", 1], ["Justin Bieber", "SWAG"],
+            ["Sabrina Carpenter", "Man's Best Friend"], ["Clipse", "Let God Sort Em Out"],
+            ["Lady Gaga", "MAYHEM"], ["Kendrick Lamar", "GNX"],
+            ["Leon Thomas", "MUTT"], ["Tyler, The Creator", "CHROMAKOPIA"]
+        ],
+        "Chanson de l'Année": [
+            ["Billie Eilish", "WILDFLOWER", 1], ["Lady Gaga", "Abracadabra"],
+            ["Doechii", "Anxiety"], ["ROSÉ & Bruno Mars", "APT."],
+            ["Bad Bunny", "DtMF"], ["HUNTR/X", "Golden"],
+            ["Kendrick Lamar & SZA", "luther"], ["Sabrina Carpenter", "Manchild"]
+        ],
+        "Meilleure Performance Rap": [
+            ["Clipse ft. Kendrick Lamar & Pharrell", "Chains & Whips", 1], ["Cardi B", "Outside"],
+            ["Doechii", "Anxiety"], ["Kendrick Lamar", "tv off"],
+            ["Tyler, The Creator", "Darling, I"]
+        ],
+        "Meilleure Collaboration": [
+            ["Kendrick Lamar & SZA", "luther", 1], ["Fridayy & Meek Mill", "Proud of Me"],
+            ["JID, Ty Dolla $ign & 6LACK", "Wholeheartedly"], ["Terrace Martin & Kenyon Dixon", "WeMaj"],
+            ["PARTYNEXTDOOR & Drake", "SOMEBODY LOVES ME"]
+        ],
+        "Meilleure Chanson Rap": [
+            ["Kendrick Lamar", "tv off", 1], ["Doechii", "Anxiety"],
+            ["Clipse", "The Birds Don't Sing"], ["Tyler, The Creator", "Sticky"],
+            ["GloRilla", "TGIF"]
+        ],
+        "Meilleur Album Rap/Urbain": [
+            ["Kendrick Lamar", "GNX", 1], ["Clipse", "Let God Sort Em Out"],
+            ["GloRilla", "GLORIOUS"], ["JID", "God Does Like Ugly"],
+            ["Tyler, The Creator", "CHROMAKOPIA"]
+        ],
+        "Meilleur Album R&B": [
+            ["Leon Thomas", "MUTT", 1], ["GIVĒON", "BELOVED"],
+            ["Coco Jones", "Why Not More?"], ["Ledisi", "The Crown"],
+            ["Teyana Taylor", "Escape Room"]
+        ],
+        "Meilleure Performance Live": [
+            ["Kendrick Lamar", "Super Bowl LIX", 1], ["Beyoncé", "Cowboy Carter Tour"],
+            ["Coldplay", "Music of the Spheres Tour"], ["Billie Eilish", "Hit Me Hard and Soft Tour"],
+            ["Chappell Roan", "Coachella 2025"]
+        ],
+        "Artiste masculin de l'Année": [
+            ["Bad Bunny", null, 1], ["Kendrick Lamar", null],
+            ["Justin Bieber", null], ["Leon Thomas", null],
+            ["Tyler, The Creator", null]
+        ],
+    },
+    2027: {
+        "Album de l'Année": [
+            ["Phoebe Bridgers", "Lost Weekend"], ["Olivia Dean", "The Art of Loving"],
+            ["Ella Langley", "Dandelion"], ["Bruno Mars", "The Romantic"],
+            ["RAYE", "This Music May Contain Hope."], ["Olivia Rodrigo", "You Seem Pretty Sad for a Girl So in Love"],
+            ["ROSALÍA", "LUX"], ["Taylor Swift", "The Life of a Showgirl"]
+        ],
+        "Chanson de l'Année": [
+            ["ROSALÍA", "Berghain"], ["Ella Langley", "Choosin' Texas"],
+            ["Olivia Rodrigo", "the cure"], ["Ariana Grande", "hate that i made you love me"],
+            ["Taylor Swift", "I Knew It, I Knew You"], ["Olivia Dean", "Man I Need"],
+            ["Bruno Mars", "Risk It All"], ["RAYE", "WHERE IS MY HUSBAND!"]
+        ],
+        "Meilleure Performance Rap": [
+            ["Baby Keem & Kendrick Lamar", "Good Flirts"], ["Cardi B", "ErrTime"],
+            ["De La Soul & Nas", "Run It Back!!"], ["T.I.", "LET 'EM KNOW"],
+            ["Don Toliver", "Body"]
+        ],
+        "Meilleure Collaboration": [
+            ["Busta Rhymes", "This Woman"], ["Cardi B & Kehlani", "Safe"],
+            ["Doechii & SZA", "girl, get up."], ["Don Toliver", "E85"],
+            ["Wale & Leon Thomas", "Watching Us"]
+        ],
+        "Meilleure Chanson Rap": [
+            ["Don Toliver", "E85"], ["Cardi B", "ErrTime"],
+            ["Doechii & SZA", "girl, get up."], ["T.I.", "LET 'EM KNOW"],
+            ["Yung Miami", "Spend Dat"]
+        ],
+        "Meilleur Album Rap/Urbain": [
+            ["Kanye West", "BULLY", 1], ["Busta Rhymes", "DILLAGENCE II"],
+            ["Cardi B", "AM I THE DRAMA?"], ["Rapsody", "God Gotta Afro & Gold Hoops"],
+            ["Don Toliver", "OCTANE"], ["Wale", "everything is a lot."]
+        ],
+        "Meilleur Album R&B": [
+            ["Chris Brown", "BROWN"], ["Alex Isley", "When the City Sleeps"],
+            ["Kehlani", "Kehlani"], ["PJ Morton", "Saturday Night"],
+            ["Jill Scott", "To Whom This May Concern"]
+        ],
+        "Meilleure Performance Live": [
+            ["Kanye West", "Bully Tour", 1], ["Bad Bunny", "Super Bowl LX"],
+            ["Lady Gaga", "The Mayhem Ball"], ["Oasis", "Live '25"],
+            ["Sabrina Carpenter", "Short n' Sweet Tour"]
+        ],
+        "Artiste masculin de l'Année": [
+            ["Bruno Mars", null, 1], ["Bad Bunny", null],
+            ["Don Toliver", null], ["Leon Thomas", null],
+            ["Kanye West", null]
+        ],
+    },
+};
+// Les nommés d'une année posée à la main, ou null si l'année n'est pas couverte.
+function palmaresDe(annee, cat) {
+    const a = GRAMMY_PALMARES[annee];
+    if (!a)
+        return null;
+    const l = a[cat];
+    return l ? l.map(([nom, titre, v]) => ({ nom, titre: titre || null, vainqueur: !!v })) : null;
+}
+// Fisco prend la place d'un nommé sans (V) — jamais celle du vainqueur prévu.
+function placePourFisco(liste) {
+    const dehors = liste.map((x, i) => [x, i]).filter(([x]) => !x.vainqueur);
+    if (!dehors.length)
+        return liste.slice(0, -1);
+    const [, i] = dehors[Math.floor(Math.random() * dehors.length)];
+    return liste.filter((_, j) => j !== i);
+}
 const GRAMMY_RANG = {
     "Meilleure Performance Live": 1, "Meilleure Performance Rap": 2, "Meilleure Collaboration": 3,
     "Meilleur Album R&B": 4, "Meilleure Chanson Rap": 5, "Meilleur Album Rap/Urbain": 6,
@@ -18731,9 +18953,25 @@ function scoreTrack(t) {
 // adversaires que pour les catégories où tu es nommé : ailleurs la soirée ne te
 // regarde pas. Personne ne rafle plus de deux prix dans la nuit — une razzia
 // rendrait la défaite anecdotique.
-function garnirCeremonie(results) {
+function garnirCeremonie(results, annee) {
     const sacres = {};
     return results.map(r => {
+        // ── Années posées à la main : les vrais nommés, et le vainqueur prévu ──
+        const pose = palmaresDe(annee, r.category);
+        if (pose) {
+            // Fisco figure déjà dans sa propre ligne : il ne s'affronte pas lui-même.
+            let liste = pose.filter(x => !/\bFisco\b/i.test(x.nom));
+            if (r.nominated)
+                liste = placePourFisco(liste);
+            const rivaux = liste.map(x => ({ nom: x.nom, titre: x.titre }));
+            if (r.youWon)
+                return { ...r, rivaux, cote: r.cote === undefined ? 0.3 : r.cote };
+            // Le (V) l'emporte. Si l'année n'en désigne aucun, on en tire un parmi les nommés.
+            const v = liste.find(x => x.vainqueur) || liste[Math.floor(Math.random() * liste.length)];
+            return { ...r, rivaux, gagnant: v ? v.nom : null, gagnantTitre: v ? v.titre : null,
+                cote: r.cote === undefined ? 0.12 : r.cote };
+        }
+        // ── Années libres : le générateur, comme avant ──
         if (!r.nominated)
             return r;
         const bloques = new Set(Object.keys(sacres).filter(n => sacres[n] >= 2));
@@ -18746,10 +18984,12 @@ function garnirCeremonie(results) {
         return { ...r, rivaux, gagnant, cote: r.cote === undefined ? 0.12 : r.cote };
     });
 }
-function runGrammyCeremony(gs) {
+// ── QUI EST NOMMÉ, ET AVEC QUOI ───────────────────────────────────────────
+// Séparé de la cérémonie : les nominations se calculent une fois, vingt jours
+// avant, et la soirée joue exactement celles-là. Sans ça l'annonce aurait pu
+// promettre une chose et la cérémonie en servir une autre.
+function nominerGrammy(gs) {
     const year = new Date(gs.currentDate).getFullYear();
-    const alreadyRevelation = (gs.revelationWon || (gs.grammyHistory || []).some(g => g.results.some(r => r.category === REVELATION_CAT && r.youWon))
-        || (gs.vdlmHistory || []).some(v => v.results.some(r => r.category === REVELATION_CAT && r.youWon)));
     const oneYearAgo = gs.currentDate - 365 * 86400000;
     const eligibleProjects = (gs.discography || []).filter(d => d.releaseDate && d.releaseDate >= oneYearAgo);
     const eligibleAlbums = eligibleProjects.filter(d => d.type === "album" || d.type === "EP");
@@ -18758,46 +18998,51 @@ function runGrammyCeremony(gs) {
     const bestTrack = eligibleTracks.length ? eligibleTracks.reduce((a, b) => scoreTrack(a) >= scoreTrack(b) ? a : b) : null;
     const bestCollabTrack = eligibleTracks.filter(t => getFeatIds(t).length).length
         ? eligibleTracks.filter(t => getFeatIds(t).length).reduce((a, b) => scoreTrack(a) >= scoreTrack(b) ? a : b) : bestTrack;
-    // Cérémonie 2024 scriptée : les deux premiers Grammy de Fisco.
-    // Une nomination hors script n'existe que si un vrai projet peut la porter :
-    // on n'est jamais nommé pour quelque chose qui n'a pas de nom.
-    if (year === 2024) {
-        const results = GRAMMY_CATEGORIES.map(cat => {
-            if (Object.prototype.hasOwnProperty.call(GRAMMY_2024_SCRIPT, cat))
-                return { category: cat, nominated: true, projectTitle: GRAMMY_2024_SCRIPT[cat], youWon: true };
-            const estArtiste = cat === "Artiste masculin de l'Année" || cat === REVELATION_CAT;
-            const porteur = estArtiste ? null : (GRAMMY_ALBUM_CATS.has(cat) ? bestAlbum : bestTrack);
-            if (!estArtiste && !porteur)
-                return { category: cat, nominated: false, projectTitle: null, youWon: false };
-            return { category: cat, nominated: Math.random() < 0.3,
-                projectTitle: porteur ? (porteur.title || porteur.parentTitle || null) : null, youWon: false };
-        });
-        const garnis = garnirCeremonie(results);
-        return { year, results: garnis, winsCount: garnis.filter(r => r.youWon).length, project: "#0000ff" };
-    }
-    let results = GRAMMY_CATEGORIES.map(cat => {
-        // La révélation ne peut être remportée qu'une seule fois dans une carrière
+    const alreadyRevelation = (gs.revelationWon
+        || (gs.grammyHistory || []).some(g => g.results.some(r => r.category === REVELATION_CAT && r.youWon))
+        || (gs.vdlmHistory || []).some(v => v.results.some(r => r.category === REVELATION_CAT && r.youWon)));
+    const cats = GRAMMY_CATEGORIES.map(cat => {
+        // La première cérémonie est écrite : « Laissez moi » est nommé quoi qu'il arrive.
+        if (year === 2024 && Object.prototype.hasOwnProperty.call(GRAMMY_2024_SCRIPT, cat))
+            return { category: cat, nominated: true, projectTitle: GRAMMY_2024_SCRIPT[cat], score: 999, scripte: true };
         if (cat === REVELATION_CAT && alreadyRevelation)
-            return { category: cat, nominated: false, projectTitle: null, youWon: false };
+            return { category: cat, nominated: false, projectTitle: null, score: 0 };
+        const isArtistCat = cat === GRAMMY_ARTIST_CAT || cat === REVELATION_CAT;
         const isAlbumCat = GRAMMY_ALBUM_CATS.has(cat);
         const isSongCat = GRAMMY_SONG_CATS.has(cat);
-        const rawCandidate = cat === "Meilleure Collaboration" ? bestCollabTrack : isAlbumCat ? bestAlbum : isSongCat ? bestTrack : (bestAlbum || bestTrack);
-        const rawScore = rawCandidate ? (isAlbumCat || (!isSongCat && cat !== "Meilleure Collaboration") ? scoreProject(rawCandidate) : scoreTrack(rawCandidate)) : 0;
+        const porteur = cat === "Meilleure Collaboration" ? bestCollabTrack
+            : isAlbumCat ? bestAlbum : isSongCat ? bestTrack : (bestAlbum || bestTrack);
+        const note = porteur ? ((isAlbumCat || (!isSongCat && cat !== "Meilleure Collaboration"))
+            ? scoreProject(porteur) : scoreTrack(porteur)) : 0;
         // Un projet porté uniquement par des feats francophones n'est pas éligible aux Grammy
-        const candFeats = rawCandidate ? analyzeFeats(rawCandidate.trackBreakdown || [rawCandidate]) : { count: 0, onlyFranco: false };
-        const francoBlocked = candFeats.count > 0 && candFeats.onlyFranco;
-        // Nomination nettement plus exigeante qu'avant
-        const candidate = (rawCandidate && rawScore >= 74 && !francoBlocked && Math.random() < 0.55) ? rawCandidate : null;
-        const isArtistCat = cat === "Artiste masculin de l'Année" || cat === REVELATION_CAT;
-        const candidateTitle = (candidate && !isArtistCat) ? (candidate.title || candidate.parentTitle) : null;
-        const yourScore = candidate ? rawScore : 0;
-        // Gagner un Grammy reste exceptionnel
-        const winChance = candidate ? Math.max(0.015, Math.min(gs.elite ? 0.42 : 0.16, (yourScore - 74) / 210 + (gs.elite ? 0.16 : 0))) : 0;
-        const youWon = candidate ? Math.random() < winChance : false;
-        return { category: cat, nominated: !!candidate, projectTitle: candidateTitle, youWon, cote: winChance };
+        const feats = porteur ? analyzeFeats(porteur.trackBreakdown || [porteur]) : { count: 0, onlyFranco: false };
+        const francoBlocked = feats.count > 0 && feats.onlyFranco;
+        // En 2024 les autres catégories restent accessoires : on y est nommé sans y gagner.
+        const seuil = year === 2024 ? 0.3 : 0.55;
+        const retenu = !!(porteur && note >= 74 && !francoBlocked && Math.random() < seuil);
+        return { category: cat, nominated: retenu,
+            projectTitle: (retenu && !isArtistCat) ? (porteur.title || porteur.parentTitle || null) : null,
+            score: retenu ? note : 0 };
+    });
+    return { year, cats,
+        project: bestAlbum ? bestAlbum.title : (bestTrack ? bestTrack.title : null) };
+}
+function runGrammyCeremony(gs) {
+    const year = new Date(gs.currentDate).getFullYear();
+    // Les nominations annoncées vingt jours plus tôt font foi.
+    const annonce = (gs.grammyNoms && gs.grammyNoms.year === year) ? gs.grammyNoms : nominerGrammy(gs);
+    let results = annonce.cats.map(n => {
+        if (!n.nominated)
+            return { category: n.category, nominated: false, projectTitle: null, youWon: false };
+        // En 2024, seul ce qui est écrit se gagne.
+        if (year === 2024)
+            return { category: n.category, nominated: true, projectTitle: n.projectTitle,
+                youWon: !!n.scripte, cote: n.scripte ? 1 : 0 };
+        const cote = Math.max(0.015, Math.min(gs.elite ? 0.42 : 0.16, (n.score - 74) / 210 + (gs.elite ? 0.16 : 0)));
+        return { category: n.category, nominated: true, projectTitle: n.projectTitle,
+            youWon: Math.random() < cote, cote };
     });
     // ── Les catégories achetées au cercle : le vote est simplement connu à l'avance ──
-    // Chaque commande porte le projet choisi au moment de l'achat.
     const orders = (gs.boughtGrammys || []);
     if (orders.length) {
         const byCat = Object.fromEntries(orders.map(o => [o.category, o]));
@@ -18815,9 +19060,9 @@ function runGrammyCeremony(gs) {
         const keep = new Set(wins.sort(() => Math.random() - 0.5).slice(0, 2).map(r => r.category));
         results = results.map(r => (r.youWon && !r.bought && !keep.has(r.category)) ? { ...r, youWon: false } : r);
     }
-    results = garnirCeremonie(results);
+    results = garnirCeremonie(results, year);
     const winsCount = results.filter(r => r.youWon).length;
-    return { year, results, project: bestAlbum ? bestAlbum.title : (bestTrack ? bestTrack.title : null), winsCount };
+    return { year, results, project: annonce.project, winsCount };
 }
 // ─── VOYAGE / TOURNÉE MONDIALE ─────────────────────────────────────────────
 const CITIES = [
@@ -19717,7 +19962,7 @@ const INIT = {
     rlM6: null, detteVue: 0, bienFaits: [], bienVu: 0, marche: null, bonnePart: false, dime: false, falltosVus: [], naelVus: [], marcheActs: {}, marcheJour: null, marcheVu: null, tentations: [], temoignages: [], publicFidele: 0, nael: null, eliteSince: null, membreDepuis: null, grossesseCercle: null, enfantLivre: null, enfantRevu: false, sacrifices: [], warMission: null, warMissionsDone: [], docLeaked: false, eliteInfluence: 0, favorsUsed: [], circleNews: [], evidence: 0, exposure: 0, activeOps: [], pendingCM: null, cmDone: [], activeOp: null, opsDone: [], targetExposure: {}, exposedTargets: [],
     allyState: { falltos: "actif", kanye_west: "actif", candace_owens: "actif", alain_soral: "actif", dieudonne: "actif", ryan_garcia: "actif", justin_bieber: "absent", the_weeknd: "absent" },
     inResistance: false, awardsBanned: false, conspiracist: false, tutorialDone: false, baptismDate: null, faithStart: null, faithStage: 0, faithDone: false, exElite: false,
-    anokPlan: null, anokAt: null, dario: null, alpha: null, filleF: null, enfantCercle: [], npcKids: [], warrant: null, mourning: false, mourningTold: false, boughtGrammys: [], lawShield: false, openCountries: [], mediaCycle: null, kaineEnded: null, eliteMet: [], newElites: {}, lastRecruitYear: null, curiaNames: null, curiaUntil: null, mkStage: {}, mkActive: null, mkFails: [], mkDone: {}, sacrificesDone: [], festivalDisaster: null, sabotaged: [], erased: [], seatsPlaced: [], lawsPassed: [], exitStrikes: [], resistanceTried: false, resistDeclinedAt: null, musicTier: null, musicOn: true, falltosSacrificed: false, lastFalltosOffer: null, eliteService: 0, rankSeen: null, eliteMission: null, eliteMissionsDone: [], circleOp: null, circleOpsDone: [], circleOpsFailed: [], lastCircleOpAt: null, eliteEndDone: false, lastEliteOffer: null, eliteOfferAt: null, eliteRefused: false, pendingDeath: null, elite: false, eliteOffered: false, eliteStrikes: 0, eliteFallen: false, hits: [], postStreaming: null, lastSummerHitYear: null, mentalAspects: { anxiety: 22, burnout: 18, loneliness: 25, purpose: 78 }, therapy: null, addictions: [], stis: [], unsafeActs: 0, lastStiCheck: null, stiTested: null,
+    grammyNoms: null, anokPlan: null, anokAt: null, dario: null, alpha: null, filleF: null, enfantCercle: [], npcKids: [], warrant: null, mourning: false, mourningTold: false, boughtGrammys: [], lawShield: false, openCountries: [], mediaCycle: null, kaineEnded: null, eliteMet: [], newElites: {}, lastRecruitYear: null, curiaNames: null, curiaUntil: null, mkStage: {}, mkActive: null, mkFails: [], mkDone: {}, sacrificesDone: [], festivalDisaster: null, sabotaged: [], erased: [], seatsPlaced: [], lawsPassed: [], exitStrikes: [], resistanceTried: false, resistDeclinedAt: null, musicTier: null, musicOn: true, falltosSacrificed: false, lastFalltosOffer: null, eliteService: 0, rankSeen: null, eliteMission: null, eliteMissionsDone: [], circleOp: null, circleOpsDone: [], circleOpsFailed: [], lastCircleOpAt: null, eliteEndDone: false, lastEliteOffer: null, eliteOfferAt: null, eliteRefused: false, pendingDeath: null, elite: false, eliteOffered: false, eliteStrikes: 0, eliteFallen: false, hits: [], postStreaming: null, lastSummerHitYear: null, mentalAspects: { anxiety: 22, burnout: 18, loneliness: 25, purpose: 78 }, therapy: null, addictions: [], stis: [], unsafeActs: 0, lastStiCheck: null, stiTested: null,
     reissues: [], endedRuns: null, atoneLog: [], pendingLeak: null, betrayals: [], industryEra: null, eraIndex: 0, eraAdapted: [], secrets: [], secretThreat: null,
     objectives: [], objectivesDone: [], timeline: [], grief: null, callbacks: [],
     healthAspects: { voice: 88, body: 85, sleep: 80, mind: 82 },
@@ -19887,7 +20132,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "113";
+const VERSION_JEU = "115";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -21215,6 +21460,8 @@ function gameReducerInner(state, action) {
                 rivals: { ...state.rivals, kaine_dubois: { strength: action.win ? 10 : 100 } } };
         case "NPC_BIRTH":
             return { ...state, npcKids: [...(state.npcKids || []), action.kid] };
+        case "SET_GRAMMY_NOMS":
+            return { ...state, grammyNoms: action.noms };
         case "ANOK_PLAN":
             return { ...state, anokPlan: action.at };
         case "ANOK_COUPLE":
@@ -23620,10 +23867,12 @@ function FiscoGame() {
                     setCalAlert({ emoji: "🚫", title: "Grammy Awards — écarté",
                         desc: "En pleine période de boycott, l'académie ne retient ta candidature dans aucune catégorie cette année. Tu regardes la cérémonie de loin." });
                     dispatch({ type: "RECORD_GRAMMY", result: { year: d.getFullYear(), results: [], winsCount: 0, project: null, boycotted: true }, repGain: 0, moneyGain: 0 });
+                    dispatch({ type: "SET_GRAMMY_NOMS", noms: null });
                 }
                 else {
                     const result = runGrammyCeremony(gs);
                     dispatch({ type: "RECORD_GRAMMY", result, repGain: result.winsCount * 8, moneyGain: result.winsCount * 300000 });
+                    dispatch({ type: "SET_GRAMMY_NOMS", noms: null }); // la liste a servi
                     // Les trophées commandés sont livrés : la liste repart à zéro pour l'an prochain
                     if ((gs.boughtGrammys || []).length)
                         dispatch({ type: "CLEAR_BOUGHT_GRAMMYS" });
@@ -25260,6 +25509,30 @@ function FiscoGame() {
             addLog(`[MÉDIAS] Fin du cycle — ${c.label}`);
             setCalAlert({ emoji: "📺", title: "Le cycle retombe",
                 desc: `${c.subject ? `**${c.subject}** quitte les unes` : "La séquence s'achève"} aussi brutalement qu'elle avait commencé.\n\nPersonne ne commente ce changement d'orientation. Une autre actualité prend toute la place dès le lendemain.\n\nC'est ainsi que ça fonctionne, et tu sais désormais que ça n'a jamais fonctionné autrement.` });
+        }
+        // ── LES NOMINATIONS, VINGT JOURS AVANT ───────────────────────────────
+        // La cérémonie tombe le 4 février : l'Académie annonce le 15 janvier. Ce
+        // qui est annoncé ici est exactement ce qui se jouera — les nominations
+        // sont calculées une seule fois et rangées dans la partie.
+        if (phase === "game" && !ending && d.getMonth() === 0 && d.getDate() === 15
+            && !(gs.grammyNoms && gs.grammyNoms.year === d.getFullYear())
+            && (gs.lastGrammyYear || 0) < d.getFullYear()) {
+            const noms = nominerGrammy(gs);
+            dispatch({ type: "SET_GRAMMY_NOMS", noms });
+            const retenues = noms.cats.filter(c => c.nominated);
+            if (retenues.length) {
+                const lignes = retenues.map(c => `• **${c.category}**${c.projectTitle ? ` — « ${c.projectTitle} »` : ""}`).join("\n");
+                addLog(`[GRAMMY] ${retenues.length} nomination(s) pour ${noms.year}`);
+                dispatch({ type: "ADD_TIMELINE", entry: { type: "musique", emoji: "🏆",
+                        title: `${retenues.length} nomination(s) aux Grammy ${noms.year}` } });
+                setCalAlert({ emoji: "📜", title: "Les nominations sont tombées", majeur: true,
+                    desc: `L'Académie a publié sa liste. Tu es nommé dans **${retenues.length} catégorie${retenues.length > 1 ? "s" : ""}** aux Grammy Awards ${noms.year} :\n\n${lignes}\n\nLa cérémonie a lieu le 4 février. D'ici là, rien de ce que tu feras ne changera cette liste.` });
+            }
+            else {
+                addLog(`[GRAMMY] Aucune nomination pour ${noms.year}`);
+                setCalAlert({ emoji: "📜", title: "Les nominations sont tombées", majeur: true,
+                    desc: `L'Académie a publié sa liste pour les Grammy Awards ${noms.year}.\n\n**Ton nom n'y est pas.**\n\n${(gs.discography || []).length ? "Ce que tu as sorti cette année n'a pas suffi, ou n'était pas éligible." : "Il faut avoir sorti quelque chose dans l'année pour y prétendre."}\n\nLa cérémonie a lieu le 4 février. Tu peux la regarder depuis chez toi.` });
+            }
         }
         // ── FALLTOS ET ANOK YAI, PUIS DARIO ──────────────────────────────────
         // Une seule date, tirée une fois pour toutes entre 2028 et 2034 ; deux ans
@@ -29937,7 +30210,8 @@ function FiscoGame() {
                                 color: r.youWon ? or : "rgba(242,234,218,.6)", fontWeight: 700 } },
                             r.youWon ? "Fisco" : (r.gagnant || "—"),
                             (() => {
-                                const t = r.youWon ? r.projectTitle : titreProjet(r.gagnant, r.category, grammyResult.year);
+                                const t = r.youWon ? r.projectTitle
+                                    : (r.gagnantTitre !== undefined ? r.gagnantTitre : titreProjet(r.gagnant, r.category, grammyResult.year));
                                 return t ? react_1.default.createElement("span", { style: { display: "block", fontSize: 9.5, fontWeight: 400, fontStyle: "italic",
                                         color: "rgba(242,234,218,.4)" } },
                                     "\u00AB ",
@@ -30026,7 +30300,9 @@ function FiscoGame() {
         const derniere = grammyIdx >= grammyNommes.length - 1;
         const moi = { nom: "FISCO", toi: true };
         const liste = [{ ...moi, titre: r.projectTitle || null },
-            ...(r.rivaux || []).map(n => ({ nom: n, titre: titreProjet(n, r.category, grammyResult.year) }))];
+            ...(r.rivaux || []).map(n => typeof n === "string"
+                ? { nom: n, titre: titreProjet(n, r.category, grammyResult.year) }
+                : { nom: n.nom, titre: n.titre })];
         return (react_1.default.createElement("div", { style: { position: "fixed", inset: 0, zIndex: 260, background: "radial-gradient(ellipse 70% 60% at 50% 38%, rgba(48,34,6,.93), rgba(4,6,12,.98))",
                 backdropFilter: "blur(14px)", overflowY: "auto", padding: "24px 14px" } },
             react_1.default.createElement("div", { style: { ...cadre, padding: "26px 20px", animation: "rise .5s cubic-bezier(.2,.9,.3,1) both" }, key: grammyIdx },
