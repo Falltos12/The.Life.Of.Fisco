@@ -8867,6 +8867,8 @@ const ICONES = new Set([
 const SOUS_AGENCE = new Set(["twice", "newjeans", "aespa", "jennie", "babymonster", "katseye", "cortis"]);
 // Ceux que tu as écartés toi-même, et les mineurs, qui n'ont rien à faire ici.
 const HORS_LISTE = new Set(["clara_luciani", "lorenzo", "north_west"]);
+// Jusqu'où l'oubli peut faire descendre une relation, et pas plus bas.
+const SILENCE_PLANCHER = -20;
 function enFroidAvec(gs, id) {
     if (!id)
         return false;
@@ -8884,7 +8886,9 @@ function enFroidAvec(gs, id) {
     const st = String(r.status || "").toLowerCase();
     if (/rival|ennemi|brouill|guerre|froid/.test(st))
         return true;
-    return (r.score == null ? 0 : r.score) < 0; // en froid dès que ça passe sous zéro
+    // En froid dès que ça passe sous zéro — mais pas pour un simple éloignement :
+    // on ne compte que ce qui descend plus bas que ce que l'oubli peut creuser.
+    return (r.score == null ? 0 : r.score) < SILENCE_PLANCHER;
 }
 function talentSignable(gs, t) {
     if (!t)
@@ -17405,7 +17409,16 @@ function isHostile(gs, id) {
     const r = (gs.relations || {})[id];
     if (!r)
         return false;
-    return r.status === "rival" || ((_a = r.score) !== null && _a !== void 0 ? _a : 0) <= -25;
+    const st = String(r.status || "").toLowerCase();
+    if (/rival|ennemi|brouill|guerre|tendu/.test(st))
+        return true;
+    // Un clash, une rivalité ouverte : là, oui.
+    const riv = (gs.rivals || {})[id];
+    if (riv && (riv.strength || 0) > 0 && !riv.resolved)
+        return true;
+    if (((gs.clashHistory) || []).some(c => c && (c.target === id || c.targetId === id) && !c.resolved))
+        return true;
+    return ((_a = r.score) !== null && _a !== void 0 ? _a : 0) <= -25;
 }
 function partyGuestUnlocked(c, legend, gs) {
     var _a;
@@ -21832,7 +21845,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "141";
+const VERSION_JEU = "142";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -21881,7 +21894,7 @@ function capStreams(next) {
 // Le plafond de streams, le plafond de célébrité, le palier du cercle et la
 // réparation des couples s'appliquent d'eux-mêmes à chaque geste du joueur.
 // Reste une correction rétroactive, qui n'a de sens qu'une seule fois.
-const VERSION_EQUILIBRE = 9;
+const VERSION_EQUILIBRE = 10;
 // Où se trouve réellement un morceau : on cherche dans toute la discographie.
 function projetDuMorceau(titre, disco) {
     if (!titre || !Array.isArray(disco))
@@ -22038,6 +22051,35 @@ function reprendrePartie(next) {
     // te donne la clé correspondante, sans prestige ni facture.
     if (!Array.isArray(repris.boutique))
         repris.boutique = [];
+    // L'érosion du silence descendait sans limite : des centaines de gens avec
+    // qui il ne s'était rien passé étaient devenus « hostiles », et disparaissaient
+    // du casting, des soirées et des signatures. On les remet au plancher.
+    {
+        const brouilles = new Set();
+        Object.entries((repris.rivals) || {}).forEach(([id, r]) => {
+            if (r && (r.strength || 0) > 0 && !r.resolved)
+                brouilles.add(id);
+        });
+        ((repris.clashHistory) || []).forEach(c => {
+            if (c && !c.resolved)
+                brouilles.add(c.target || c.targetId);
+        });
+        const rels = { ...(repris.relations || {}) };
+        let remontes = 0;
+        Object.entries(rels).forEach(([id, r]) => {
+            if (!r || typeof r.score !== "number" || r.score >= SILENCE_PLANCHER)
+                return;
+            if (brouilles.has(id))
+                return;
+            const st = String(r.status || "").toLowerCase();
+            if (/rival|ennemi|brouill|guerre|tendu|froid/.test(st))
+                return;
+            rels[id] = { ...r, score: SILENCE_PLANCHER };
+            remontes++;
+        });
+        if (remontes)
+            repris.relations = rels;
+    }
     // Un week-end improvisé pouvait laisser la partie nulle part : on la ramène
     // chez elle plutôt que de la laisser dans une ville qui n'existe pas.
     if (!CITIES.some(c => c.id === repris.currentCity)) {
@@ -22898,7 +22940,11 @@ function gameReducerInner(state, action) {
                 // Après 6 mois sans contact, la relation s'effrite progressivement
                 if (monthsSilent > 6 && k !== state.romance.partner) {
                     const loss = Math.min(4, Math.floor((monthsSilent - 6) / 3));
-                    rel[k] = { ...r, score: Math.max(-100, r.score - loss) };
+                    // Le silence éloigne, il ne fâche pas : il ne descend jamais plus bas
+                    // que SILENCE_PLANCHER. Seule une brouille réelle creuse au-delà.
+                    const vise = r.score - loss;
+                    const bas = Math.min(r.score, SILENCE_PLANCHER);
+                    rel[k] = { ...r, score: Math.max(bas, vise) };
                 }
                 else
                     rel[k] = r;
