@@ -1944,8 +1944,9 @@ function calcProjectStats(project, gs) {
     const catalogPull = 1;
     let ultimate = Math.round(H * qualityFactor * typeFactor * fameFactor * variance * featFactor
         * seasonFactor * rolloutFactor * studioFactor * eliteFactor * catalogPull * commande);
-    // Le plafond s'applique dès la naissance du projet, pas seulement à l'arrivée
-    ultimate = tasserStreams(ultimate);
+    // Le plafond s'applique dès la naissance du projet, pas seulement à l'arrivée.
+    // Un single n'est qu'un morceau : c'est le plafond du titre qui vaut pour lui.
+    ultimate = project.type === "single" ? tasserTitre(ultimate) : tasserStreams(ultimate);
     // ── Le poids des décennies ──────────────────────────────────────────────
     // Passé trente ans de carrière, dépasser 600 M de streams devient de plus en
     // plus rare : le public se renouvelle, les habitudes d'écoute changent, et un
@@ -21963,13 +21964,43 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "158";
+const VERSION_JEU = "160";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
 const PLAFOND_MORCEAU = 5000000000;
+// Un seul morceau, c'est autre chose qu'un album entier. Au-delà du milliard,
+// chaque centaine de millions coûte de plus en plus cher, et les deux milliards
+// ne se franchissent jamais : on ne fait que s'en approcher.
+const PLAFOND_TITRE = 2000000000;
+const SEUIL_TITRE = 1000000000;
+const ECHELLE_TITRE = 1000000000; // même règle : jamais de gonflement
+// L'objectif réellement atteignable par un projet : un single obéit au plafond
+// d'un morceau, un album à celui d'un projet. C'est ce chiffre qu'on affiche.
+function plafondVise(etat, d) {
+    const u = (d && d.ultimate) || 0;
+    if (!u)
+        return 0;
+    if (!d || d.type !== "single")
+        return tasserStreams(u);
+    const vise = tasserTitre(u);
+    // Un single, c'est un morceau : s'il n'a rien pour mériter le milliard, son
+    // objectif affiché ne doit pas le promettre.
+    const t = (d.trackBreakdown || [])[0];
+    if (t && !meriteLeMilliard(etat, d, t))
+        return Math.min(vise, PLAFOND_SANS_MERITE);
+    return vise;
+}
+function tasserTitre(x) {
+    if (!(x > SEUIL_TITRE))
+        return x;
+    const sup = PLAFOND_TITRE - SEUIL_TITRE;
+    return Math.round(SEUIL_TITRE + sup * (1 - Math.exp(-(x - SEUIL_TITRE) / ECHELLE_TITRE)));
+}
 const SEUIL_TASSEMENT = 2500000000;
-const ECHELLE_TASSEMENT = 1200000000;
+// Égale à l'écart au plafond : la pente au seuil vaut exactement 1, donc la
+// courbe tasse toujours et ne gonfle jamais.
+const ECHELLE_TASSEMENT = 2500000000;
 function tasserStreams(x) {
     if (!(x > SEUIL_TASSEMENT))
         return x;
@@ -22013,7 +22044,10 @@ function capStreams(next) {
         const ajout = Math.max(0, d.streams - dernierAffiche);
         const brut = (typeof d.streamsBruts === "number" ? d.streamsBruts : d.streams) + ajout;
         const affiche = tasserStreams(brut);
-        const cible = typeof d.ultimate === "number" ? Math.min(d.ultimate, PLAFOND_MORCEAU) : d.ultimate;
+        const cible = typeof d.ultimate === "number"
+            ? (d.type === "single" ? Math.min(tasserTitre(d.ultimate), PLAFOND_TITRE)
+                : Math.min(d.ultimate, PLAFOND_MORCEAU))
+            : d.ultimate;
         if (affiche === d.streams && d.streamsBruts === brut && d.streamsAffiches === affiche
             && cible === d.ultimate)
             return d;
@@ -22031,6 +22065,12 @@ function capStreams(next) {
             if (t.streams > PLAFOND_SANS_MERITE && !meriteLeMilliard(next, d, t)) {
                 perdu += t.streams - PLAFOND_SANS_MERITE;
                 return { ...t, streams: PLAFOND_SANS_MERITE, plafonne: true };
+            }
+            // Même mérité, un morceau se heurte à son propre plafond.
+            const serre = tasserTitre(t.streams);
+            if (serre !== t.streams) {
+                perdu += t.streams - serre;
+                return { ...t, streams: serre, plafonne: t.plafonne ? undefined : t.plafonne };
             }
             return t.plafonne ? { ...t, plafonne: undefined } : t;
         });
@@ -38681,7 +38721,7 @@ function FiscoGame() {
                             react_1.default.createElement("span", { style: { fontSize: 10, color: "#7ce0a4", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
                                 fmtFoll(d.streams),
                                 " streams",
-                                (() => { const cible = tasserStreams(d.ultimate || 0); return d.ultimate && d.streams < cible - 1000000 ? ` (↗ vers ${fmtFoll(cible)})` : ""; })()),
+                                (() => { const cible = plafondVise(gs, d); return d.ultimate && d.streams < cible - 1000000 ? ` (↗ vers ${fmtFoll(cible)})` : ""; })()),
                             d.peakPosition && react_1.default.createElement("span", { style: { fontSize: 10, color: "#7fb3cc", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
                                 "\uD83D\uDCC8 pic #",
                                 d.peakPosition),
