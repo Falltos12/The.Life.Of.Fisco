@@ -1738,11 +1738,17 @@ const DA_STYLES = [
 const GENRES = ["Rap", "Trap", "R&B", "Drill", "Afrobeat", "Pop Urbain", "Cloud Rap", "Boom Bap", "Alternative", "Ballade", "Club/Dance", "Rap Mélo", "Expérimental"];
 const TRACK_LIMITS = { EP: { min: 4, max: 6 }, Album: { min: 8, max: 16 } };
 // Courbe réaliste : énorme pic de sortie, puis chute rapide et longue traîne
-const GROWTH_CURVE = [0.34, 0.21, 0.13, 0.085, 0.06, 0.045, 0.033, 0.025, 0.018, 0.014];
+// Les dix premières semaines : le pic de sortie. Elles ne pèsent plus que un
+// huitième du total d'un projet — le reste se gagne dans la durée. Un an après
+// la sortie on en est à un quart, trois ans à la moitié, huit ans à 90 %.
+const GROWTH_CURVE = [0.030, 0.020, 0.015, 0.012, 0.010, 0.009, 0.008, 0.006, 0.005, 0.005];
 // Saisonnalité : l'industrie sort ses gros projets en automne, jamais en plein été
 const SEASON_MULT = { 1: 0.92, 2: 0.95, 3: 1.02, 4: 1.00, 5: 1.03, 6: 0.90, 7: 0.78, 8: 0.74, 9: 1.12, 10: 1.18, 11: 1.15, 12: 0.98 };
 const SEASON_LABEL = { 1: "Rentrée de janvier, marché calme", 2: "Période creuse", 3: "Bonne fenêtre de printemps", 4: "Fenêtre correcte", 5: "Avant l'été, dynamique", 6: "Début d'été, attention à la baisse", 7: "Plein été — très mauvaise période", 8: "Août — la pire période de l'année", 9: "Rentrée — excellente fenêtre", 10: "Octobre — la meilleure fenêtre de l'année", 11: "Novembre — très forte fenêtre", 12: "Fêtes, marché saturé" };
-const CATALOG_TRICKLE = 0.00035; // tiny ongoing weekly trickle after growth curve ends (legacy catalog longevity)
+// La longue traîne, qui fait l'essentiel d'un gros compteur. Franchir le
+// milliard demande donc des années d'écoute, et non deux mois de buzz.
+const CATALOG_TRICKLE = 0.0031;
+const TRAINE_DEMIVIE = 0.88; // ce que la traîne garde d'une année sur l'autre
 // Le socle d'une nouvelle sortie, c'est-à-dire ce que le public attend de toi.
 // Il montait auparavant à la moyenne exacte des trois derniers projets : chaque
 // sortie prenait donc la précédente pour référence, et la carrière partait en
@@ -21768,10 +21774,10 @@ const INIT = {
     objectives: [], objectivesDone: [], timeline: [], grief: null, callbacks: [],
     healthAspects: { voice: 88, body: 85, sleep: 80, mind: 82 },
     activeTrial: null, trialHistory: [], hangoutHistory: [], clipography: [
-        { id: "clip_cassez", date: new Date(2023, 4, 12).getTime(), track: "Cassez vous", project: "Tecktonik", director: "Réalisateur star", concept: "Tournage de rue", location: "Nice", guests: [], views: 148000000, quality: 88, viral: true, legacy: true },
+        { id: "clip_cassez", date: new Date(2021, 6, 12).getTime(), track: "Cassez vous", project: "Tecktonik", director: "Réalisateur star", concept: "Tournage de rue", location: "Nice", guests: [], views: 148000000, quality: 88, viral: true, legacy: true },
         { id: "clip_etudes_colors", date: new Date(2023, 1, 22).getTime(), track: "Études", project: "#0000ff", director: "COLORS", concept: "A COLORS SHOW", location: "Berlin", guests: [], views: 116000000, quality: 92, viral: true, legacy: true, colors: true, fullTitle: "Fisco - Études | A COLORS SHOW" },
-        { id: "clip_laissez", date: new Date(2023, 2, 3).getTime(), track: "Laissez moi", project: "#0000ff", director: "Cinéaste de renom", concept: "Clip narratif", location: "Nassau", guests: [], views: 90000000, quality: 90, viral: true, legacy: true },
-        { id: "clip_maisnan", date: new Date(2023, 3, 20).getTime(), track: "Mais Nan", project: "UNUHU", director: "Réalisateur star", concept: "Démonstration de luxe", location: "Nice", guests: [], views: 77000000, quality: 85, viral: true, legacy: true },
+        { id: "clip_laissez", date: new Date(2023, 4, 4).getTime(), track: "Laissez moi", project: "#0000ff", director: "Cinéaste de renom", concept: "Clip narratif", location: "Nassau", guests: [], views: 90000000, quality: 90, viral: true, legacy: true },
+        { id: "clip_maisnan", date: new Date(2021, 11, 27).getTime(), track: "Mais Nan", project: "UNUHU", director: "Réalisateur star", concept: "Démonstration de luxe", location: "Nice", guests: [], views: 77000000, quality: 85, viral: true, legacy: true },
     ],
     tourHistory: [], activeTour: null,
     filmography: [],
@@ -21952,7 +21958,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "154";
+const VERSION_JEU = "156";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -21969,6 +21975,27 @@ function tasserStreams(x) {
 // partie déjà entamée est corrigée dès le premier geste du joueur.
 // On garde le total BRUT à côté du total affiché : sans ça, tasser un compteur
 // déjà tassé le rongeait un peu plus à chaque action, et les chiffres fondaient.
+// Le milliard ne s'attrape pas par hasard. Un morceau n'y a droit que s'il a
+// été travaillé en studio (bonus de qualité d'au moins +13), porté par une
+// sortie préparée, ou accompagné d'un clip. Sinon il plafonne juste en dessous,
+// aussi longtemps qu'il reste dans cet état — tourner un clip lève le plafond.
+const PLAFOND_SANS_MERITE = 999000000;
+const BONUS_MERITANT = 13;
+function meriteLeMilliard(etat, d, t) {
+    if (!t)
+        return true;
+    if ((t.studioBonus || 0) >= BONUS_MERITANT)
+        return true;
+    const brut = ((d && d.tracks) || []).find(x => x && x.title === t.title);
+    if (brut && (brut.studioBonus || 0) >= BONUS_MERITANT)
+        return true;
+    if ((d && d.rolloutBoost || 0) > 0)
+        return true; // sortie préparée
+    if (t.hasClip)
+        return true;
+    return ((etat && etat.clipography) || []).some(c => c && (c.track === t.title
+        || (!c.track && d && c.project === d.title)));
+}
 function capStreams(next) {
     if (!next || !Array.isArray(next.discography))
         return next;
@@ -21991,8 +22018,19 @@ function capStreams(next) {
         // une partie où ils avaient déjà dérivé.
         const somme = (d.trackBreakdown || []).reduce((a, t) => a + (t.streams || 0), 0);
         const ratio = somme > 0 ? affiche / somme : 1;
-        const tb = (d.trackBreakdown || []).map(t => ({ ...t, streams: Math.round((t.streams || 0) * ratio) }));
-        return { ...d, streams: affiche, streamsBruts: brut, streamsAffiches: affiche, ultimate: cible,
+        let tb = (d.trackBreakdown || []).map(t => ({ ...t, streams: Math.round((t.streams || 0) * ratio) }));
+        // Le plafond du morceau qui n'a rien pour lui. Ce qu'on lui retire sort
+        // aussi du total du projet : la somme des titres lui reste égale.
+        let perdu = 0;
+        tb = tb.map(t => {
+            if (t.streams > PLAFOND_SANS_MERITE && !meriteLeMilliard(next, d, t)) {
+                perdu += t.streams - PLAFOND_SANS_MERITE;
+                return { ...t, streams: PLAFOND_SANS_MERITE, plafonne: true };
+            }
+            return t.plafonne ? { ...t, plafonne: undefined } : t;
+        });
+        const total = Math.max(0, affiche - perdu);
+        return { ...d, streams: total, streamsBruts: brut, streamsAffiches: total, ultimate: cible,
             trackBreakdown: d.trackBreakdown ? tb : d.trackBreakdown };
     });
     return touche ? { ...next, discography: disco } : next;
@@ -22020,18 +22058,35 @@ function projetDuMorceau(titre, disco) {
     }
     return null;
 }
+// Les dates des quatre clips d'avant le récit, telles qu'elles sont.
+const DATES_CLIPS_ORIGINE = {
+    clip_cassez: new Date(2021, 6, 12).getTime(), // 12 juillet 2021
+    clip_maisnan: new Date(2021, 11, 27).getTime(), // 27 décembre 2021
+    clip_etudes_colors: new Date(2023, 1, 22).getTime(), // 22 février 2023
+    clip_laissez: new Date(2023, 4, 4).getTime(), // 4 mai 2023
+};
 function recalerClips(clips, disco) {
-    if (!Array.isArray(clips) || !Array.isArray(disco))
+    if (!Array.isArray(clips))
         return clips;
     let change = false;
     const out = clips.map(c => {
-        if (!c || !c.track)
+        if (!c)
             return c;
-        const vrai = projetDuMorceau(c.track, disco);
-        if (!vrai || vrai === c.project)
-            return c;
-        change = true;
-        return { ...c, project: vrai };
+        let r = c;
+        // La date des clips d'origine : elle ne dépend pas de la partie.
+        const vraieDate = DATES_CLIPS_ORIGINE[c.id];
+        if (vraieDate !== undefined && c.date !== vraieDate) {
+            r = { ...r, date: vraieDate };
+            change = true;
+        }
+        if (c.track && Array.isArray(disco)) {
+            const vrai = projetDuMorceau(c.track, disco);
+            if (vrai && vrai !== c.project) {
+                r = { ...r, project: vrai };
+                change = true;
+            }
+        }
+        return r;
     });
     return change ? out : clips;
 }
@@ -22135,6 +22190,21 @@ function assainirNominations(etat) {
 //     pas une date de rupture : on peut recroiser une ex des années après.
 //   — face à une borne inconnue, on affirme le moins possible. Une relation dont
 //     on ignore le début commence l'année où elle s'est terminée, pas en 2023.
+function recalerDatesClips(etat) {
+    if (!etat || !Array.isArray(etat.clipography))
+        return etat;
+    let touche = false;
+    const clips = etat.clipography.map(c => {
+        if (!c || !c.id)
+            return c;
+        const vraie = DATES_CLIPS_ORIGINE[c.id];
+        if (vraie === undefined || c.date === vraie)
+            return c;
+        touche = true;
+        return { ...c, date: vraie };
+    });
+    return touche ? { ...etat, clipography: clips } : etat;
+}
 function consoliderHistoires(etat) {
     if (!etat || typeof etat !== "object")
         return etat;
@@ -22700,10 +22770,13 @@ function gameReducerInner(state, action) {
                     else {
                         // Longue traîne qui s'amenuise avec les années, jamais tout à fait nulle
                         const yearsOld = Math.max(0, (newDate - d.releaseDate) / (365 * 86400000));
-                        const decay = Math.max(0.12, Math.pow(0.72, yearsOld));
+                        const decay = Math.max(0.08, Math.pow(TRAINE_DEMIVIE, yearsOld));
                         const crisisMult = (state.activeCrisis && state.activeCrisis.royalty) ? (1 + state.activeCrisis.royalty) : 1;
                         inc = Math.round(target * CATALOG_TRICKLE * decay * crisisMult * summerBoost);
                     }
+                    // Le plafond d'un projet est un plafond : la traîne s'y arrête.
+                    if (typeof target === "number" && target > 0 && d.streams + inc > target)
+                        inc = Math.max(0, target - d.streams);
                     weeklyIncrements[d.id] = inc;
                     const growthRatio = d.streams > 0 ? (d.streams + inc) / d.streams : 1;
                     const newTrackBreakdown = (d.trackBreakdown || []).map(t => ({ ...t, streams: Math.round(t.streams * growthRatio), weekInc: Math.round((t.streams * growthRatio) - t.streams) }));
@@ -24725,7 +24798,7 @@ function gameReducerInner(state, action) {
             merged.hits = (merged.hits || []).map(h => ({ ...h, title: fixT(h.title) }));
             // Une partie rouverte après coup retrouve Damon au niveau de son époque,
             // et le catalogue complet du garage et de l'agence immobilière.
-            return rattraperDamon(assainirNominations(consoliderHistoires(rafraichirCatalogues(merged))));
+            return rattraperDamon(assainirNominations(recalerDatesClips(consoliderHistoires(rafraichirCatalogues(merged)))));
         }
         case "RESET": return JSON.parse(JSON.stringify(INIT));
         default: return state;
