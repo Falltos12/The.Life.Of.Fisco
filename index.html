@@ -21847,7 +21847,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "148";
+const VERSION_JEU = "149";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -21992,58 +21992,69 @@ function fondreCatalogue(garde, catalogue) {
         neuf.push(v); });
     return neuf;
 }
-// Toute histoire terminée doit avoir ses deux bornes. La sauvegarde n'en garde
-// qu'une (la dernière rupture) ; le reste se déduit sans rien inventer : le
-// récit commence à une date connue, deux histoires ne se chevauchent pas, et le
-// dernier contact avec quelqu'un dit quand on a cessé de se voir.
+// Toute histoire terminée doit avoir ses deux bornes, et elles doivent dire ce
+// qui s'est vraiment passé. Deux principes :
+//   — l'ordre d'archivage fait foi. Le « dernier contact » avec quelqu'un n'est
+//     pas une date de rupture : on peut recroiser une ex des années après, ça ne
+//     déplace pas l'histoire dans le temps.
+//   — face à une borne inconnue, on affirme le moins possible. Une relation dont
+//     on ignore le début commence l'année où elle s'est terminée, pas en 2023.
 function consoliderHistoires(etat) {
     if (!etat || typeof etat !== "object")
         return etat;
     const r = etat.romance || {};
-    const rel = etat.relations || {};
     const vieux = Array.isArray(etat.romanceHistory) ? etat.romanceHistory : [];
     const parId = new Map();
     vieux.forEach(h => { if (h && h.id && !parId.has(h.id))
         parId.set(h.id, h); });
-    // Toutes les anciennes, d'où qu'elles viennent.
-    const ids = [...new Set([...vieux.map(h => h && h.id), ...(r.pastPartners || [])])]
-        .filter(id => id && id !== r.partner);
-    if (!ids.length)
+    // L'ordre : celui du registre d'abord, puis celles qu'il ne connaît pas
+    // encore, dans l'ordre où elles ont été archivées. La fiancée du début passe
+    // toujours en tête : son histoire précède le récit.
+    const ordre = [];
+    const pousser = id => { if (id && id !== r.partner && ordre.indexOf(id) < 0)
+        ordre.push(id); };
+    vieux.forEach(h => pousser(h && h.id));
+    (r.pastPartners || []).forEach(pousser);
+    const i0 = ordre.indexOf(ROMANCE_INITIALE);
+    if (i0 > 0)
+        ordre.unshift(...ordre.splice(i0, 1));
+    if (!ordre.length)
         return { ...etat, romanceHistory: [] };
-    const contact = id => ((rel[id] || {}).lastContact) || null;
-    // Chronologie : la date connue de chacune, à défaut l'ordre d'archivage.
-    const reperePour = id => {
+    // Ce que la sauvegarde sait vraiment de chacune.
+    const bornes = ordre.map((id, k) => {
         const h = parId.get(id) || {};
-        return h.to || ((id === r.exPartner && r.breakupDate) ? r.breakupDate : null) || contact(id) || null;
-    };
-    const ordre = ids.slice().sort((a, b) => {
-        const da = reperePour(a), db = reperePour(b);
-        if (da != null && db != null)
-            return da - db;
-        if (da != null)
-            return -1;
-        if (db != null)
-            return 1;
-        return ids.indexOf(a) - ids.indexOf(b);
+        const fin = (h.to != null) ? h.to : ((id === r.exPartner && r.breakupDate) ? r.breakupDate : null);
+        const debut = (h.from != null) ? h.from
+            : ((k === 0 && id === ROMANCE_INITIALE) ? GAME_START_DATE : null);
+        return { h, id, from: debut, to: fin,
+            exact: { from: h.from != null, to: h.to != null } };
     });
-    // La borne qui ferme la dernière histoire : la compagne actuelle, sinon la
-    // dernière rupture, sinon aujourd'hui.
-    const borneFinale = r.partner ? (r.since || etat.currentDate) : (r.breakupDate || etat.currentDate);
-    let curseur = GAME_START_DATE;
-    const liste = ordre.map((id, k) => {
-        const h = parId.get(id) || {};
-        const dernier = (k === ordre.length - 1);
-        const debut = (h.from != null) ? h.from : curseur;
-        const fin = (h.to != null) ? h.to
-            : ((id === r.exPartner && r.breakupDate) ? r.breakupDate
-                : (contact(id) || (dernier ? borneFinale : null)));
-        const borne = (fin != null && fin >= debut) ? fin : (dernier ? borneFinale : null);
-        if (borne != null)
-            curseur = borne;
-        return { ...h, id, from: debut, to: borne,
-            fromApprox: (h.fromApprox !== undefined) ? h.fromApprox : (k === 0 && id === ROMANCE_INITIALE) };
-    });
-    return { ...etat, romanceHistory: liste };
+    // La borne qui ferme la dernière : la compagne actuelle, sinon la dernière
+    // rupture, sinon aujourd'hui.
+    const finale = r.partner ? (r.since || etat.currentDate) : (r.breakupDate || etat.currentDate);
+    if (bornes[bornes.length - 1].to == null)
+        bornes[bornes.length - 1].to = finale;
+    // 1. Un début manquant se prend sur la fin de l'histoire d'avant.
+    for (let k = 1; k < bornes.length; k++)
+        if (bornes[k].from == null && bornes[k - 1].to != null)
+            bornes[k].from = bornes[k - 1].to;
+    // 2. S'il manque encore, on n'étire rien : l'histoire commence l'année de sa
+    //    fin. C'est la plus petite affirmation compatible avec ce qu'on sait.
+    for (let k = 0; k < bornes.length; k++)
+        if (bornes[k].from == null && bornes[k].to != null)
+            bornes[k].from = bornes[k].to;
+    // 3. Une fin manquante se prend sur le début de l'histoire suivante.
+    for (let k = bornes.length - 2; k >= 0; k--)
+        if (bornes[k].to == null && bornes[k + 1].from != null)
+            bornes[k].to = bornes[k + 1].from;
+    // 4. Dernier recours, et seulement là : la borne de clôture.
+    bornes.forEach(b => { if (b.to == null)
+        b.to = finale; if (b.from == null)
+        b.from = b.to; });
+    return { ...etat, romanceHistory: bornes.map((b, k) => ({ ...b.h, id: b.id,
+            from: b.from, to: b.to,
+            fromApprox: (b.h.fromApprox !== undefined) ? b.h.fromApprox
+                : (k === 0 && b.id === ROMANCE_INITIALE) })) };
 }
 function rafraichirCatalogues(etat) {
     if (!etat || typeof etat !== "object")
