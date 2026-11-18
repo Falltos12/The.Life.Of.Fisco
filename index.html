@@ -21845,7 +21845,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "142";
+const VERSION_JEU = "143";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -30594,6 +30594,37 @@ function FiscoGame() {
         narrateRomance(`TOURNÉE : Fisco vient de lancer sa tournée "${name}" (${dates} dates, ${region.label}), qui durera ${durationDays} jours. Contexte: ${buildCtx()}. Raconte le départ en tournée + 3 choix.`);
     }, [gs, addLog, toast, narrateRomance, buildCtx]);
     // ── Cinéma : réaliser un film ────────────────────────────────────────────
+    // Les acteurs d'une saison reviennent pour la suivante, avec leur rôle et le
+    // nom de leur personnage. Ceux qui ne sont plus là ne reviennent pas.
+    const castQuiRevient = (0, react_1.useCallback)((serie) => {
+        if (!serie || !Array.isArray(serie.seasons) || !serie.seasons.length)
+            return [];
+        const derniere = serie.seasons[serie.seasons.length - 1];
+        const partis = new Set([...((gs.deceased) || []), ...((gs.erased) || [])]);
+        const vus = new Set();
+        return (derniere.cast || []).filter(c => {
+            if (!c || !c.id || vus.has(c.id))
+                return false;
+            if (c.id !== "__fisco__" && (partis.has(c.id) || !charAny(c.id)))
+                return false;
+            vus.add(c.id);
+            return true;
+        }).map(c => ({
+            id: c.id,
+            role: (MOVIE_ROLES.find(r => r.label === c.role)
+                || MOVIE_ROLES.find(r => r.id === c.role) || {}).id || "support",
+            characterName: c.characterName || "",
+        }));
+    }, [gs]);
+    // Reprendre une série : on y arrive avec son casting déjà en place.
+    const reprendreSerie = (0, react_1.useCallback)((serie) => {
+        const revient = castQuiRevient(serie);
+        setSeriesPick(p => ({ ...p, seriesId: serie.id, title: serie.title,
+            genre: (SERIES_GENRES.find(g => g.name === serie.genre) || SERIES_GENRES[0]).id,
+            cast: revient }));
+        if (revient.length)
+            toast(`🎭 ${revient.length} acteur${revient.length > 1 ? "s" : ""} de la saison précédente ${revient.length > 1 ? "sont" : "est"} déjà au casting`, "#7ce0a4");
+    }, [castQuiRevient, toast]);
     const releaseSeason = (0, react_1.useCallback)((data) => {
         const genre = SERIES_GENRES.find(g => g.id === data.genre);
         const platform = data.platform;
@@ -30611,7 +30642,7 @@ function FiscoGame() {
             viewers: outcome.viewers, quality: outcome.quality, renewed: outcome.renewed,
             cast: data.cast.map(c => {
                 var _a, _b;
-                const person = c.id === "__fisco__" ? { name: "Fisco" } : CHARS_BY_ID[c.id];
+                const person = c.id === "__fisco__" ? { name: "Fisco" } : charAny(c.id);
                 return { id: c.id, name: person === null || person === void 0 ? void 0 : person.name, role: (_a = MOVIE_ROLES.find(r => r.id === c.role)) === null || _a === void 0 ? void 0 : _a.label, characterName: ((_b = c.characterName) === null || _b === void 0 ? void 0 : _b.trim()) || null, isSelf: c.id === "__fisco__" };
             }),
         };
@@ -30637,7 +30668,7 @@ function FiscoGame() {
             cost: budget.cost, boxOffice: outcome.boxOffice, profit: outcome.profit, entries,
             cast: data.cast.map(c => {
                 var _a, _b;
-                const person = c.id === "__fisco__" ? { name: "Fisco", emoji: "🎤" } : CHARS_BY_ID[c.id];
+                const person = c.id === "__fisco__" ? { name: "Fisco", emoji: "🎤" } : charAny(c.id);
                 const role = (_a = MOVIE_ROLES.find(r => r.id === c.role)) === null || _a === void 0 ? void 0 : _a.label;
                 const characterName = ((_b = c.characterName) === null || _b === void 0 ? void 0 : _b.trim()) || null;
                 return { id: c.id, name: person === null || person === void 0 ? void 0 : person.name, role, characterName, isSelf: c.id === "__fisco__" };
@@ -36931,7 +36962,7 @@ function FiscoGame() {
             react_1.default.createElement("div", { style: { fontFamily: "'Bebas Neue',cursive", fontSize: 18, color: "#7fb3cc", letterSpacing: 2, marginBottom: 12 } }, "\uD83D\uDCFA PRODUIRE UNE S\u00C9RIE"),
             (gs.seriesography || []).filter(s => s.renewed).length > 0 && !seriesPick.seriesId && (react_1.default.createElement(react_1.default.Fragment, null,
                 react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(127,179,204,.5)", letterSpacing: 2, marginBottom: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, "CONTINUER UNE S\u00C9RIE EXISTANTE"),
-                (gs.seriesography || []).filter(s => s.renewed).map(s => (react_1.default.createElement("button", { key: s.id, onClick: () => setSeriesPick(p => { var _a; return ({ ...p, seriesId: s.id, title: s.title, genre: ((_a = SERIES_GENRES.find(g => g.name === s.genre)) === null || _a === void 0 ? void 0 : _a.id) || SERIES_GENRES[0].id }); }), style: { width: "100%", marginBottom: 6, padding: "9px 11px", background: "rgba(124,224,164,.07)", border: "1px solid rgba(124,224,164,.25)", color: "#7ce0a4", borderRadius: 8, textAlign: "left", cursor: "pointer", fontSize: 12 } },
+                (gs.seriesography || []).filter(s => s.renewed).map(s => (react_1.default.createElement("button", { key: s.id, onClick: () => reprendreSerie(s), style: { width: "100%", marginBottom: 6, padding: "9px 11px", background: "rgba(124,224,164,.07)", border: "1px solid rgba(124,224,164,.25)", color: "#7ce0a4", borderRadius: 8, textAlign: "left", cursor: "pointer", fontSize: 12 } },
                     "\u25B6 ",
                     s.title,
                     " \u2014 saison ",
@@ -36956,7 +36987,13 @@ function FiscoGame() {
             react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(127,179,204,.5)", letterSpacing: 2, marginBottom: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, "PLATEFORME DE DIFFUSION"),
             react_1.default.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 6, marginBottom: 12 } }, SERIES_PLATFORMS.map(p => {
                 var _a, _b, _c;
-                return (react_1.default.createElement("button", { key: p.id, onClick: () => setSeriesPick(sp => ({ ...sp, platform: p, cast: sp.cast.slice(0, p.capRoles) })), style: { padding: "8px 6px", background: ((_a = seriesPick.platform) === null || _a === void 0 ? void 0 : _a.id) === p.id ? "rgba(127,179,204,.18)" : "rgba(255,255,255,.03)", border: ((_b = seriesPick.platform) === null || _b === void 0 ? void 0 : _b.id) === p.id ? "1px solid rgba(127,179,204,.5)" : "1px solid rgba(255,255,255,.08)", borderRadius: 8, cursor: "pointer", textAlign: "left" } },
+                return (react_1.default.createElement("button", { key: p.id, onClick: () => {
+                        // Une plateforme plus petite ne peut pas payer tout le monde.
+                        const perdus = Math.max(0, seriesPick.cast.length - p.capRoles);
+                        if (perdus)
+                            toast(`⚠️ ${p.label} ne finance que ${p.capRoles} rôles — ${perdus} acteur${perdus > 1 ? "s" : ""} retiré${perdus > 1 ? "s" : ""} du casting`, "#e6ac56");
+                        setSeriesPick(sp => ({ ...sp, platform: p, cast: sp.cast.slice(0, p.capRoles) }));
+                    }, style: { padding: "8px 6px", background: ((_a = seriesPick.platform) === null || _a === void 0 ? void 0 : _a.id) === p.id ? "rgba(127,179,204,.18)" : "rgba(255,255,255,.03)", border: ((_b = seriesPick.platform) === null || _b === void 0 ? void 0 : _b.id) === p.id ? "1px solid rgba(127,179,204,.5)" : "1px solid rgba(255,255,255,.08)", borderRadius: 8, cursor: "pointer", textAlign: "left" } },
                     react_1.default.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: ((_c = seriesPick.platform) === null || _c === void 0 ? void 0 : _c.id) === p.id ? "white" : "#7fb3cc" } }, p.label),
                     react_1.default.createElement("div", { style: { fontSize: 8, color: "rgba(255,255,255,.4)" } },
                         fmtMoney(p.costPerEp),
@@ -36983,9 +37020,16 @@ function FiscoGame() {
                     "/",
                     seriesPick.platform.capRoles,
                     ")"),
+                !!seriesPick.seriesId && (() => {
+                    const avant = new Set(castQuiRevient((gs.seriesography || []).find(x => x.id === seriesPick.seriesId)).map(c => c.id));
+                    const gardes = seriesPick.cast.filter(c => avant.has(c.id)).length;
+                    return (react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(124,224,164,.65)", marginBottom: 7, fontStyle: "italic", lineHeight: 1.5 } }, gardes
+                        ? `${gardes} acteur${gardes > 1 ? "s" : ""} de la saison précédente ${gardes > 1 ? "reconduits" : "reconduit"} avec ${gardes > 1 ? "leurs rôles" : "son rôle"}. Tu peux en retirer, en changer, en ajouter.`
+                        : "Tu repars sur un casting entièrement neuf pour cette saison."));
+                })(),
                 react_1.default.createElement("input", { value: seriesCastFilter, onChange: e => setSeriesCastFilter(e.target.value), placeholder: "\uD83D\uDD0D Rechercher un acteur, chanteur, rappeur\u2026", style: { ...inputStyle, marginBottom: 8 } }),
                 seriesPick.cast.length > 0 && (react_1.default.createElement("div", { style: { marginBottom: 10, display: "flex", flexDirection: "column", gap: 5 } }, seriesPick.cast.map(c => {
-                    const person = c.id === "__fisco__" ? { emoji: "🎤", name: "Fisco (toi)" } : CHARS_BY_ID[c.id];
+                    const person = c.id === "__fisco__" ? { emoji: "🎤", name: "Fisco (toi)" } : charAny(c.id);
                     return (react_1.default.createElement("div", { key: c.id, style: { background: "rgba(255,255,255,.04)", border: c.id === "__fisco__" ? "1px solid rgba(124,224,164,.3)" : "1px solid rgba(255,255,255,.08)", borderRadius: 7, padding: "6px 10px" } },
                         react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 } },
                             react_1.default.createElement("span", { style: { fontSize: 11, color: "rgba(255,255,255,.85)" } }, person === null || person === void 0 ? void 0 :
@@ -37106,7 +37150,7 @@ function FiscoGame() {
                     ")"),
                 react_1.default.createElement("input", { value: movieCastFilter, onChange: e => setMovieCastFilter(e.target.value), placeholder: "\uD83D\uDD0D Rechercher un acteur, chanteur, rappeur\u2026", style: { ...inputStyle, marginBottom: 8 } }),
                 moviePick.cast.length > 0 && (react_1.default.createElement("div", { style: { marginBottom: 10, display: "flex", flexDirection: "column", gap: 5 } }, moviePick.cast.map((c, i) => {
-                    const person = c.id === "__fisco__" ? { emoji: "🎤", name: "Fisco (toi)" } : CHARS_BY_ID[c.id];
+                    const person = c.id === "__fisco__" ? { emoji: "🎤", name: "Fisco (toi)" } : charAny(c.id);
                     return (react_1.default.createElement("div", { key: c.id, style: { background: "rgba(255,255,255,.04)", border: c.id === "__fisco__" ? "1px solid rgba(124,224,164,.3)" : "1px solid rgba(255,255,255,.08)", borderRadius: 7, padding: "6px 10px" } },
                         react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 } },
                             react_1.default.createElement("span", { style: { fontSize: 11, color: "rgba(255,255,255,.85)" } }, person === null || person === void 0 ? void 0 :
