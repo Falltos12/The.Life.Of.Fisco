@@ -1079,6 +1079,8 @@ const CHARS = {
     justin_bieber: { id: "justin_bieber", name: "Justin Bieber", emoji: "🎵", cat: "music", loc: "Toronto", bio: "Chanteur reconnu." },
     kodak_black: { id: "kodak_black", name: "Kodak Black", emoji: "📀", cat: "music", loc: "Floride", bio: "Rappeur reconnu." },
     gunna: { id: "gunna", name: "Gunna", emoji: "🔉", cat: "music", loc: "Atlanta", bio: "Rappeur reconnu." },
+    quavo: { id: "quavo", name: "Quavo", emoji: "🎤", cat: "music", loc: "Atlanta", bio: "Rappeur reconnu." },
+    offset: { id: "offset", name: "Offset", emoji: "🎙️", cat: "music", loc: "Atlanta", bio: "Rappeur reconnu." },
     lil_durk: { id: "lil_durk", name: "Lil Durk", emoji: "🎚️", cat: "music", loc: "Chicago", bio: "Rappeur reconnu." },
     dababy: { id: "dababy", name: "DaBaby", emoji: "🎛️", cat: "music", loc: "Charlotte", bio: "Rappeur reconnu." },
     polo_g: { id: "polo_g", name: "Polo G", emoji: "🎼", cat: "music", loc: "Chicago", bio: "Rappeur reconnu." },
@@ -8916,7 +8918,10 @@ const SOUS_AGENCE = new Set(["twice", "newjeans", "aespa", "jennie", "babymonste
 // Ceux que tu as écartés toi-même, et les mineurs, qui n'ont rien à faire ici.
 const HORS_LISTE = new Set(["clara_luciani", "lorenzo", "north_west"]);
 // Jusqu'où l'oubli peut faire descendre une relation, et pas plus bas.
-const SILENCE_PLANCHER = -20;
+// Ne plus donner de nouvelles ramène à l'indifférence, jamais à l'animosité.
+const SILENCE_PLANCHER = 0;
+// En dessous de ça, il s'est vraiment passé quelque chose entre vous.
+const FROID_SEUIL = -20;
 // La fiancée du tout début : son histoire précède le récit.
 const ROMANCE_INITIALE = "jenna_ortega";
 function enFroidAvec(gs, id) {
@@ -8936,9 +8941,9 @@ function enFroidAvec(gs, id) {
     const st = String(r.status || "").toLowerCase();
     if (/rival|ennemi|brouill|guerre|froid/.test(st))
         return true;
-    // En froid dès que ça passe sous zéro — mais pas pour un simple éloignement :
-    // on ne compte que ce qui descend plus bas que ce que l'oubli peut creuser.
-    return (r.score == null ? 0 : r.score) < SILENCE_PLANCHER;
+    // En froid, mais pas pour un simple éloignement : il faut être descendu plus
+    // bas que ce que l'oubli peut creuser.
+    return (r.score == null ? 0 : r.score) < FROID_SEUIL;
 }
 function talentSignable(gs, t) {
     if (!t)
@@ -21958,7 +21963,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "156";
+const VERSION_JEU = "158";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -22039,7 +22044,7 @@ function capStreams(next) {
 // Le plafond de streams, le plafond de célébrité, le palier du cercle et la
 // réparation des couples s'appliquent d'eux-mêmes à chaque geste du joueur.
 // Reste une correction rétroactive, qui n'a de sens qu'une seule fois.
-const VERSION_EQUILIBRE = 12;
+const VERSION_EQUILIBRE = 13;
 // Où se trouve réellement un morceau : on cherche dans toute la discographie.
 function projetDuMorceau(titre, disco) {
     if (!titre || !Array.isArray(disco))
@@ -22378,7 +22383,9 @@ function reprendrePartie(next) {
             const st = String(r.status || "").toLowerCase();
             if (/rival|ennemi|brouill|guerre|tendu|froid/.test(st))
                 return;
-            rels[id] = { ...r, score: SILENCE_PLANCHER };
+            // Une rupture laisse une trace : une ex ne remonte pas à zéro d'office.
+            const estUneEx = (((repris.romance || {}).pastPartners) || []).includes(id);
+            rels[id] = { ...r, score: estUneEx ? Math.max(r.score, FROID_SEUIL) : SILENCE_PLANCHER };
             remontes++;
         });
         if (remontes)
@@ -38939,8 +38946,10 @@ function FiscoGame() {
                             return 3;
                         if (featIds.has(c.id))
                             return 4; // collaborateurs
-                        if (st === "rival" || st === "tendu" || sc <= -10)
-                            return 6; // rivaux
+                        // Rival veut dire rival : un statut déclaré, une rivalité
+                        // ouverte, un clash — pas un lien qui a glissé tout seul.
+                        if (st === "rival" || st === "tendu" || estEnGuerre(gs, c.id) || sc <= -40)
+                            return 6;
                         if (st === "neutre" || sc > 0)
                             return 5;
                         return 8; // inconnus en dernier
