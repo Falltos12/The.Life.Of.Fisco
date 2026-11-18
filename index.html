@@ -8260,6 +8260,42 @@ const NPC_ARTISTS = [
 // ─── QUI PEUT DEVENIR QUELQU'UN ─────────────────────────────────────────────
 // On ne sort pas avec quelqu'un qu'on ne connaît pas. Il faut d'abord être amis.
 const ROMANCE_FRIEND_MIN = 62;
+// Reconquérir demande plus que se mettre avec quelqu'un de neuf : il y a
+// l'histoire d'avant à faire oublier.
+const RECONQUETE_MIN = 74;
+function dejaSortiAvec(gs, id) {
+    if (!gs || !id)
+        return false;
+    if ((((gs.romance || {}).pastPartners) || []).includes(id))
+        return true;
+    return ((gs.romanceHistory) || []).some(h => h && h.id === id);
+}
+// Ce qui pèse quand on frappe à une porte déjà fermée une fois : le lien
+// reconstruit, le temps écoulé, la façon dont ça s'était terminé, et le nombre
+// de fois où on a déjà recommencé.
+function chanceDeReconquete(gs, id) {
+    const rel = (gs.relations || {})[id] || { score: 0 };
+    const sc = Math.max(0, Math.min(100, rel.score || 0));
+    if (isHostile(gs, id))
+        return 0;
+    let p = 0.12 + ((sc - RECONQUETE_MIN) / 100) * 1.5; // le lien d'aujourd'hui
+    const fins = ((gs.romanceHistory) || []).filter(h => h && h.id === id && h.to);
+    const derniere = fins.length ? Math.max(...fins.map(h => h.to)) : null;
+    if (derniere != null) {
+        const mois = (gs.currentDate - derniere) / (30.44 * 86400000);
+        if (mois < 3)
+            p -= 0.22; // la plaie est encore ouverte
+        else if (mois > 18)
+            p += 0.12; // le temps a fait son travail
+    }
+    if (fins.length >= 2)
+        p -= 0.18; // la troisième fois convainc moins
+    if (((gs.romance || {}).cheatHistory || []).some(c => c && c.on === id))
+        p -= 0.2;
+    if ((gs.rep || 0) >= 70)
+        p += 0.06;
+    return Math.max(0.04, Math.min(0.88, p));
+}
 // Anok Yai est écrite comme la future femme de Falltos et la mère de Dario :
 // elle n'est pas sur le marché, avant ni après l'annonce.
 const RESERVES_SCENARIO = new Set(["anok_yai"]);
@@ -8325,7 +8361,13 @@ function romanceEligible(gs, id) {
     if (kid && gs.currentDate - kid.birth < 18 * 365.25 * 86400000)
         return false;
     const rel = gs.relations[id] || gs.relations[RELATION_ALIAS && RELATION_ALIAS[id]] || { score: 0, status: "inconnu" };
-    return (rel.score || 0) >= ROMANCE_FRIEND_MIN || ["ami", "cercle proche", "ex"].includes(rel.status);
+    // En froid, personne — pas même une ex. Le passé ne rouvre aucune porte.
+    if (isHostile(gs, id))
+        return false;
+    // Une ex ne revient pas parce qu'elle a été là : il faut la reconquérir.
+    if (dejaSortiAvec(gs, id))
+        return (rel.score || 0) >= RECONQUETE_MIN;
+    return (rel.score || 0) >= ROMANCE_FRIEND_MIN || ["ami", "cercle proche"].includes(rel.status);
 }
 // De quoi il manque pour qu'elle apparaisse
 function romanceGap(gs, id) {
@@ -17404,6 +17446,34 @@ function sortPeople(list, gs, mode) {
     };
     return [...list].sort((a, b) => score(b) - score(a) || a.name.localeCompare(b.name));
 }
+// Proposer n'est pas obliger. Plus c'est tendu, moins il y a de chances qu'on
+// accepte — mais jamais zéro, et jamais la certitude.
+function chanceDeVenir(gs, id) {
+    const r = (gs && gs.relations || {})[id] || { score: 0, status: "inconnu" };
+    const sc = r.score == null ? 0 : r.score;
+    if (estEnGuerre(gs, id))
+        return 0.08; // une guerre ouverte, ça se refuse
+    if (isHostile(gs, id))
+        return 0.22;
+    if (sc < 0)
+        return 0.45;
+    if (sc < 25)
+        return 0.72;
+    if (sc < 55)
+        return 0.88;
+    return 0.97;
+}
+// Une brouille déclarée, par opposition à un simple froid.
+function estEnGuerre(gs, id) {
+    const r = (gs && gs.relations || {})[id] || {};
+    const st = String(r.status || "").toLowerCase();
+    if (/ennemi|guerre/.test(st))
+        return true;
+    const riv = (gs && gs.rivals || {})[id];
+    if (riv && (riv.strength || 0) >= 50 && !riv.resolved)
+        return true;
+    return ((gs && gs.clashHistory) || []).some(c => c && (c.target === id || c.targetId === id) && !c.resolved);
+}
 function isHostile(gs, id) {
     var _a;
     if (id === "falltos")
@@ -21882,7 +21952,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "152";
+const VERSION_JEU = "154";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -22027,13 +22097,6 @@ function fondreCatalogue(garde, catalogue) {
         neuf.push(v); });
     return neuf;
 }
-// Toute histoire terminée doit avoir ses deux bornes, et elles doivent dire ce
-// qui s'est vraiment passé. Deux principes :
-//   — l'ordre d'archivage fait foi. Le « dernier contact » avec quelqu'un n'est
-//     pas une date de rupture : on peut recroiser une ex des années après, ça ne
-//     déplace pas l'histoire dans le temps.
-//   — face à une borne inconnue, on affirme le moins possible. Une relation dont
-//     on ignore le début commence l'année où elle s'est terminée, pas en 2023.
 // Une nomination « Live » ne tient que si une tournée la porte, et que son
 // intitulé est bien celui de cette tournée.
 function nominationLiveValide(etat, noms) {
@@ -22064,65 +22127,82 @@ function assainirNominations(etat) {
             cats: noms.cats.map(c => (c && c.category === CAT_LIVE && c.nominated && !c.scripte)
                 ? { ...c, nominated: false, projectTitle: null, score: 0 } : c) } };
 }
+// Toute histoire terminée doit avoir ses deux bornes, et elles doivent dire ce
+// qui s'est vraiment passé. Trois principes :
+//   — on peut sortir deux fois avec la même personne : chaque histoire est une
+//     entrée à part, jamais fondue avec l'autre.
+//   — l'ordre d'archivage fait foi. Le « dernier contact » avec quelqu'un n'est
+//     pas une date de rupture : on peut recroiser une ex des années après.
+//   — face à une borne inconnue, on affirme le moins possible. Une relation dont
+//     on ignore le début commence l'année où elle s'est terminée, pas en 2023.
 function consoliderHistoires(etat) {
     if (!etat || typeof etat !== "object")
         return etat;
     const r = etat.romance || {};
-    const vieux = Array.isArray(etat.romanceHistory) ? etat.romanceHistory : [];
-    const parId = new Map();
-    vieux.forEach(h => { if (h && h.id && !parId.has(h.id))
-        parId.set(h.id, h); });
-    // L'ordre : celui du registre d'abord, puis celles qu'il ne connaît pas
-    // encore, dans l'ordre où elles ont été archivées. La fiancée du début passe
-    // toujours en tête : son histoire précède le récit.
-    const ordre = [];
-    const pousser = id => { if (id && id !== r.partner && ordre.indexOf(id) < 0)
-        ordre.push(id); };
-    vieux.forEach(h => pousser(h && h.id));
-    (r.pastPartners || []).forEach(pousser);
-    const i0 = ordre.indexOf(ROMANCE_INITIALE);
-    if (i0 > 0)
-        ordre.unshift(...ordre.splice(i0, 1));
-    if (!ordre.length)
+    const vieux = (Array.isArray(etat.romanceHistory) ? etat.romanceHistory : []).filter(h => h && h.id);
+    // Les occurrences manquantes : quelqu'un listé dans les ex sans entrée
+    // correspondante. On compte, pour ne pas en perdre une sur deux.
+    const reste = new Map();
+    vieux.forEach(h => reste.set(h.id, (reste.get(h.id) || 0) + 1));
+    const aAjouter = [];
+    (r.pastPartners || []).forEach(id => {
+        const n = reste.get(id) || 0;
+        if (n > 0) {
+            reste.set(id, n - 1);
+            return;
+        }
+        aAjouter.push({ id });
+    });
+    // L'histoire en cours n'est pas une histoire passée : elle n'a pas de fin.
+    // Une histoire terminée avec la même personne, elle, reste au registre.
+    let suite = [...vieux, ...aAjouter]
+        .filter(h => !(r.partner && h.id === r.partner && h.to == null));
+    if (!suite.length)
         return { ...etat, romanceHistory: [] };
+    // La première histoire du récit passe devant : elle a commencé avant lui.
+    const i0 = suite.findIndex(h => h.id === ROMANCE_INITIALE);
+    if (i0 > 0)
+        suite = [suite[i0], ...suite.filter((_, k) => k !== i0)];
     // Ce que la sauvegarde sait VRAIMENT de chacune. Une histoire vécue sous le
     // registre porte le statut qu'elle avait (« couple », « fiancee », « marie ») :
-    // ses dates sont de première main, on n'y touche pas. Une entrée sans statut
-    // vient d'une reconstitution antérieure — ses dates ne valent rien et on les
-    // recalcule, sinon une mauvaise valeur se recopie de version en version.
-    const bornes = ordre.map((id, k) => {
-        const h = parId.get(id) || {};
+    // ses dates sont de première main. Une entrée sans statut vient d'une
+    // reconstitution antérieure — ses dates se recalculent.
+    const bornes = suite.map((h, k) => {
         const vecue = !!h.statut;
-        const fin = vecue && h.to != null ? h.to
-            : ((id === r.exPartner && r.breakupDate) ? r.breakupDate : (vecue ? h.to : null));
-        const debut = vecue && h.from != null ? h.from
-            : ((k === 0 && id === ROMANCE_INITIALE) ? GAME_START_DATE : null);
-        return { h, id, from: debut, to: (fin != null ? fin : null) };
+        const derniere = (k === suite.length - 1);
+        const fin = (vecue && h.to != null) ? h.to
+            : ((derniere && r.exPartner === h.id && r.breakupDate) ? r.breakupDate : (vecue ? h.to : null));
+        // Même une histoire vécue peut n'avoir pas de début noté : celle qui ouvre
+        // le récit commence au récit.
+        const debut = (vecue && h.from != null) ? h.from
+            : ((k === 0 && h.id === ROMANCE_INITIALE) ? GAME_START_DATE : (vecue ? h.from : null));
+        return { h, id: h.id, from: debut, to: (fin != null ? fin : null) };
     });
-    // La borne qui ferme la dernière : la compagne actuelle, sinon la dernière
-    // rupture, sinon aujourd'hui.
     const finale = r.partner ? (r.since || etat.currentDate) : (r.breakupDate || etat.currentDate);
     if (bornes[bornes.length - 1].to == null)
         bornes[bornes.length - 1].to = finale;
-    // 1. Un début manquant se prend sur la fin de l'histoire d'avant.
-    for (let k = 1; k < bornes.length; k++)
-        if (bornes[k].from == null && bornes[k - 1].to != null)
-            bornes[k].from = bornes[k - 1].to;
-    // 2. S'il manque encore, on n'étire rien : l'histoire commence l'année de sa
-    //    fin. C'est la plus petite affirmation compatible avec ce qu'on sait.
-    for (let k = 0; k < bornes.length; k++)
-        if (bornes[k].from == null && bornes[k].to != null)
-            bornes[k].from = bornes[k].to;
-    // 3. Une fin manquante se prend sur le début de l'histoire suivante.
-    for (let k = bornes.length - 2; k >= 0; k--)
-        if (bornes[k].to == null && bornes[k + 1].from != null)
-            bornes[k].to = bornes[k + 1].from;
-    // 4. Dernier recours, et seulement là : la borne de clôture.
+    // On comble de proche en proche, et on recommence : combler un trou en révèle
+    // parfois un autre qui devient alors comblable. Trois tours suffisent.
+    for (let tour = 0; tour < 4; tour++) {
+        // Une fin manquante se prend sur le début de l'histoire suivante.
+        for (let k = bornes.length - 2; k >= 0; k--)
+            if (bornes[k].to == null && bornes[k + 1].from != null)
+                bornes[k].to = bornes[k + 1].from;
+        // Un début manquant se prend sur la fin de l'histoire d'avant.
+        for (let k = 1; k < bornes.length; k++)
+            if (bornes[k].from == null && bornes[k - 1].to != null)
+                bornes[k].from = bornes[k - 1].to;
+        // S'il manque encore, on n'étire rien : l'histoire commence l'année de sa fin.
+        for (let k = 0; k < bornes.length; k++)
+            if (bornes[k].from == null && bornes[k].to != null)
+                bornes[k].from = bornes[k].to;
+    }
+    // Dernier recours : la borne de clôture.
     bornes.forEach(b => { if (b.to == null)
         b.to = finale; if (b.from == null)
         b.from = b.to; });
-    // Le mariage : une seule date est gardée dans la sauvegarde, elle appartient
-    // à l'histoire dans laquelle elle tombe.
+    // Le mariage : une seule date est gardée, elle appartient à l'histoire dans
+    // laquelle elle tombe.
     const noce = r.marriedDate || null;
     return { ...etat, romanceHistory: bornes.map((b, k) => {
             const marieAlors = (b.h.statut === "marie")
@@ -22826,7 +22906,10 @@ function gameReducerInner(state, action) {
                 next.since = prev.since;
             let archives = state.romanceHistory || [];
             if (prev.partner && prev.partner !== next.partner) {
-                const debut = (prev.since == null ? null : prev.since);
+                // L'histoire qui ouvre le récit n'a pas de date de départ notée : elle
+                // commence avec le récit.
+                const debut = (prev.since != null) ? prev.since
+                    : (prev.partner === ROMANCE_INITIALE ? GAME_START_DATE : null);
                 const fin = (action.romance && action.romance.breakupDate) || state.currentDate;
                 const dedans = archives.some(h => h && h.id === prev.partner && h.from === debut && h.to === fin);
                 if (!dedans)
@@ -25612,34 +25695,39 @@ function buildWiki(gs) {
     {
         const dejaNommee = gs.romance.status === "deuil"
             ? ((gs.romanceHistory || [])[(gs.romanceHistory || []).length - 1] || {}).id : null;
-        const hist = (gs.romanceHistory || []).filter(h => h && h.id
-            && h.id !== gs.romance.partner && h.id !== dejaNommee);
-        const vues = new Set();
+        const hist = (gs.romanceHistory || []).filter(h => h && h.id && h.id !== dejaNommee);
+        // Une même personne peut revenir dans une vie : ses histoires se suivent
+        // sur une seule ligne, dans l'ordre, et aucune n'en efface une autre.
+        const parPersonne = new Map();
+        hist.forEach(h => {
+            if (!parPersonne.has(h.id))
+                parPersonne.set(h.id, []);
+            parPersonne.get(h.id).push(h);
+        });
         const lignes = [];
-        for (let i = hist.length - 1; i >= 0; i--) {
-            const h = hist[i];
-            const nom = (_c = charAny(h.id)) === null || _c === void 0 ? void 0 : _c.name;
-            if (!nom || vues.has(h.id))
+        for (const [id, periodes] of parPersonne) {
+            const nom = (_c = charAny(id)) === null || _c === void 0 ? void 0 : _c.name;
+            if (!nom)
                 continue;
-            vues.add(h.id);
-            const bornes = bornesRelation(h.from, h.to);
-            // Si l'histoire est allée jusqu'au mariage, ça se dit.
-            const noces = h.marie
-                ? (h.marieDepuis != null && h.to != null
-                    ? ` (mariés ${new Date(h.marieDepuis).getFullYear()}-${new Date(h.to).getFullYear()})`
-                    : " (mariés)")
-                : "";
-            lignes.push(bornes ? `${nom} : ${bornes}${noces}` : `${nom}${noces}`);
-            if (lignes.length >= 4)
+            const morceaux = periodes.map(h => {
+                const bornes = bornesRelation(h.from, h.to);
+                // Si l'histoire est allée jusqu'au mariage, ça se dit.
+                const noces = h.marie
+                    ? (h.marieDepuis != null && h.to != null
+                        ? ` (mariés ${new Date(h.marieDepuis).getFullYear()}-${new Date(h.to).getFullYear()})`
+                        : " (mariés)")
+                    : "";
+                return bornes ? `${bornes}${noces}` : null;
+            }).filter(Boolean);
+            lignes.push(morceaux.length ? `${nom} : ${morceaux.join(", puis ")}` : nom);
+            if (lignes.length >= 6)
                 break;
         }
         // Les histoires antérieures au registre : on a le nom, pas les dates.
         const sansDate = [...new Set(gs.romance.pastPartners || [])]
-            .filter(id => id !== gs.romance.partner && id !== dejaNommee && !vues.has(id))
+            .filter(id => id !== dejaNommee && !parPersonne.has(id))
             .map(id => { var _a; return (_a = charAny(id)) === null || _a === void 0 ? void 0 : _a.name; }).filter(Boolean);
-        // Dans l'ordre où elles ont eu lieu : on a parcouru à l'envers pour garder
-        // les plus récentes, on remet à l'endroit pour les lire.
-        const toutes = [...lignes.reverse(), ...sansDate.slice(0, 3)];
+        const toutes = [...lignes, ...sansDate.slice(0, 3)];
         if (toutes.length)
             priv += `\n\nRelations passées — ${toutes.join(" · ")}.`;
     }
@@ -29148,7 +29236,6 @@ function FiscoGame() {
         });
     }, [gs, toast]);
     const choosePartner = (0, react_1.useCallback)(charId => {
-        var _a;
         if (gs.romance.status !== "celibataire") {
             toast("Tu n'es pas disponible pour l'instant.", "#e8963c");
             return;
@@ -29167,7 +29254,26 @@ function FiscoGame() {
             toast("Ce n'est pas possible.", "#e8963c");
             return;
         }
-        const name = (_a = CHARS_BY_ID[charId]) === null || _a === void 0 ? void 0 : _a.name;
+        const name = (CHARS_BY_ID[charId] || (gs.newCast || {})[charId] || {}).name;
+        // Une ex, c'est une reconquête : elle a le droit de refuser.
+        if (dejaSortiAvec(gs, charId)) {
+            const chance = chanceDeReconquete(gs, charId);
+            if (Math.random() >= chance) {
+                dispatch({ type: "APPLY", effects: { rel: { [charId]: -6 }, stress: +6 } });
+                addLog(`[REFUS] ${name} ne veut pas recommencer`);
+                toast(`💔 ${name} dit non`, "#f0756a");
+                setRomanceModal(false);
+                narrateRomance(`RECONQUÊTE REFUSÉE : Fisco a tenté de se remettre avec ${name}, elle a refusé. Contexte: ${buildCtx()}. Raconte ce moment + 3 choix.`);
+                return;
+            }
+            dispatch({ type: "SET_ROMANCE", romance: { partner: charId, status: "couple", fidelity: 100, suspicion: 0 } });
+            dispatch({ type: "APPLY", effects: { rel: { [charId]: +20 } } });
+            addLog(`[RETOUR] Fisco se remet avec ${name}`);
+            toast(`❤️ ${name} te redonne une chance`, "#b48ce0");
+            setRomanceModal(false);
+            narrateRomance(`RECONQUÊTE RÉUSSIE : Fisco se remet avec ${name}, après une première histoire finie. Contexte: ${buildCtx()}. Raconte ce retour + 3 choix.`);
+            return;
+        }
         dispatch({ type: "SET_ROMANCE", romance: { partner: charId, status: "couple", fidelity: 100, suspicion: 0 } });
         dispatch({ type: "APPLY", effects: { rel: { [charId]: +30 } } });
         addLog(`[NOUVELLE RELATION] Fisco commence à sortir avec ${name}`);
@@ -31382,11 +31488,27 @@ function FiscoGame() {
             toast("🔒 Impossible depuis la prison", "#f0756a");
             return;
         }
-        const refus = guests.filter(g => isHostile(gs, g.id));
+        // Chacun décide s'il vient. Un refus se paie en lien, pas en argent : la
+        // soirée a lieu quand même, avec ceux qui ont dit oui.
+        const refus = guests.filter(g => Math.random() > chanceDeVenir(gs, g.id));
+        const venus = guests.filter(g => !refus.some(x => x.id === g.id));
         if (refus.length) {
-            toast(`⚔️ ${refus.map(g => g.name).join(", ")} ${refus.length > 1 ? "refusent" : "refuse"} ton invitation`, "#f0756a");
+            toast(`🚫 ${refus.map(g => g.name).join(", ")} ${refus.length > 1 ? "ne viennent" : "ne vient"} pas`, "#e8963c");
+            addLog(`[REFUS] ${refus.map(g => g.name).join(", ")} ${refus.length > 1 ? "déclinent" : "décline"} l'invitation`);
+            dispatch({ type: "APPLY", effects: { rel: Object.fromEntries(refus.map(g => [g.id, -1])) } });
+        }
+        if (!venus.length) {
+            setHangoutModal(false);
+            setHangoutPick({ activity: null, guests: [], choice: null });
+            setHangoutResult({ id: `ho_${Date.now()}`, date: gs.currentDate,
+                activity: activity.label, emoji: activity.emoji, guests: [], names: [],
+                delta: 0, bad: true, detail: null,
+                tale: refus.length === 1
+                    ? `${refus[0].name} ne vient pas. Tu annules, et tu passes la soirée chez toi.`
+                    : `Personne n'a dit oui. Tu éteins ton téléphone et tu restes chez toi.` });
             return;
         }
+        guests = venus;
         const cost = Math.round(activity.cost * (1 + guests.length * 0.35) * (gs.inflation || 1));
         if (gs.money < cost) {
             toast("💸 Cash insuffisant", "#f0756a");
@@ -36708,14 +36830,17 @@ function FiscoGame() {
                 .filter(c => partyGuestUnlocked(c, gs.partyLegend || 0, gs))
                 .filter(c => !isGroup(c))
                 .filter(c => !(gs.deceased || []).includes(c.id) && !(gs.erased || []).includes(c.id))
-                .filter(c => !isHostile(gs, c.id))
                 .filter(c => !hangoutPick.guests.some(g => g.id === c.id))
                 .filter(c => c.name.toLowerCase().includes(hangoutFilter.toLowerCase())), hangJob), gs, "hangout")
                 .slice(0, 90).map(c => {
                 var _a;
                 const sc = (_a = gs.relations[c.id]) === null || _a === void 0 ? void 0 : _a.score;
-                return (react_1.default.createElement("button", { key: c.id, onClick: () => { if (hangoutPick.guests.length < 8)
-                        setHangoutPick(p => ({ ...p, guests: [...p.guests, c] })); }, style: { padding: "4px 8px", background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.6)", borderRadius: 14, fontSize: 9, cursor: "pointer", boxShadow: RELIEF } },
+                // On peut inviter quelqu'un avec qui c'est tendu : le jeu dit
+                // seulement que ce n'est pas gagné.
+                const tendu = isHostile(gs, c.id);
+                return (react_1.default.createElement("button", { key: c.id, title: tendu ? "C'est tendu entre vous : il peut refuser de venir" : "", onClick: () => { if (hangoutPick.guests.length < 8)
+                        setHangoutPick(p => ({ ...p, guests: [...p.guests, c] })); }, style: { padding: "4px 8px", background: tendu ? "rgba(240,117,106,.07)" : "rgba(255,255,255,.04)", border: tendu ? "1px dashed rgba(240,117,106,.35)" : "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.6)", borderRadius: 14, fontSize: 9, cursor: "pointer", boxShadow: RELIEF } },
+                    tendu ? "⚡ " : "",
                     c.emoji,
                     " ",
                     c.name,
@@ -37731,19 +37856,30 @@ function FiscoGame() {
                         && !(gs.npcKids || []).some(k => k.id === pid && gs.currentDate - k.birth < 18 * 365.25 * 86400000))
                         .sort((a, b) => romanceGap(gs, a) - romanceGap(gs, b)).slice(0, 6);
                     return (react_1.default.createElement(react_1.default.Fragment, null,
-                        react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(255,255,255,.4)", marginBottom: 8, lineHeight: 1.5 } }, "Tu ne peux te mettre avec quelqu'un que si vous \u00EAtes d\u00E9j\u00E0 proches. Passe du temps avec elle dans l'onglet Night pour faire monter le lien."),
+                        react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(255,255,255,.4)", marginBottom: 8, lineHeight: 1.5 } },
+                            "Tu ne peux te mettre avec quelqu'un que si vous \u00EAtes d\u00E9j\u00E0 proches. Passe du temps avec elle dans l'onglet Night pour faire monter le lien.",
+                            " ",
+                            "Une ex demande davantage, et elle garde le droit de refuser."),
                         ok.length === 0 && (react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(240,201,138,.75)", fontStyle: "italic", marginBottom: 10, lineHeight: 1.5 } }, "Personne d'assez proche pour l'instant. Construis d'abord une vraie amiti\u00E9.")),
                         ok.map(pid => {
                             const c = CHARS_BY_ID[pid] || (gs.newCast || {})[pid];
                             const rel = gs.relations[pid] || { score: 0 };
-                            return (react_1.default.createElement("button", { key: pid, onClick: () => choosePartner(pid), style: { width: "100%", marginBottom: 6, padding: "10px 12px", background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.85)", borderRadius: 8, textAlign: "left", cursor: "pointer", display: "flex", gap: 10, alignItems: "center", boxShadow: RELIEF } },
+                            // Une ex se reconquiert : on annonce la couleur avant le clic.
+                            const revient = dejaSortiAvec(gs, pid);
+                            const chance = revient ? Math.round(chanceDeReconquete(gs, pid) * 100) : null;
+                            return (react_1.default.createElement("button", { key: pid, onClick: () => choosePartner(pid), style: { width: "100%", marginBottom: 6, padding: "10px 12px", background: revient ? "rgba(180,140,224,.07)" : "rgba(255,255,255,.04)", border: revient ? "1px solid rgba(180,140,224,.3)" : "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.85)", borderRadius: 8, textAlign: "left", cursor: "pointer", display: "flex", gap: 10, alignItems: "center", boxShadow: RELIEF } },
                                 react_1.default.createElement("span", { style: { fontSize: 20 } }, c.emoji),
-                                react_1.default.createElement("span", null,
-                                    react_1.default.createElement("div", { style: { fontSize: 13, fontWeight: 700 } }, c.name),
+                                react_1.default.createElement("span", { style: { flex: 1, minWidth: 0 } },
+                                    react_1.default.createElement("div", { style: { fontSize: 13, fontWeight: 700 } },
+                                        c.name,
+                                        revient ? " · reconquête" : ""),
                                     react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(255,255,255,.4)" } },
                                         bioFor(c),
                                         " \u00B7 lien ",
-                                        Math.round(rel.score || 0)))));
+                                        Math.round(rel.score || 0)),
+                                    revient && (react_1.default.createElement("div", { style: { fontSize: 9.5, color: chance >= 55 ? "rgba(124,224,164,.8)" : chance >= 30 ? "rgba(240,201,138,.8)" : "rgba(240,117,106,.8)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", marginTop: 2 } },
+                                        chance,
+                                        "% qu'elle accepte \u00B7 elle peut dire non")))));
                         }),
                         near.length > 0 && (react_1.default.createElement(react_1.default.Fragment, null,
                             react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(240,201,138,.5)", letterSpacing: 2, fontFamily: "'Space Mono',monospace", margin: "12px 0 6px" } }, "PAS ENCORE ASSEZ PROCHES"),
