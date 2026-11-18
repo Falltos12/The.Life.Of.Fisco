@@ -21800,7 +21800,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "138";
+const VERSION_JEU = "139";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -21849,7 +21849,7 @@ function capStreams(next) {
 // Le plafond de streams, le plafond de célébrité, le palier du cercle et la
 // réparation des couples s'appliquent d'eux-mêmes à chaque geste du joueur.
 // Reste une correction rétroactive, qui n'a de sens qu'une seule fois.
-const VERSION_EQUILIBRE = 8;
+const VERSION_EQUILIBRE = 9;
 // Où se trouve réellement un morceau : on cherche dans toute la discographie.
 function projetDuMorceau(titre, disco) {
     if (!titre || !Array.isArray(disco))
@@ -22006,6 +22006,11 @@ function reprendrePartie(next) {
     // te donne la clé correspondante, sans prestige ni facture.
     if (!Array.isArray(repris.boutique))
         repris.boutique = [];
+    // Un week-end improvisé pouvait laisser la partie nulle part : on la ramène
+    // chez elle plutôt que de la laisser dans une ville qui n'existe pas.
+    if (!CITIES.some(c => c.id === repris.currentCity)) {
+        repris.currentCity = CITIES[0].id;
+    }
     // Un jet ski part sur une remorque : ce n'est pas une place de port. On ne
     // donne la clé que pour un engin qui demande vraiment une infrastructure.
     const aDeja = (cat) => (repris.vehicles || []).some(v => v && v.owned && v.cat === cat && v.price >= 3000000);
