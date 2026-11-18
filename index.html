@@ -16191,7 +16191,7 @@ const WEEKEND_SPOTS = [
     { id: "Dubai", name: "Dubaï", emoji: "🕋", spots: ["une nuit dans le désert", "le sommet d'une tour", "un souk au petit matin", "une piscine à débordement"] },
     { id: "Istanbul", name: "Istanbul", emoji: "🇹🇷", spots: ["une traversée du Bosphore", "un hammam historique", "le Grand Bazar", "une terrasse face à la Corne d'Or"] },
     { id: "Mexico", name: "Mexico", emoji: "🇲🇽", spots: ["une pyramide au lever du jour", "un marché de Coyoacán", "une cantina sans touristes", "les canaux de Xochimilco"] },
-    { id: "TelAviv", name: "Tel-Aviv", emoji: "🇮🇱", country: "Israël", cost: 92000, hours: 14, prestige: 6, desc: "Scène nocturne intense, affaires discrètes." },
+    { id: "TelAviv", name: "Tel-Aviv", emoji: "🇮🇱", spots: ["une plage à six heures du matin", "un marché le vendredi", "un immeuble Bauhaus", "une vieille ville au bord de l'eau"] },
     { id: "Stockholm", name: "Stockholm", emoji: "🇸🇪", spots: ["une île de l'archipel", "un sauna sur l'eau", "la vieille ville sous la neige", "un studio scandinave"] },
     { id: "Kingston", name: "Kingston", emoji: "🇯🇲", spots: ["les Blue Mountains", "un studio d'enregistrement historique", "une plage du nord de l'île", "un sound system de rue"] },
     { id: "Buenos", name: "Buenos Aires", emoji: "🇦🇷", spots: ["une milonga de quartier", "San Telmo le dimanche", "une parrilla de la vieille école", "un théâtre devenu librairie"] },
@@ -16201,6 +16201,65 @@ const WEEKEND_SPOTS = [
     { id: "Barcelone", name: "Barcelone", emoji: "🇪🇸", spots: ["la Sagrada Família vide", "une terrasse du Gòtic", "le Parc Güell à l'aube", "une plage au petit matin"] },
     { id: "Amsterdam", name: "Amsterdam", emoji: "🇳🇱", spots: ["les canaux à vélo", "un musée sans personne", "un café brun centenaire", "une péniche pour la nuit"] },
     { id: "Doha", name: "Doha", emoji: "🇶🇦", spots: ["le souk Waqif", "une dune au coucher du soleil", "le musée d'Art islamique", "une nuit sur un dhow"] },
+    { id: "Toronto", name: "Toronto", emoji: "🍁", spots: ["un studio de Scarborough", "le lac gelé en février", "une tour d'observation à minuit", "un marché couvert le samedi"] },
+    { id: "Nice", name: "Nice", emoji: "🌊", spots: ["la promenade avant le lever du jour", "un marché aux fleurs", "une corniche au-dessus de la mer", "un village perché de l'arrière-pays"] },
+    { id: "Marseille", name: "Marseille", emoji: "⚓", spots: ["une calanque accessible à pied", "un bar du Panier", "le Vieux-Port à l'aube", "un cabanon aux Goudes"] },
+    { id: "Bruxelles", name: "Bruxelles", emoji: "🇧🇪", spots: ["une friterie à deux heures du matin", "une maison Art nouveau", "un café à l'ancienne", "une salle de concert en sous-sol"] },
+    { id: "LosAngeles", name: "Los Angeles", emoji: "🌴", spots: ["une route de canyon sans personne", "un diner ouvert toute la nuit", "un studio dans la Valley", "le Pacifique au coucher du soleil"] },
+    { id: "Montreal", name: "Montréal", emoji: "🇨🇦", spots: ["un escalier en colimaçon du Plateau", "un bagel à trois heures du matin", "le mont Royal sous la neige", "une salle de jazz en sous-sol"] },
+    { id: "London", name: "Londres", emoji: "🇬🇧", spots: ["un pub sans enseigne", "les marchés de l'est à l'ouverture", "un parc dans le brouillard", "un club de Soho"] },
+    { id: "Compton", name: "Compton", emoji: "🏀", spots: ["un terrain de basket grillagé", "un barbecue de quartier", "un garage transformé en studio", "un boulevard interminable"] },
+    { id: "Berlin", name: "Berlin", emoji: "🇩🇪", spots: ["une ancienne centrale devenue club", "un lac en périphérie", "un mur couvert de fresques", "un petit-déjeuner à quatorze heures"] },
+    { id: "Madrid", name: "Madrid", emoji: "🇪🇸", spots: ["une taverne centenaire", "un musée à l'heure creuse", "un rooftop face au couchant", "un marché de quartier"] },
+    { id: "Milan", name: "Milan", emoji: "👗", spots: ["une cour intérieure cachée", "un showroom vide un dimanche", "un apéritif qui dure", "les toits du Duomo"] },
+    { id: "Lagos", name: "Lagos", emoji: "🇳🇬", spots: ["un studio d'Ikeja", "une plage à l'écart", "un marché à la tombée du jour", "une fête qui ne s'arrête pas"] },
+    { id: "Casablanca", name: "Casablanca", emoji: "🇲🇦", spots: ["un café sur la corniche", "la médina à l'heure du thé", "un marché aux poissons", "une villa Art déco"] },
+    { id: "Dakar", name: "Dakar", emoji: "🇸🇳", spots: ["une plage de Ngor", "un atelier de couturier", "le marché Sandaga", "une soirée mbalax"] },
+    { id: "Abidjan", name: "Abidjan", emoji: "🇨🇮", spots: ["un maquis en bord de lagune", "un studio de Yopougon", "la lagune en pirogue", "un marché de nuit"] },
+    { id: "SaoPaulo", name: "São Paulo", emoji: "🇧🇷", spots: ["une fresque de rue immense", "un restaurant à minuit", "un rooftop au-dessus du béton", "un disquaire oublié"] },
+    { id: "Chicago", name: "Chicago", emoji: "🌬️", spots: ["le lac quand il gèle", "un club de blues", "une pizzeria du South Side", "l'architecture vue du fleuve"] },
+    { id: "Atlanta", name: "Atlanta", emoji: "🍑", spots: ["un studio ouvert jour et nuit", "un dîner soul food", "une fête dans une maison en bois", "une forêt urbaine"] },
+    { id: "LasVegas", name: "Las Vegas", emoji: "🎰", spots: ["une suite trop grande", "le désert à vingt minutes", "une table à cinq heures du matin", "une chapelle ridicule"] },
+    { id: "Houston", name: "Houston", emoji: "🤠", spots: ["un drive-in encore debout", "un centre spatial", "une fête de quartier", "un restaurant texan sans carte"] },
+    { id: "Vancouver", name: "Vancouver", emoji: "🌲", spots: ["une forêt pluviale à une heure de route", "un marché sur l'île", "la montagne depuis la mer", "un studio face au port"] },
+    { id: "Monaco", name: "Monaco", emoji: "🇲🇨", spots: ["un virage mythique à pied", "un port rempli de bateaux", "un casino à l'ouverture", "une route en corniche"] },
+    { id: "AbuDhabi", name: "Abou Dabi", emoji: "🇦🇪", spots: ["une mosquée au lever du jour", "un circuit vide", "une île de mangroves", "un désert à perte de vue"] },
+    { id: "Mumbai", name: "Mumbai", emoji: "🇮🇳", spots: ["un train de banlieue à l'heure de pointe", "un studio de Bollywood", "la mer depuis la promenade", "un marché aux épices"] },
+    { id: "Athenes", name: "Athènes", emoji: "🏛️", spots: ["l'Acropole à l'ouverture", "une taverne de quartier", "un cinéma en plein air", "un port de pêcheurs"] },
+    { id: "Kyoto", name: "Kyoto", emoji: "⛩️", spots: ["une allée de torii à l'aube", "un jardin de mousse", "une maison de thé", "une bambouseraie dans le vent"] },
+    { id: "HongKong", name: "Hong Kong", emoji: "🏙️", spots: ["un tram à impériale", "un marché de nuit", "un sommet au-dessus des nuages", "une île de pêcheurs"] },
+    { id: "Shanghai", name: "Shanghai", emoji: "🏮", spots: ["le Bund à six heures", "une ruelle de maisons basses", "un bar caché derrière une boutique", "un jardin classique"] },
+    { id: "Hanoi", name: "Hanoï", emoji: "🇻🇳", spots: ["une ruelle large d'un mètre", "un café à l'œuf", "un lac au petit matin", "une baie semée d'îlots"] },
+    { id: "Taipei", name: "Taipei", emoji: "🇹🇼", spots: ["un marché de nuit sans fin", "une source chaude en montagne", "un temple dans la fumée d'encens", "une route de crête"] },
+    { id: "Jaipur", name: "Jaipur", emoji: "🕌", spots: ["un palais rose au lever du jour", "un atelier de teinture", "un escalier d'eau", "un fort au-dessus de la plaine"] },
+    { id: "Petra", name: "Petra", emoji: "🏜️", spots: ["un défilé de roche au petit matin", "un campement bédouin", "un tombeau taillé dans la falaise", "un ciel absolument noir"] },
+    { id: "LeCaire", name: "Le Caire", emoji: "🐫", spots: ["un plateau à l'aube", "un café vieux de trois siècles", "le fleuve au crépuscule", "un bazar étourdissant"] },
+    { id: "Zanzibar", name: "Zanzibar", emoji: "🏝️", spots: ["une ruelle de Stone Town", "un banc de sable à marée basse", "une plantation d'épices", "un boutre au coucher du soleil"] },
+    { id: "CapVert", name: "Cap-Vert", emoji: "🇨🇻", spots: ["une plage de sable noir", "un volcan habité", "une soirée de morna", "un port de pêche coloré"] },
+    { id: "Venise", name: "Venise", emoji: "🚤", spots: ["un canal sans personne", "une île de verriers", "un bacaro à l'heure de l'ombre", "la lagune dans la brume"] },
+    { id: "Florence", name: "Florence", emoji: "🎨", spots: ["une fresque dans une église vide", "un atelier de cuir", "un pont au lever du jour", "une colline au-dessus des toits"] },
+    { id: "Naples", name: "Naples", emoji: "🍕", spots: ["une pizzeria sans réservation", "un escalier qui descend à la mer", "un cloître en pleine ville", "un volcan en fond de décor"] },
+    { id: "Seville", name: "Séville", emoji: "💃", spots: ["un patio couvert d'azulejos", "une cour d'orangers", "une taverne de flamenco", "un fleuve au crépuscule"] },
+    { id: "Porto", name: "Porto", emoji: "🍷", spots: ["une cave de l'autre rive", "une gare tapissée d'azulejos", "une librairie trop belle", "un pont en fer"] },
+    { id: "Vienne", name: "Vienne", emoji: "🎻", spots: ["un café où l'on reste trois heures", "une salle de concert dorée", "un parc impérial", "un marché du samedi"] },
+    { id: "Prague", name: "Prague", emoji: "🏰", spots: ["un pont à cinq heures du matin", "une cour baroque", "une brasserie centenaire", "une colline au-dessus des toits"] },
+    { id: "Copenhague", name: "Copenhague", emoji: "🚲", spots: ["un port où l'on se baigne", "un quartier libre", "un design shop sans enseigne", "une forêt à vingt minutes"] },
+    { id: "Oslo", name: "Oslo", emoji: "🇳🇴", spots: ["un fjord en bateau", "un sauna flottant", "une colline de tremplins", "un opéra sur lequel on marche"] },
+    { id: "Edimbourg", name: "Édimbourg", emoji: "🏴", spots: ["une ruelle en escalier", "une colline en pleine ville", "une distillerie de campagne", "un château dans la brume"] },
+    { id: "Santorin", name: "Santorin", emoji: "🇬🇷", spots: ["une caldeira au coucher du soleil", "un village blanc désert", "une plage de galets noirs", "une cave creusée dans la roche"] },
+    { id: "Capri", name: "Capri", emoji: "⛵", spots: ["une grotte éclairée par en dessous", "un sentier au-dessus du vide", "une place minuscule", "un bateau à l'aube"] },
+    { id: "SaintBarth", name: "Saint-Barthélemy", emoji: "🇧🇱", spots: ["une anse accessible à pied", "un ponton au coucher du soleil", "une route en lacets", "une plage battue par le vent"] },
+    { id: "Maldives", name: "Maldives", emoji: "🐠", spots: ["un lagon transparent", "un banc de sable qui disparaît", "un récif à masque et tuba", "un ciel sans aucune lumière"] },
+    { id: "BoraBora", name: "Bora-Bora", emoji: "🌺", spots: ["un motu désert", "un lagon à l'aube", "un pic volcanique dans les nuages", "une pirogue à balancier"] },
+    { id: "Tulum", name: "Tulum", emoji: "🌿", spots: ["un cénote dans la jungle", "des ruines face à la mer", "une route de sable", "une fête sous les arbres"] },
+    { id: "Aspen", name: "Aspen", emoji: "⛷️", spots: ["une piste à l'ouverture", "un chalet en rondins", "une forêt de trembles dorés", "un bar après le ski"] },
+    { id: "Courchevel", name: "Courchevel", emoji: "🎿", spots: ["un hors-piste au petit matin", "un refuge d'altitude", "une descente aux flambeaux", "une table en haut des pistes"] },
+    { id: "SaintMoritz", name: "Saint-Moritz", emoji: "🏔️", spots: ["un lac gelé où l'on court", "un train panoramique", "un palace d'un autre siècle", "une vallée sans un bruit"] },
+    { id: "Patagonie", name: "Patagonie", emoji: "🏔️", spots: ["un glacier qui craque", "une estancia isolée", "un vent qui ne s'arrête jamais", "un lac couleur laiton"] },
+    { id: "Sahara", name: "Désert du Sahara", emoji: "🏜️", spots: ["une dune au lever du jour", "un bivouac sous les étoiles", "une oasis improbable", "une piste sans aucun repère"] },
+    { id: "Nairobi", name: "Nairobi", emoji: "🦒", spots: ["un parc national à vingt minutes", "un marché d'artisans", "un rooftop face aux collines", "une réserve au lever du jour"] },
+    { id: "Beyrouth", name: "Beyrouth", emoji: "🇱🇧", spots: ["une corniche au coucher du soleil", "un immeuble des années trente", "une table qui n'en finit pas", "un village de montagne"] },
+    { id: "Tbilissi", name: "Tbilissi", emoji: "🇬🇪", spots: ["un bain sulfureux voûté", "une cour en bois sculpté", "un club dans un stade", "une route militaire vers le nord"] },
 ];
 const CONCERT_ARTISTS_FALLBACK = ["un groupe de rock", "un collectif de jazz", "un DJ international", "un orchestre symphonique", "un rappeur émergent", "une légende en tournée d'adieu"];
 const MATCH_SCORES = [[0, 0], [1, 0], [2, 0], [2, 1], [3, 0], [3, 1], [3, 2], [1, 1], [2, 2], [4, 1], [4, 0], [0, 1], [1, 2], [0, 2], [1, 3], [2, 3], [5, 1], [0, 3]];
@@ -21741,7 +21800,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "136";
+const VERSION_JEU = "138";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -29932,6 +29991,8 @@ function FiscoGame() {
     const [boutTexte, setBoutTexte] = (0, react_1.useState)("");
     const [boutBudget, setBoutBudget] = (0, react_1.useState)(false);
     const [boutPlus, setBoutPlus] = (0, react_1.useState)(false);
+    const [weTexte, setWeTexte] = (0, react_1.useState)("");
+    const [wePlus, setWePlus] = (0, react_1.useState)(false);
     const [talentZone, setTalentZone] = (0, react_1.useState)("toutes");
     const [talentBudget, setTalentBudget] = (0, react_1.useState)(false);
     const [talentsPlus, setTalentsPlus] = (0, react_1.useState)(false);
@@ -30965,16 +31026,20 @@ function FiscoGame() {
             energy: activity.energy, health: (activity.health || 0) + (bad ? -2 : 0),
             stress: (activity.stress || 0) + (bad ? 8 : -5), entry });
         advanceHours((activity.days || 0) * 24 || 6);
-        if (activity.sub === "weekend" && choice && choice.id && choice.id !== gs.city) {
-            const back0 = gs.city;
-            dispatch({ type: "TRAVEL", city: choice.id });
-            setTimeout(() => { dispatch({ type: "TRAVEL", city: back0 }); addLog(`[VOYAGE] Retour à ${back0}`); }, 1500);
+        // Certaines destinations ne figurent pas sur la carte des villes : on y
+        // part en récit, pas en avion.
+        if (activity.sub === "weekend" && choice && choice.id && choice.id !== gs.currentCity
+            && CITIES.some(c => c.id === choice.id)) {
+            const back0 = gs.currentCity;
+            dispatch({ type: "TRAVEL", cityId: choice.id, cost: 0, prestige: 0 });
+            setTimeout(() => { dispatch({ type: "TRAVEL", cityId: back0, cost: 0, prestige: 0 }); addLog(`[VOYAGE] Retour à ${back0}`); }, 1500);
         }
-        if (activity.sub === "match" && choice && choice.city && choice.city !== gs.city) {
+        if (activity.sub === "match" && choice && choice.city && choice.city !== gs.currentCity
+            && CITIES.some(c => c.id === choice.city)) {
             // Se déplacer pour le match, puis revenir trois jours plus tard
-            const back = gs.city;
-            dispatch({ type: "TRAVEL", city: choice.city });
-            setTimeout(() => { dispatch({ type: "TRAVEL", city: back }); addLog(`[VOYAGE] Retour à ${back}`); }, 1500);
+            const back = gs.currentCity;
+            dispatch({ type: "TRAVEL", cityId: choice.city, cost: 0, prestige: 0 });
+            setTimeout(() => { dispatch({ type: "TRAVEL", cityId: back, cost: 0, prestige: 0 }); addLog(`[VOYAGE] Retour à ${back}`); }, 1500);
         }
         addLog(`[MOMENT] ${activity.label} avec ${guests.map(g => g.name).join(", ")} — ${delta > 0 ? "+" : ""}${delta}`);
         setHangoutModal(false);
@@ -36253,15 +36318,25 @@ function FiscoGame() {
                         }))));
                 }
                 if (s === "weekend") {
+                    const q = weTexte.trim().toLowerCase();
+                    const liste = WEEKEND_SPOTS.filter(w => !q || `${w.name} ${(w.spots || []).join(" ")}`.toLowerCase().includes(q));
+                    const vues = wePlus ? liste : liste.slice(0, 24);
                     return (react_1.default.createElement("div", { style: { marginBottom: 12 } },
                         react_1.default.createElement(Head, { txt: "DESTINATION" }),
-                        react_1.default.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 4 } }, WEEKEND_SPOTS.map(w => {
+                        react_1.default.createElement("input", { value: weTexte, onChange: e => { setWeTexte(e.target.value); setWePlus(false); }, placeholder: "\uD83D\uDD0D Une ville, une envie\u2026", style: { width: "100%", padding: "7px 10px", marginBottom: 6, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.12)", borderRadius: 8, color: "#fff", fontSize: 12, outline: "none" } }),
+                        react_1.default.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 4 } }, vues.map(w => {
                             var _a;
                             return (react_1.default.createElement(Chip, { key: w.id, sel: ((_a = hangoutPick.choice) === null || _a === void 0 ? void 0 : _a.id) === w.id, onClick: () => setHangoutPick(p => ({ ...p, choice: w })) },
                                 w.emoji,
                                 " ",
                                 w.name));
-                        }))));
+                        })),
+                        !liste.length && react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.45)", fontStyle: "italic", padding: "6px 2px" } }, "Aucune destination ne correspond."),
+                        liste.length > vues.length && (react_1.default.createElement("button", { onClick: () => setWePlus(true), style: { width: "100%", marginTop: 6, padding: "6px", background: "rgba(255,255,255,.04)", border: "1px dashed rgba(255,255,255,.18)", color: "rgba(255,255,255,.55)", borderRadius: 8, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                            "\u25BE Voir les ",
+                            liste.length - vues.length,
+                            " autres destinations")),
+                        !!hangoutPick.choice && hangoutPick.choice.spots && (react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(255,255,255,.4)", fontStyle: "italic", marginTop: 6, lineHeight: 1.5 } }, hangoutPick.choice.spots.join(" · ")))));
                 }
                 if (s === "match") {
                     return (react_1.default.createElement("div", { style: { marginBottom: 12 } },
