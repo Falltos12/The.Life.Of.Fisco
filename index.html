@@ -21847,7 +21847,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "147";
+const VERSION_JEU = "148";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -21992,6 +21992,59 @@ function fondreCatalogue(garde, catalogue) {
         neuf.push(v); });
     return neuf;
 }
+// Toute histoire terminée doit avoir ses deux bornes. La sauvegarde n'en garde
+// qu'une (la dernière rupture) ; le reste se déduit sans rien inventer : le
+// récit commence à une date connue, deux histoires ne se chevauchent pas, et le
+// dernier contact avec quelqu'un dit quand on a cessé de se voir.
+function consoliderHistoires(etat) {
+    if (!etat || typeof etat !== "object")
+        return etat;
+    const r = etat.romance || {};
+    const rel = etat.relations || {};
+    const vieux = Array.isArray(etat.romanceHistory) ? etat.romanceHistory : [];
+    const parId = new Map();
+    vieux.forEach(h => { if (h && h.id && !parId.has(h.id))
+        parId.set(h.id, h); });
+    // Toutes les anciennes, d'où qu'elles viennent.
+    const ids = [...new Set([...vieux.map(h => h && h.id), ...(r.pastPartners || [])])]
+        .filter(id => id && id !== r.partner);
+    if (!ids.length)
+        return { ...etat, romanceHistory: [] };
+    const contact = id => ((rel[id] || {}).lastContact) || null;
+    // Chronologie : la date connue de chacune, à défaut l'ordre d'archivage.
+    const reperePour = id => {
+        const h = parId.get(id) || {};
+        return h.to || ((id === r.exPartner && r.breakupDate) ? r.breakupDate : null) || contact(id) || null;
+    };
+    const ordre = ids.slice().sort((a, b) => {
+        const da = reperePour(a), db = reperePour(b);
+        if (da != null && db != null)
+            return da - db;
+        if (da != null)
+            return -1;
+        if (db != null)
+            return 1;
+        return ids.indexOf(a) - ids.indexOf(b);
+    });
+    // La borne qui ferme la dernière histoire : la compagne actuelle, sinon la
+    // dernière rupture, sinon aujourd'hui.
+    const borneFinale = r.partner ? (r.since || etat.currentDate) : (r.breakupDate || etat.currentDate);
+    let curseur = GAME_START_DATE;
+    const liste = ordre.map((id, k) => {
+        const h = parId.get(id) || {};
+        const dernier = (k === ordre.length - 1);
+        const debut = (h.from != null) ? h.from : curseur;
+        const fin = (h.to != null) ? h.to
+            : ((id === r.exPartner && r.breakupDate) ? r.breakupDate
+                : (contact(id) || (dernier ? borneFinale : null)));
+        const borne = (fin != null && fin >= debut) ? fin : (dernier ? borneFinale : null);
+        if (borne != null)
+            curseur = borne;
+        return { ...h, id, from: debut, to: borne,
+            fromApprox: (h.fromApprox !== undefined) ? h.fromApprox : (k === 0 && id === ROMANCE_INITIALE) };
+    });
+    return { ...etat, romanceHistory: liste };
+}
 function rafraichirCatalogues(etat) {
     if (!etat || typeof etat !== "object")
         return etat;
@@ -22055,36 +22108,6 @@ function reprendrePartie(next) {
         repris.boutique = [];
     if (!Array.isArray(repris.romanceHistory))
         repris.romanceHistory = [];
-    // Rien n'était noté avant : on reconstitue la chaîne des histoires avec ce
-    // que la sauvegarde sait réellement — le début du récit, les derniers
-    // contacts, la date de rupture. Deux histoires ne se chevauchent pas : la fin
-    // de l'une ouvre la suivante.
-    if (!repris.romanceHistory.length && ((repris.romance || {}).pastPartners || []).length) {
-        const r = repris.romance, rel = repris.relations || {};
-        const quand = id => ((rel[id] || {}).lastContact) || null;
-        const anciennes = [...new Set(r.pastPartners)].filter(Boolean);
-        const ordre = anciennes.slice().sort((a, b) => {
-            const da = quand(a), db = quand(b);
-            if (da != null && db != null)
-                return da - db;
-            if (da != null)
-                return -1;
-            if (db != null)
-                return 1;
-            return anciennes.indexOf(a) - anciennes.indexOf(b);
-        });
-        let curseur = GAME_START_DATE;
-        repris.romanceHistory = ordre.map((id, i) => {
-            const dernier = (i === ordre.length - 1);
-            const fin = (id === r.exPartner && r.breakupDate) ? r.breakupDate
-                : (quand(id) || (dernier ? (r.since || r.breakupDate || repris.currentDate) : null));
-            const debut = curseur;
-            if (fin)
-                curseur = fin;
-            return { id, from: debut, fromApprox: (i === 0 && id === ROMANCE_INITIALE),
-                to: fin || null, statut: null, reconstitue: true };
-        });
-    }
     // La compagne actuelle n'a pas de date ? La rupture précédente en donne une
     // borne basse : la nouvelle histoire n'a pas pu commencer avant.
     if (repris.romance && repris.romance.partner && repris.romance.since == null
@@ -24530,7 +24553,7 @@ function gameReducerInner(state, action) {
             merged.hits = (merged.hits || []).map(h => ({ ...h, title: fixT(h.title) }));
             // Une partie rouverte après coup retrouve Damon au niveau de son époque,
             // et le catalogue complet du garage et de l'agence immobilière.
-            return rattraperDamon(rafraichirCatalogues(merged));
+            return rattraperDamon(consoliderHistoires(rafraichirCatalogues(merged)));
         }
         case "RESET": return JSON.parse(JSON.stringify(INIT));
         default: return state;
