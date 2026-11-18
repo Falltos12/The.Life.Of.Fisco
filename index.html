@@ -20124,49 +20124,713 @@ const ENDINGS = [
         text: "Tu n'es pas entré dans l'histoire, et tu n'as pas sombré non plus.\n\nTu as fait de la musique, monté des entreprises, connu des gens, aimé, perdu, recommencé. Il y a eu des sommets et des périodes creuses, des choix brillants et d'autres que tu préfères oublier.\n\nAu fond, c'est déjà beaucoup plus que ce qu'aurait pu espérer un gamin abandonné dans une forêt." },
 ];
 const PROPS_CAT = [
-    { id: "villa_tarka", name: "Villa Tarka", emoji: "🏝️", price: 0, rent: 198000, prestige: 30, loc: "Nassau", owned: true, desc: "Ta villa principale. Piscine, studio privé, vue mer." },
+    { id: "villa_tarka", name: "Villa Tarka", emoji: "🏝️", price: 0, rent: 198000, prestige: 8, loc: "Nassau", owned: true, desc: "Ta villa principale. Piscine, studio privé, vue mer." },
     { id: "penthouse_ny", name: "Penthouse NYC", emoji: "🏙️", price: 121680000, rent: 871200, prestige: 25, loc: "New York", owned: false, desc: "400m² à Tribeca. Vue Manhattan 360°." },
     { id: "villa_ibiza", name: "Villa Ibiza", emoji: "🌊", price: 74360000, rent: 554400, prestige: 20, loc: "Ibiza", owned: false, desc: "6 chambres. Accès direct à la mer." },
-    { id: "estate_miami", name: "Estate Miami", emoji: "🌴", price: 216320000, rent: 1108800, prestige: 28, loc: "Miami", owned: false, desc: "Manoir baie de Biscayne. Ponton yacht." },
-    { id: "studio_paris", name: "Studio Paris", emoji: "🗼", price: 30420000, rent: 158400, prestige: 10, loc: "Paris", owned: false, desc: "Pied-à-terre Marais." },
-    { id: "chalet_nice", name: "Villa Nice", emoji: "🌴", price: 50700000, rent: 257400, prestige: 12, loc: "Nice", owned: false, desc: "Vue sur mer, à deux pas d'où tout a commencé." },
-    { id: "penthouse_dubai", name: "Penthouse Dubaï", emoji: "🏙️", price: 324480000, rent: 1504800, prestige: 35, loc: "Dubaï", owned: false, desc: "Étage complet, vue Burj Khalifa." },
-    { id: "apart_tokyo", name: "Appartement Tokyo", emoji: "🗾", price: 64220000, rent: 297000, prestige: 14, loc: "Tokyo", owned: false, desc: "Shibuya, discret et ultra-moderne." },
-    { id: "ranch_texas", name: "Ranch Texas", emoji: "🤠", price: 87880000, rent: 356400, prestige: 15, loc: "USA", owned: false, desc: "200 hectares, loin de tout, calme absolu." },
+    { id: "estate_miami", name: "Estate Miami", emoji: "🌴", price: 216320000, rent: 1108800, prestige: 32, loc: "Miami", owned: false, desc: "Manoir baie de Biscayne. Ponton yacht." },
+    { id: "studio_paris", name: "Studio Paris", emoji: "🗼", price: 30420000, rent: 158400, prestige: 16, loc: "Paris", owned: false, desc: "Pied-à-terre Marais." },
+    { id: "chalet_nice", name: "Villa Nice", emoji: "🌴", price: 50700000, rent: 257400, prestige: 16, loc: "Nice", owned: false, desc: "Vue sur mer, à deux pas d'où tout a commencé." },
+    { id: "penthouse_dubai", name: "Penthouse Dubaï", emoji: "🏙️", price: 324480000, rent: 1504800, prestige: 32, loc: "Dubaï", owned: false, desc: "Étage complet, vue Burj Khalifa." },
+    { id: "apart_tokyo", name: "Appartement Tokyo", emoji: "🗾", price: 64220000, rent: 297000, prestige: 20, loc: "Tokyo", owned: false, desc: "Shibuya, discret et ultra-moderne." },
+    { id: "ranch_texas", name: "Ranch Texas", emoji: "🤠", price: 87880000, rent: 356400, prestige: 20, loc: "USA", owned: false, desc: "200 hectares, loin de tout, calme absolu." },
     { id: "mansion_la", name: "Manoir Los Angeles", emoji: "🌇", price: 270400000, rent: 1267200, prestige: 32, loc: "Los Angeles", owned: false, desc: "Bel-Air. Studio d'enregistrement intégré." },
-    { id: "chateau_loire", name: "Château Loire", emoji: "🏰", price: 175760000, rent: 514800, prestige: 22, loc: "France", owned: false, desc: "Un château du XVIIe, complètement rénové." },
-    { id: "ile_privee", name: "Île Privée Bahamas", emoji: "🏝️", price: 1000000000, rent: 0, prestige: 50, loc: "Bahamas", owned: false, desc: "12 hectares au large de Nassau. Le QG du festival. Le bien le plus cher du jeu." },
-    { id: "chalet_gstaad", name: "Chalet Gstaad", emoji: "🏔️", price: 236600000, rent: 712800, prestige: 33, loc: "Suisse", owned: false, desc: "Sommet enneigé, discrétion absolue." },
-    { id: "palazzo_venise", name: "Palazzo Venise", emoji: "🛶", price: 405600000, rent: 990000, prestige: 42, loc: "Venise", owned: false, desc: "Un palais du XVe sur le Grand Canal." },
+    { id: "chateau_loire", name: "Château Loire", emoji: "🏰", price: 175760000, rent: 514800, prestige: 25, loc: "France", owned: false, desc: "Un château du XVIIe, complètement rénové." },
+    { id: "ile_privee", name: "Île Privée Bahamas", emoji: "🏝️", price: 1000000000, rent: 0, prestige: 40, loc: "Bahamas", owned: false, desc: "12 hectares au large de Nassau. Le QG du festival. Le bien le plus cher du jeu." },
+    { id: "chalet_gstaad", name: "Chalet Gstaad", emoji: "🏔️", price: 236600000, rent: 712800, prestige: 32, loc: "Suisse", owned: false, desc: "Sommet enneigé, discrétion absolue." },
+    { id: "palazzo_venise", name: "Palazzo Venise", emoji: "🛶", price: 405600000, rent: 990000, prestige: 40, loc: "Venise", owned: false, desc: "Un palais du XVe sur le Grand Canal." },
     { id: "penthouse_hk", name: "Penthouse Hong Kong", emoji: "🌃", price: 473200000, rent: 1584000, prestige: 40, loc: "Hong Kong", owned: false, desc: "Le plus haut étage de la ville." },
-    { id: "villa_capri", name: "Villa Capri", emoji: "🍋", price: 256880000, rent: 792000, prestige: 34, loc: "Capri", owned: false, desc: "Falaise privée surplombant la Méditerranée." },
-    { id: "skyscraper_dubai", name: "Étage complet — Burj Azure", emoji: "🌆", price: 642200000, rent: 1980000, prestige: 60, loc: "Dubaï", owned: false, desc: "Un gratte-ciel entier à ton nom." },
-    { id: "private_atoll", name: "Atoll Privé Polynésie", emoji: "🏝️", price: 988000000, rent: 0, prestige: 75, loc: "Polynésie", owned: false, desc: "Un atoll entier, ton propre royaume insulaire." },
-    { id: "castle_scotland", name: "Château Écossais", emoji: "🏴", price: 546000000, rent: 1620000, prestige: 58, loc: "Écosse", owned: false, desc: "Un domaine ancestral avec ses propres terres de chasse." },
-    { id: "space_estate", name: "Résidence Aspen Signature", emoji: "🏔️", price: 767000000, rent: 2160000, prestige: 65, loc: "Aspen", owned: false, desc: "La propriété la plus exclusive des Rocheuses." },
+    { id: "villa_capri", name: "Villa Capri", emoji: "🍋", price: 256880000, rent: 792000, prestige: 32, loc: "Capri", owned: false, desc: "Falaise privée surplombant la Méditerranée." },
+    { id: "skyscraper_dubai", name: "Étage complet — Burj Azure", emoji: "🌆", price: 642200000, rent: 1980000, prestige: 40, loc: "Dubaï", owned: false, desc: "Un gratte-ciel entier à ton nom." },
+    { id: "private_atoll", name: "Atoll Privé Polynésie", emoji: "🏝️", price: 988000000, rent: 0, prestige: 40, loc: "Polynésie", owned: false, desc: "Un atoll entier, ton propre royaume insulaire." },
+    { id: "castle_scotland", name: "Château Écossais", emoji: "🏴", price: 546000000, rent: 1620000, prestige: 40, loc: "Écosse", owned: false, desc: "Un domaine ancestral avec ses propres terres de chasse." },
+    { id: "space_estate", name: "Résidence Aspen Signature", emoji: "🏔️", price: 767000000, rent: 2160000, prestige: 40, loc: "Aspen", owned: false, desc: "La propriété la plus exclusive des Rocheuses." },
+    { id: "p_hotel_particulier_du_marais", name: "Hôtel particulier du Marais", emoji: "🏛️", price: 174000000, rent: 1250000, prestige: 25, loc: "Paris", owned: false, desc: "Cour pavée, dix-huit pièces, classé." },
+    { id: "p_triplex_avenue_montaigne", name: "Triplex avenue Montaigne", emoji: "🏙️", price: 136000000, rent: 979000, prestige: 25, loc: "Paris", owned: false, desc: "Terrasse sur les toits, vue Tour Eiffel." },
+    { id: "p_appartement_place_des_vosges", name: "Appartement place des Vosges", emoji: "🏛️", price: 93000000, rent: 670000, prestige: 20, loc: "Paris", owned: false, desc: "Poutres d'époque, parquet Versailles." },
+    { id: "p_villa_de_saint_jean_cap_ferrat", name: "Villa de Saint-Jean-Cap-Ferrat", emoji: "🌊", price: 403000000, rent: 2900000, prestige: 40, loc: "Côte d'Azur", owned: false, desc: "Pins parasols, accès privé à la mer." },
+    { id: "p_propriete_de_saint_tropez", name: "Propriété de Saint-Tropez", emoji: "🌴", price: 236000000, rent: 1700000, prestige: 32, loc: "Côte d'Azur", owned: false, desc: "Pinède, piscine à débordement, héliport." },
+    { id: "p_penthouse_du_carre_d_or", name: "Penthouse du Carré d'Or", emoji: "🏙️", price: 279000000, rent: 2010000, prestige: 32, loc: "Monaco", owned: false, desc: "Trois cents mètres carrés au-dessus du port." },
+    { id: "p_villa_belle_epoque", name: "Villa Belle Époque", emoji: "🏛️", price: 112000000, rent: 806000, prestige: 25, loc: "Menton", owned: false, desc: "Jardin d'agrumes en terrasses." },
+    { id: "p_chalet_de_courchevel_1850", name: "Chalet de Courchevel 1850", emoji: "🏔️", price: 248000000, rent: 1790000, prestige: 32, loc: "Alpes", owned: false, desc: "Ski aux pieds, spa, salle de projection." },
+    { id: "p_chalet_de_gstaad", name: "Chalet de Gstaad", emoji: "🏔️", price: 341000000, rent: 2460000, prestige: 32, loc: "Suisse", owned: false, desc: "Bois ancien, cheminées ouvertes, discrétion absolue." },
+    { id: "p_villa_de_verbier", name: "Villa de Verbier", emoji: "🏔️", price: 155000000, rent: 1120000, prestige: 25, loc: "Suisse", owned: false, desc: "Baies vitrées sur la vallée." },
+    { id: "p_villa_d_ibiza_nord", name: "Villa d'Ibiza Nord", emoji: "🌊", price: 124000000, rent: 893000, prestige: 25, loc: "Baléares", owned: false, desc: "Finca restaurée, oliviers centenaires." },
+    { id: "p_domaine_de_majorque", name: "Domaine de Majorque", emoji: "🌊", price: 174000000, rent: 1250000, prestige: 25, loc: "Baléares", owned: false, desc: "Vingt hectares, oliveraie, chapelle privée." },
+    { id: "p_villa_de_marbella", name: "Villa de Marbella", emoji: "🌴", price: 136000000, rent: 979000, prestige: 25, loc: "Espagne", owned: false, desc: "Golf, sept chambres, cave climatisée." },
+    { id: "p_palazzo_du_grand_canal", name: "Palazzo du Grand Canal", emoji: "🏛️", price: 186000000, rent: 1340000, prestige: 25, loc: "Venise", owned: false, desc: "Entrée par l'eau, fresques du XVIIIe." },
+    { id: "p_villa_du_lac_de_come", name: "Villa du lac de Côme", emoji: "🌊", price: 217000000, rent: 1560000, prestige: 32, loc: "Italie", owned: false, desc: "Ponton privé, jardin à l'italienne." },
+    { id: "p_masseria_des_pouilles", name: "Masseria des Pouilles", emoji: "🫒", price: 74400000, rent: 536000, prestige: 20, loc: "Italie", owned: false, desc: "Murs de pierre sèche, deux cents oliviers." },
+    { id: "p_villa_de_capri", name: "Villa de Capri", emoji: "🌊", price: 161000000, rent: 1160000, prestige: 25, loc: "Italie", owned: false, desc: "Suspendue au-dessus des Faraglioni." },
+    { id: "p_domaine_viticole_de_toscane", name: "Domaine viticole de Toscane", emoji: "🍇", price: 248000000, rent: 1790000, prestige: 32, loc: "Italie", owned: false, desc: "Cent hectares, chai, villa du XVIe." },
+    { id: "p_villa_de_mykonos", name: "Villa de Mykonos", emoji: "🌊", price: 99200000, rent: 714000, prestige: 20, loc: "Grèce", owned: false, desc: "Blanc, bleu, et rien d'autre à l'horizon." },
+    { id: "p_propriete_de_santorin", name: "Propriété de Santorin", emoji: "🌊", price: 86800000, rent: 625000, prestige: 20, loc: "Grèce", owned: false, desc: "Creusée dans la falaise, face au volcan." },
+    { id: "p_villa_d_hydra", name: "Villa d'Hydra", emoji: "⛵", price: 55800000, rent: 402000, prestige: 16, loc: "Grèce", owned: false, desc: "Pas une voiture sur l'île. Que des ânes." },
+    { id: "p_yali_du_bosphore", name: "Yali du Bosphore", emoji: "🌊", price: 279000000, rent: 2010000, prestige: 32, loc: "Istanbul", owned: false, desc: "Maison de bois sur l'eau, dix-neuvième siècle." },
+    { id: "p_riad_de_marrakech", name: "Riad de Marrakech", emoji: "🕌", price: 49600000, rent: 357000, prestige: 16, loc: "Maroc", owned: false, desc: "Patio, zelliges, bassin central." },
+    { id: "p_villa_de_tanger", name: "Villa de Tanger", emoji: "🌊", price: 68200000, rent: 491000, prestige: 20, loc: "Maroc", owned: false, desc: "Face au détroit, deux continents visibles." },
+    { id: "p_penthouse_de_tribeca", name: "Penthouse de Tribeca", emoji: "🏙️", price: 310000000, rent: 2230000, prestige: 32, loc: "New York", owned: false, desc: "Deux étages, verrière, ascenseur privé." },
+    { id: "p_maison_de_greenwich_village", name: "Maison de Greenwich Village", emoji: "🏛️", price: 198000000, rent: 1430000, prestige: 25, loc: "New York", owned: false, desc: "Brique rouge, jardin arrière, 1840." },
+    { id: "p_triplex_de_central_park_west", name: "Triplex de Central Park West", emoji: "🏙️", price: 372000000, rent: 2680000, prestige: 32, loc: "New York", owned: false, desc: "Vue intégrale sur le parc." },
+    { id: "p_villa_de_beverly_hills", name: "Villa de Beverly Hills", emoji: "🌴", price: 298000000, rent: 2150000, prestige: 32, loc: "Los Angeles", owned: false, desc: "Allée de palmiers, court de tennis." },
+    { id: "p_maison_de_malibu_colony", name: "Maison de Malibu Colony", emoji: "🌊", price: 260000000, rent: 1870000, prestige: 32, loc: "Los Angeles", owned: false, desc: "Pieds dans le sable, baies coulissantes." },
+    { id: "p_manoir_de_bel_air", name: "Manoir de Bel Air", emoji: "🏛️", price: 527000000, rent: 3790000, prestige: 40, loc: "Los Angeles", owned: false, desc: "Trois mille mètres carrés, bowling, cinéma." },
+    { id: "p_villa_de_miami_beach", name: "Villa de Miami Beach", emoji: "🌴", price: 217000000, rent: 1560000, prestige: 32, loc: "Miami", owned: false, desc: "Ponton pour un yacht de quarante mètres." },
+    { id: "p_penthouse_de_brickell", name: "Penthouse de Brickell", emoji: "🏙️", price: 112000000, rent: 806000, prestige: 25, loc: "Miami", owned: false, desc: "Piscine privée au cinquantième étage." },
+    { id: "p_ile_privee_des_exumas", name: "Île privée des Exumas", emoji: "🏝️", price: 279000000, rent: 2010000, prestige: 32, loc: "Bahamas", owned: false, desc: "Quatre-vingts hectares, piste d'atterrissage." },
+    { id: "p_villa_de_harbour_island", name: "Villa de Harbour Island", emoji: "🏝️", price: 93000000, rent: 670000, prestige: 20, loc: "Bahamas", owned: false, desc: "Sable rose, cinq minutes du débarcadère." },
+    { id: "p_villa_de_mustique", name: "Villa de Mustique", emoji: "🏝️", price: 174000000, rent: 1250000, prestige: 25, loc: "Caraïbes", owned: false, desc: "L'île où personne ne prend de photos." },
+    { id: "p_propriete_de_saint_barthelemy", name: "Propriété de Saint-Barthélemy", emoji: "🏝️", price: 198000000, rent: 1430000, prestige: 25, loc: "Caraïbes", owned: false, desc: "Vue sur Gustavia, personnel permanent." },
+    { id: "p_hacienda_de_tulum", name: "Hacienda de Tulum", emoji: "🌴", price: 86800000, rent: 625000, prestige: 20, loc: "Mexique", owned: false, desc: "Jungle, cénote privé, architecture de terre." },
+    { id: "p_fazenda_de_trancoso", name: "Fazenda de Trancoso", emoji: "🌴", price: 62000000, rent: 446000, prestige: 20, loc: "Brésil", owned: false, desc: "Trois kilomètres de plage déserte." },
+    { id: "p_penthouse_de_knightsbridge", name: "Penthouse de Knightsbridge", emoji: "🏙️", price: 341000000, rent: 2460000, prestige: 32, loc: "Londres", owned: false, desc: "Face à Hyde Park, sécurité diplomatique." },
+    { id: "p_maison_de_notting_hill", name: "Maison de Notting Hill", emoji: "🏛️", price: 161000000, rent: 1160000, prestige: 25, loc: "Londres", owned: false, desc: "Jardin partagé, façade pastel." },
+    { id: "p_domaine_des_cotswolds", name: "Domaine des Cotswolds", emoji: "🐑", price: 186000000, rent: 1340000, prestige: 25, loc: "Angleterre", owned: false, desc: "Manoir en pierre, six cents hectares." },
+    { id: "p_chateau_ecossais", name: "Château écossais", emoji: "🏰", price: 136000000, rent: 979000, prestige: 25, loc: "Écosse", owned: false, desc: "Tourelles, rivière à saumons, quatre mille hectares." },
+    { id: "p_villa_de_zurich_kusnacht", name: "Villa de Zurich-Küsnacht", emoji: "🌊", price: 174000000, rent: 1250000, prestige: 25, loc: "Suisse", owned: false, desc: "Lac au bout du jardin, fiscalité comprise." },
+    { id: "p_appartement_de_vienne", name: "Appartement de Vienne", emoji: "🏛️", price: 74400000, rent: 536000, prestige: 20, loc: "Autriche", owned: false, desc: "Plafonds de cinq mètres, parquet d'origine." },
+    { id: "p_penthouse_de_berlin_mitte", name: "Penthouse de Berlin-Mitte", emoji: "🏙️", price: 86800000, rent: 625000, prestige: 20, loc: "Allemagne", owned: false, desc: "Ancien château d'eau reconverti." },
+    { id: "p_villa_de_stockholm_djurgarden", name: "Villa de Stockholm-Djurgården", emoji: "🌲", price: 99200000, rent: 714000, prestige: 20, loc: "Suède", owned: false, desc: "Bois, verre, et six mois de nuit." },
+    { id: "p_maison_de_reykjavik", name: "Maison de Reykjavik", emoji: "🌋", price: 43400000, rent: 312000, prestige: 16, loc: "Islande", owned: false, desc: "Sources chaudes privées, aurores boréales." },
+    { id: "p_penthouse_de_dubai_marina", name: "Penthouse de Dubai Marina", emoji: "🏙️", price: 186000000, rent: 1340000, prestige: 25, loc: "Dubaï", owned: false, desc: "Étage entier, vue sur le golfe." },
+    { id: "p_villa_de_palm_jumeirah", name: "Villa de Palm Jumeirah", emoji: "🏝️", price: 279000000, rent: 2010000, prestige: 32, loc: "Dubaï", owned: false, desc: "Plage privée, ponton, dix chambres." },
+    { id: "p_residence_de_singapour_sentosa", name: "Résidence de Singapour-Sentosa", emoji: "🌴", price: 236000000, rent: 1700000, prestige: 32, loc: "Singapour", owned: false, desc: "Marina privée, à dix minutes du centre." },
+    { id: "p_machiya_de_kyoto", name: "Machiya de Kyoto", emoji: "🎋", price: 55800000, rent: 402000, prestige: 16, loc: "Japon", owned: false, desc: "Maison de marchand, jardin sec, silence." },
+    { id: "p_penthouse_de_shibuya", name: "Penthouse de Shibuya", emoji: "🏙️", price: 149000000, rent: 1070000, prestige: 25, loc: "Tokyo", owned: false, desc: "Au-dessus du carrefour le plus traversé du monde." },
+    { id: "p_villa_de_bali_uluwatu", name: "Villa de Bali-Uluwatu", emoji: "🌴", price: 49600000, rent: 357000, prestige: 16, loc: "Indonésie", owned: false, desc: "Falaise, piscine à débordement, personnel de six." },
+    { id: "p_lodge_du_serengeti", name: "Lodge du Serengeti", emoji: "🦁", price: 74400000, rent: 536000, prestige: 20, loc: "Tanzanie", owned: false, desc: "Vingt mille hectares de concession privée." },
+    { id: "p_vignoble_de_napa_valley", name: "Vignoble de Napa Valley", emoji: "🍇", price: 341000000, rent: 2460000, prestige: 32, loc: "Californie", owned: false, desc: "Quatre-vingts hectares, cave de vieillissement." },
+    { id: "p_ranch_du_montana", name: "Ranch du Montana", emoji: "🐎", price: 434000000, rent: 3120000, prestige: 40, loc: "États-Unis", owned: false, desc: "Dix mille hectares, rivière privée, écuries." },
+    { id: "p_appartement_de_sydney_point_piper", name: "Appartement de Sydney-Point Piper", emoji: "🌊", price: 248000000, rent: 1790000, prestige: 32, loc: "Australie", owned: false, desc: "Face à l'Opéra, ponton pour hors-bord." },
+    { id: "p_station_de_ski_privee", name: "Station de ski privée", emoji: "🏔️", price: 558000000, rent: 4020000, prestige: 40, loc: "Canada", owned: false, desc: "Trois pistes, un télésiège, un seul chalet." },
+    { id: "p_ile_privee_des_grenadines", name: "Île privée des Grenadines", emoji: "🏝️", price: 682000000, rent: 4910000, prestige: 40, loc: "Caraïbes", owned: false, desc: "Deux cents hectares, port en eau profonde." },
+    { id: "p_atoll_prive_des_maldives", name: "Atoll privé des Maldives", emoji: "🏝️", price: 930000000, rent: 6700000, prestige: 40, loc: "Maldives", owned: false, desc: "Onze îlots, lagon fermé, piste pour hydravion." },
 ];
 const VEHI_CAT = [
     { id: "jetski", name: "Jet Ski Custom FOH-0", emoji: "🚤", price: 130000, prestige: 3, cat: "boat", owned: true, desc: "Ton jet ski signé FOH-0." },
     { id: "lambo", name: "Lamborghini Urus", emoji: "🚗", price: 1690000, prestige: 8, cat: "car", owned: false, desc: "SUV de luxe." },
     { id: "rolls", name: "Rolls-Royce Ghost", emoji: "🚘", price: 2210000, prestige: 12, cat: "car", owned: false, desc: "Limousine ultime." },
-    { id: "ferrari", name: "Ferrari SF90", emoji: "🏎️", price: 3120000, prestige: 15, cat: "car", owned: false, desc: "Hypercar. 2.5s 0-100." },
-    { id: "gwagon", name: "Mercedes G63 AMG", emoji: "🚙", price: 1300000, prestige: 7, cat: "car", owned: false, desc: "Increvable, imposant, iconique." },
-    { id: "cybertruck", name: "Cybertruck custom", emoji: "🚚", price: 728000, prestige: 6, cat: "car", owned: false, desc: "Futuriste, capé façon Bahasco." },
-    { id: "motoduc", name: "Ducati Panigale V4", emoji: "🏍️", price: 234000, prestige: 4, cat: "car", owned: false, desc: "Pour les sorties solo à Nassau." },
-    { id: "bugatti", name: "Bugatti Chiron", emoji: "⚡", price: 16900000, prestige: 25, cat: "car", owned: false, desc: "Status absolu." },
+    { id: "ferrari", name: "Ferrari SF90", emoji: "🏎️", price: 3120000, prestige: 12, cat: "car", owned: false, desc: "Hypercar. 2.5s 0-100." },
+    { id: "gwagon", name: "Mercedes G63 AMG", emoji: "🚙", price: 1300000, prestige: 8, cat: "car", owned: false, desc: "Increvable, imposant, iconique." },
+    { id: "cybertruck", name: "Cybertruck custom", emoji: "🚚", price: 728000, prestige: 5, cat: "car", owned: false, desc: "Futuriste, capé façon Bahasco." },
+    { id: "motoduc", name: "Ducati Panigale V4", emoji: "🏍️", price: 234000, prestige: 3, cat: "car", owned: false, desc: "Pour les sorties solo à Nassau." },
+    { id: "bugatti", name: "Bugatti Chiron", emoji: "⚡", price: 16900000, prestige: 22, cat: "car", owned: false, desc: "Status absolu." },
     { id: "koenigsegg", name: "Koenigsegg Jesko", emoji: "🚨", price: 10920000, prestige: 22, cat: "car", owned: false, desc: "Vitesse de pointe record." },
-    { id: "catamaran", name: "Catamaran de luxe", emoji: "⛵", price: 10400000, prestige: 14, cat: "boat", owned: false, desc: "Parfait pour les Bahamas." },
+    { id: "catamaran", name: "Catamaran de luxe", emoji: "⛵", price: 10400000, prestige: 22, cat: "boat", owned: false, desc: "Parfait pour les Bahamas." },
     { id: "yacht_30m", name: "Yacht 30m", emoji: "🛥️", price: 41600000, prestige: 30, cat: "boat", owned: false, desc: "10 cabines." },
-    { id: "yacht_60m", name: "Superyacht 60m", emoji: "🛳️", price: 182000000, prestige: 45, cat: "boat", owned: false, desc: "Hélipad, cinéma, spa à bord." },
-    { id: "yacht_100m", name: "Megayacht 100m", emoji: "🚢", price: 468000000, prestige: 65, cat: "boat", owned: false, desc: "Le plus grand yacht privé jamais possédé." },
-    { id: "jet", name: "Gulfstream G550", emoji: "✈️", price: 195000000, prestige: 40, cat: "plane", owned: false, desc: "Jet 12 places. Range mondial." },
-    { id: "jet_privatetail", name: "Jet privé signature Fisco", emoji: "🛩️", price: 338000000, prestige: 55, cat: "plane", owned: false, desc: "Peinture custom Bahasco, ultime symbole de réussite." },
+    { id: "yacht_60m", name: "Superyacht 60m", emoji: "🛳️", price: 182000000, prestige: 48, cat: "boat", owned: false, desc: "Hélipad, cinéma, spa à bord." },
+    { id: "yacht_100m", name: "Megayacht 100m", emoji: "🚢", price: 468000000, prestige: 62, cat: "boat", owned: false, desc: "Le plus grand yacht privé jamais possédé." },
+    { id: "jet", name: "Gulfstream G550", emoji: "✈️", price: 195000000, prestige: 48, cat: "plane", owned: false, desc: "Jet 12 places. Range mondial." },
+    { id: "jet_privatetail", name: "Jet privé signature Fisco", emoji: "🛩️", price: 338000000, prestige: 62, cat: "plane", owned: false, desc: "Peinture custom Bahasco, ultime symbole de réussite." },
     { id: "jumbo_jet", name: "Boeing 747 privé", emoji: "🛫", price: 650000000, prestige: 80, cat: "plane", owned: false, desc: "Un avion de ligne entièrement reconverti, ton QG volant." },
-    { id: "helicopter", name: "Hélicoptère privé", emoji: "🚁", price: 24700000, prestige: 20, cat: "plane", owned: false, desc: "Pour rallier l'île en quelques minutes." },
-    { id: "submarine_yacht", name: "Yacht-Submersible", emoji: "🛥️", price: 420000000, prestige: 70, cat: "boat", owned: false, desc: "Un yacht capable de plonger sous la surface." },
-    { id: "a380_private", name: "Airbus A380 privé", emoji: "🛬", price: 900000000, prestige: 95, cat: "plane", owned: false, desc: "Le plus grand jet privé jamais assemblé, ton palais volant." },
-    { id: "hypercar_onetouch", name: "Hypercar Édition Unique", emoji: "🏎️", price: 38000000, prestige: 35, cat: "car", owned: false, desc: "Exemplaire unique conçu spécialement pour toi." },
+    { id: "helicopter", name: "Hélicoptère privé", emoji: "🚁", price: 24700000, prestige: 30, cat: "plane", owned: false, desc: "Pour rallier l'île en quelques minutes." },
+    { id: "submarine_yacht", name: "Yacht-Submersible", emoji: "🛥️", price: 420000000, prestige: 62, cat: "boat", owned: false, desc: "Un yacht capable de plonger sous la surface." },
+    { id: "a380_private", name: "Airbus A380 privé", emoji: "🛬", price: 900000000, prestige: 80, cat: "plane", owned: false, desc: "Le plus grand jet privé jamais assemblé, ton palais volant." },
+    { id: "hypercar_onetouch", name: "Hypercar Édition Unique", emoji: "🏎️", price: 38000000, prestige: 30, cat: "car", owned: false, desc: "Exemplaire unique conçu spécialement pour toi." },
+    { id: "v_bugatti_tourbillon", name: "Bugatti Tourbillon", emoji: "⚡", price: 16000000, prestige: 22, cat: "car", owned: false, desc: "Sous bâche au garage, pleine d'essence." },
+    { id: "v_bugatti_mistral", name: "Bugatti Mistral", emoji: "⚡", price: 20100000, prestige: 30, cat: "car", owned: false, desc: "Elle n'a jamais vu la pluie." },
+    { id: "v_bugatti_divo", name: "Bugatti Divo", emoji: "⚡", price: 21400000, prestige: 30, cat: "car", owned: false, desc: "Première main, carnet complet." },
+    { id: "v_bugatti_centodieci", name: "Bugatti Centodieci", emoji: "⚡", price: 29600000, prestige: 30, cat: "car", owned: false, desc: "Livrée en configuration usine, jamais modifiée." },
+    { id: "v_bugatti_la_voiture_noire", name: "Bugatti La Voiture Noire", emoji: "⚡", price: 38500000, prestige: 30, cat: "car", owned: false, desc: "Le genre de voiture qu'on écoute avant de la regarder." },
+    { id: "v_rimac_nevera", name: "Rimac Nevera", emoji: "🔋", price: 9790000, prestige: 22, cat: "car", owned: false, desc: "Elle fait se retourner une rue entière." },
+    { id: "v_pininfarina_battista", name: "Pininfarina Battista", emoji: "🔋", price: 10200000, prestige: 22, cat: "car", owned: false, desc: "Peinture au choix, délai de neuf mois." },
+    { id: "v_lotus_evija", name: "Lotus Evija", emoji: "🔋", price: 9790000, prestige: 22, cat: "car", owned: false, desc: "Entretenue par le constructeur, deux fois par an." },
+    { id: "v_aspark_owl", name: "Aspark Owl", emoji: "🔋", price: 12800000, prestige: 22, cat: "car", owned: false, desc: "Moins de mille kilomètres au compteur." },
+    { id: "v_koenigsegg_gemera", name: "Koenigsegg Gemera", emoji: "🚨", price: 8230000, prestige: 22, cat: "car", owned: false, desc: "Un exemplaire parmi très peu." },
+    { id: "v_koenigsegg_regera", name: "Koenigsegg Regera", emoji: "🚨", price: 9020000, prestige: 22, cat: "car", owned: false, desc: "Elle se conduit mal en ville. Ce n'est pas le sujet." },
+    { id: "v_koenigsegg_cc850", name: "Koenigsegg CC850", emoji: "🚨", price: 15300000, prestige: 22, cat: "car", owned: false, desc: "Intérieur cousu main, cuir sélectionné pièce par pièce." },
+    { id: "v_pagani_huayra_r", name: "Pagani Huayra R", emoji: "🏎️", price: 11700000, prestige: 22, cat: "car", owned: false, desc: "Sous bâche au garage, pleine d'essence." },
+    { id: "v_pagani_utopia", name: "Pagani Utopia", emoji: "🏎️", price: 10200000, prestige: 22, cat: "car", owned: false, desc: "Elle n'a jamais vu la pluie." },
+    { id: "v_pagani_zonda_hp_barchetta", name: "Pagani Zonda HP Barchetta", emoji: "🏎️", price: 49700000, prestige: 30, cat: "car", owned: false, desc: "Première main, carnet complet." },
+    { id: "v_hennessey_venom_f5", name: "Hennessey Venom F5", emoji: "💥", price: 11300000, prestige: 22, cat: "car", owned: false, desc: "Livrée en configuration usine, jamais modifiée." },
+    { id: "v_ssc_tuatara", name: "SSC Tuatara", emoji: "💥", price: 7820000, prestige: 16, cat: "car", owned: false, desc: "Le genre de voiture qu'on écoute avant de la regarder." },
+    { id: "v_czinger_21c", name: "Czinger 21C", emoji: "💥", price: 8230000, prestige: 22, cat: "car", owned: false, desc: "Elle fait se retourner une rue entière." },
+    { id: "v_de_tomaso_p72", name: "De Tomaso P72", emoji: "🏁", price: 6590000, prestige: 16, cat: "car", owned: false, desc: "Peinture au choix, délai de neuf mois." },
+    { id: "v_gordon_murray_t_50", name: "Gordon Murray T.50", emoji: "🏁", price: 12400000, prestige: 22, cat: "car", owned: false, desc: "Entretenue par le constructeur, deux fois par an." },
+    { id: "v_gordon_murray_t_33", name: "Gordon Murray T.33", emoji: "🏁", price: 8620000, prestige: 22, cat: "car", owned: false, desc: "Moins de mille kilomètres au compteur." },
+    { id: "v_zenvo_aurora", name: "Zenvo Aurora", emoji: "💥", price: 11300000, prestige: 22, cat: "car", owned: false, desc: "Un exemplaire parmi très peu." },
+    { id: "v_mclaren_speedtail", name: "McLaren Speedtail", emoji: "🟠", price: 9790000, prestige: 22, cat: "car", owned: false, desc: "Elle se conduit mal en ville. Ce n'est pas le sujet." },
+    { id: "v_mclaren_sabre", name: "McLaren Sabre", emoji: "🟠", price: 14900000, prestige: 22, cat: "car", owned: false, desc: "Intérieur cousu main, cuir sélectionné pièce par pièce." },
+    { id: "v_mclaren_elva", name: "McLaren Elva", emoji: "🟠", price: 7420000, prestige: 16, cat: "car", owned: false, desc: "Sous bâche au garage, pleine d'essence." },
+    { id: "v_aston_martin_valkyrie", name: "Aston Martin Valkyrie", emoji: "🦅", price: 13100000, prestige: 22, cat: "car", owned: false, desc: "Elle n'a jamais vu la pluie." },
+    { id: "v_aston_martin_valhalla", name: "Aston Martin Valhalla", emoji: "🦅", price: 4410000, prestige: 16, cat: "car", owned: false, desc: "Première main, carnet complet." },
+    { id: "v_aston_martin_victor", name: "Aston Martin Victor", emoji: "🦅", price: 13100000, prestige: 22, cat: "car", owned: false, desc: "Livrée en configuration usine, jamais modifiée." },
+    { id: "v_ferrari_daytona_sp3", name: "Ferrari Daytona SP3", emoji: "🐎", price: 10600000, prestige: 22, cat: "car", owned: false, desc: "Le genre de voiture qu'on écoute avant de la regarder." },
+    { id: "v_ferrari_monza_sp2", name: "Ferrari Monza SP2", emoji: "🐎", price: 8620000, prestige: 22, cat: "car", owned: false, desc: "Elle fait se retourner une rue entière." },
+    { id: "v_ferrari_laferrari_aperta", name: "Ferrari LaFerrari Aperta", emoji: "🐎", price: 14900000, prestige: 22, cat: "car", owned: false, desc: "Peinture au choix, délai de neuf mois." },
+    { id: "v_ferrari_f80", name: "Ferrari F80", emoji: "🐎", price: 15300000, prestige: 22, cat: "car", owned: false, desc: "Entretenue par le constructeur, deux fois par an." },
+    { id: "v_lamborghini_sian", name: "Lamborghini Sian", emoji: "🐂", price: 13100000, prestige: 22, cat: "car", owned: false, desc: "Moins de mille kilomètres au compteur." },
+    { id: "v_lamborghini_countach_lpi_800_4", name: "Lamborghini Countach LPI 800-4", emoji: "🐂", price: 10600000, prestige: 22, cat: "car", owned: false, desc: "Un exemplaire parmi très peu." },
+    { id: "v_lamborghini_revuelto", name: "Lamborghini Revuelto", emoji: "🐂", price: 3240000, prestige: 12, cat: "car", owned: false, desc: "Elle se conduit mal en ville. Ce n'est pas le sujet." },
+    { id: "v_lamborghini_veneno_roadster", name: "Lamborghini Veneno Roadster", emoji: "🐂", price: 31100000, prestige: 30, cat: "car", owned: false, desc: "Intérieur cousu main, cuir sélectionné pièce par pièce." },
+    { id: "v_mercedes_amg_one", name: "Mercedes-AMG ONE", emoji: "⭐️", price: 12200000, prestige: 22, cat: "car", owned: false, desc: "Sous bâche au garage, pleine d'essence." },
+    { id: "v_porsche_918_spyder", name: "Porsche 918 Spyder", emoji: "🛡️", price: 7420000, prestige: 16, cat: "car", owned: false, desc: "Elle n'a jamais vu la pluie." },
+    { id: "v_maserati_mc20_cielo", name: "Maserati MC20 Cielo", emoji: "🔱", price: 2070000, prestige: 12, cat: "car", owned: false, desc: "Première main, carnet complet." },
+    { id: "v_apollo_intensa_emozione", name: "Apollo Intensa Emozione", emoji: "💥", price: 12100000, prestige: 22, cat: "car", owned: false, desc: "Livrée en configuration usine, jamais modifiée." },
+    { id: "v_ferrari_296_gtb", name: "Ferrari 296 GTB", emoji: "🐎", price: 2230000, prestige: 12, cat: "car", owned: false, desc: "Le genre de voiture qu'on écoute avant de la regarder." },
+    { id: "v_ferrari_sf90_xx_stradale", name: "Ferrari SF90 XX Stradale", emoji: "🐎", price: 4410000, prestige: 16, cat: "car", owned: false, desc: "Elle fait se retourner une rue entière." },
+    { id: "v_ferrari_purosangue", name: "Ferrari Purosangue", emoji: "🐎", price: 2740000, prestige: 12, cat: "car", owned: false, desc: "Peinture au choix, délai de neuf mois." },
+    { id: "v_ferrari_roma_spider", name: "Ferrari Roma Spider", emoji: "🐎", price: 1860000, prestige: 8, cat: "car", owned: false, desc: "Entretenue par le constructeur, deux fois par an." },
+    { id: "v_lamborghini_huracan_sterrato", name: "Lamborghini Huracán Sterrato", emoji: "🐂", price: 1910000, prestige: 8, cat: "car", owned: false, desc: "Moins de mille kilomètres au compteur." },
+    { id: "v_lamborghini_urus_performante", name: "Lamborghini Urus Performante", emoji: "🚙", price: 1860000, prestige: 8, cat: "car", owned: false, desc: "Un exemplaire parmi très peu." },
+    { id: "v_mclaren_750s", name: "McLaren 750S", emoji: "🟠", price: 2180000, prestige: 12, cat: "car", owned: false, desc: "Elle se conduit mal en ville. Ce n'est pas le sujet." },
+    { id: "v_mclaren_artura", name: "McLaren Artura", emoji: "🟠", price: 1690000, prestige: 8, cat: "car", owned: false, desc: "Intérieur cousu main, cuir sélectionné pièce par pièce." },
+    { id: "v_aston_martin_dbs_770_ultimate", name: "Aston Martin DBS 770 Ultimate", emoji: "🦅", price: 2590000, prestige: 12, cat: "car", owned: false, desc: "Sous bâche au garage, pleine d'essence." },
+    { id: "v_aston_martin_vanquish", name: "Aston Martin Vanquish", emoji: "🦅", price: 2740000, prestige: 12, cat: "car", owned: false, desc: "Elle n'a jamais vu la pluie." },
+    { id: "v_porsche_911_gt3_rs", name: "Porsche 911 GT3 RS", emoji: "🛡️", price: 1750000, prestige: 8, cat: "car", owned: false, desc: "Première main, carnet complet." },
+    { id: "v_porsche_911_s_t", name: "Porsche 911 S/T", emoji: "🛡️", price: 1960000, prestige: 8, cat: "car", owned: false, desc: "Livrée en configuration usine, jamais modifiée." },
+    { id: "v_porsche_carrera_gt", name: "Porsche Carrera GT", emoji: "🛡️", price: 8620000, prestige: 22, cat: "car", owned: false, desc: "Le genre de voiture qu'on écoute avant de la regarder." },
+    { id: "v_audi_r8_gt", name: "Audi R8 GT", emoji: "💿", price: 1750000, prestige: 8, cat: "car", owned: false, desc: "Elle fait se retourner une rue entière." },
+    { id: "v_corvette_z06", name: "Corvette Z06", emoji: "🇺🇸", price: 1290000, prestige: 8, cat: "car", owned: false, desc: "Peinture au choix, délai de neuf mois." },
+    { id: "v_dodge_challenger_demon_170", name: "Dodge Challenger Demon 170", emoji: "🇺🇸", price: 922000, prestige: 5, cat: "car", owned: false, desc: "Entretenue par le constructeur, deux fois par an." },
+    { id: "v_ford_gt_mk_iv", name: "Ford GT Mk IV", emoji: "🇺🇸", price: 8230000, prestige: 22, cat: "car", owned: false, desc: "Moins de mille kilomètres au compteur." },
+    { id: "v_nissan_gt_r_nismo", name: "Nissan GT-R Nismo", emoji: "🗾", price: 1520000, prestige: 8, cat: "car", owned: false, desc: "Un exemplaire parmi très peu." },
+    { id: "v_lexus_lfa", name: "Lexus LFA", emoji: "🗾", price: 4870000, prestige: 16, cat: "car", owned: false, desc: "Elle se conduit mal en ville. Ce n'est pas le sujet." },
+    { id: "v_acura_nsx_type_s", name: "Acura NSX Type S", emoji: "🗾", price: 1290000, prestige: 8, cat: "car", owned: false, desc: "Intérieur cousu main, cuir sélectionné pièce par pièce." },
+    { id: "v_rolls_royce_phantom_ewb", name: "Rolls-Royce Phantom EWB", emoji: "🚘", price: 3950000, prestige: 12, cat: "car", owned: false, desc: "Sous bâche au garage, pleine d'essence." },
+    { id: "v_rolls_royce_cullinan_black_badge", name: "Rolls-Royce Cullinan Black Badge", emoji: "🚘", price: 3240000, prestige: 12, cat: "car", owned: false, desc: "Elle n'a jamais vu la pluie." },
+    { id: "v_rolls_royce_spectre", name: "Rolls-Royce Spectre", emoji: "🚘", price: 2740000, prestige: 12, cat: "car", owned: false, desc: "Première main, carnet complet." },
+    { id: "v_rolls_royce_boat_tail", name: "Rolls-Royce Boat Tail", emoji: "🚘", price: 75700000, prestige: 38, cat: "car", owned: false, desc: "Livrée en configuration usine, jamais modifiée." },
+    { id: "v_rolls_royce_droptail", name: "Rolls-Royce Droptail", emoji: "🚘", price: 83200000, prestige: 38, cat: "car", owned: false, desc: "Le genre de voiture qu'on écoute avant de la regarder." },
+    { id: "v_rolls_royce_sweptail", name: "Rolls-Royce Sweptail", emoji: "🚘", price: 41300000, prestige: 30, cat: "car", owned: false, desc: "Elle fait se retourner une rue entière." },
+    { id: "v_bentley_mulliner_batur", name: "Bentley Mulliner Batur", emoji: "🅱️", price: 9410000, prestige: 22, cat: "car", owned: false, desc: "Peinture au choix, délai de neuf mois." },
+    { id: "v_bentley_bacalar", name: "Bentley Bacalar", emoji: "🅱️", price: 8620000, prestige: 22, cat: "car", owned: false, desc: "Entretenue par le constructeur, deux fois par an." },
+    { id: "v_bentley_flying_spur_speed", name: "Bentley Flying Spur Speed", emoji: "🅱️", price: 2120000, prestige: 12, cat: "car", owned: false, desc: "Moins de mille kilomètres au compteur." },
+    { id: "v_bentley_bentayga_ewb", name: "Bentley Bentayga EWB", emoji: "🅱️", price: 1910000, prestige: 8, cat: "car", owned: false, desc: "Un exemplaire parmi très peu." },
+    { id: "v_mercedes_maybach_s680", name: "Mercedes-Maybach S680", emoji: "⭐️", price: 1860000, prestige: 8, cat: "car", owned: false, desc: "Elle se conduit mal en ville. Ce n'est pas le sujet." },
+    { id: "v_mercedes_maybach_gls_600", name: "Mercedes-Maybach GLS 600", emoji: "⭐️", price: 1580000, prestige: 8, cat: "car", owned: false, desc: "Intérieur cousu main, cuir sélectionné pièce par pièce." },
+    { id: "v_mercedes_maybach_eqs_suv", name: "Mercedes-Maybach EQS SUV", emoji: "⭐️", price: 1410000, prestige: 8, cat: "car", owned: false, desc: "Sous bâche au garage, pleine d'essence." },
+    { id: "v_mercedes_g63_amg_4x4", name: "Mercedes G63 AMG 4x4²", emoji: "🚙", price: 2490000, prestige: 12, cat: "car", owned: false, desc: "Elle n'a jamais vu la pluie." },
+    { id: "v_brabus_900_rocket_gls", name: "Brabus 900 Rocket GLS", emoji: "🚙", price: 3950000, prestige: 12, cat: "car", owned: false, desc: "Première main, carnet complet." },
+    { id: "v_brabus_p_900_rocket_edition", name: "Brabus P 900 Rocket Edition", emoji: "🚙", price: 4870000, prestige: 16, cat: "car", owned: false, desc: "Livrée en configuration usine, jamais modifiée." },
+    { id: "v_range_rover_sv_lansdowne", name: "Range Rover SV Lansdowne", emoji: "🏔️", price: 1960000, prestige: 8, cat: "car", owned: false, desc: "Le genre de voiture qu'on écoute avant de la regarder." },
+    { id: "v_land_rover_defender_v8_trophy", name: "Land Rover Defender V8 Trophy", emoji: "🏔️", price: 1110000, prestige: 8, cat: "car", owned: false, desc: "Elle fait se retourner une rue entière." },
+    { id: "v_bmw_xm_label_red", name: "BMW XM Label Red", emoji: "🔵", price: 1580000, prestige: 8, cat: "car", owned: false, desc: "Peinture au choix, délai de neuf mois." },
+    { id: "v_bmw_m8_competition", name: "BMW M8 Competition", emoji: "🔵", price: 1290000, prestige: 8, cat: "car", owned: false, desc: "Entretenue par le constructeur, deux fois par an." },
+    { id: "v_audi_rs6_avant_performance", name: "Audi RS6 Avant Performance", emoji: "💿", price: 1230000, prestige: 8, cat: "car", owned: false, desc: "Moins de mille kilomètres au compteur." },
+    { id: "v_cadillac_celestiq", name: "Cadillac Celestiq", emoji: "🇺🇸", price: 2230000, prestige: 12, cat: "car", owned: false, desc: "Un exemplaire parmi très peu." },
+    { id: "v_lincoln_navigator_black_label", name: "Lincoln Navigator Black Label", emoji: "🇺🇸", price: 984000, prestige: 5, cat: "car", owned: false, desc: "Elle se conduit mal en ville. Ce n'est pas le sujet." },
+    { id: "v_lucid_air_sapphire", name: "Lucid Air Sapphire", emoji: "🔋", price: 1750000, prestige: 8, cat: "car", owned: false, desc: "Intérieur cousu main, cuir sélectionné pièce par pièce." },
+    { id: "v_tesla_model_s_plaid", name: "Tesla Model S Plaid", emoji: "🔋", price: 922000, prestige: 5, cat: "car", owned: false, desc: "Sous bâche au garage, pleine d'essence." },
+    { id: "v_hummer_ev_edition_1", name: "Hummer EV Edition 1", emoji: "🚚", price: 1110000, prestige: 8, cat: "car", owned: false, desc: "Elle n'a jamais vu la pluie." },
+    { id: "v_rezvani_tank_military", name: "Rezvani Tank Military", emoji: "🚚", price: 2230000, prestige: 12, cat: "car", owned: false, desc: "Première main, carnet complet." },
+    { id: "v_karlmann_king", name: "Karlmann King", emoji: "🚚", price: 16000000, prestige: 22, cat: "car", owned: false, desc: "Livrée en configuration usine, jamais modifiée." },
+    { id: "v_mercedes_300_sl_gullwing", name: "Mercedes 300 SL Gullwing", emoji: "🏛️", price: 7820000, prestige: 16, cat: "car", owned: false, desc: "Le genre de voiture qu'on écoute avant de la regarder." },
+    { id: "v_jaguar_e_type_serie_1", name: "Jaguar E-Type Série 1", emoji: "🏛️", price: 2490000, prestige: 12, cat: "car", owned: false, desc: "Elle fait se retourner une rue entière." },
+    { id: "v_ferrari_250_gt_lusso", name: "Ferrari 250 GT Lusso", emoji: "🏛️", price: 11300000, prestige: 22, cat: "car", owned: false, desc: "Peinture au choix, délai de neuf mois." },
+    { id: "v_porsche_959", name: "Porsche 959", emoji: "🏛️", price: 8230000, prestige: 22, cat: "car", owned: false, desc: "Entretenue par le constructeur, deux fois par an." },
+    { id: "v_lamborghini_miura_sv", name: "Lamborghini Miura SV", emoji: "🏛️", price: 13100000, prestige: 22, cat: "car", owned: false, desc: "Moins de mille kilomètres au compteur." },
+    { id: "v_ford_mustang_shelby_gt500_1967", name: "Ford Mustang Shelby GT500 1967", emoji: "🏛️", price: 9410000, prestige: 22, cat: "car", owned: false, desc: "Un exemplaire parmi très peu." },
+    { id: "v_chevrolet_impala_1964", name: "Chevrolet Impala 1964", emoji: "🏛️", price: 1110000, prestige: 8, cat: "car", owned: false, desc: "Elle se conduit mal en ville. Ce n'est pas le sujet." },
+    { id: "v_cadillac_eldorado_1959", name: "Cadillac Eldorado 1959", emoji: "🏛️", price: 1960000, prestige: 8, cat: "car", owned: false, desc: "Intérieur cousu main, cuir sélectionné pièce par pièce." },
+    { id: "v_aston_martin_db5", name: "Aston Martin DB5", emoji: "🏛️", price: 14900000, prestige: 22, cat: "car", owned: false, desc: "Sous bâche au garage, pleine d'essence." },
+    { id: "v_toyota_supra_mk4_turbo", name: "Toyota Supra MK4 Turbo", emoji: "🏛️", price: 1690000, prestige: 8, cat: "car", owned: false, desc: "Elle n'a jamais vu la pluie." },
+    { id: "v_ducati_superleggera_v4", name: "Ducati Superleggera V4", emoji: "🏍️", price: 858000, prestige: 5, cat: "car", owned: false, desc: "Première main, carnet complet." },
+    { id: "v_mv_agusta_superveloce_1000", name: "MV Agusta Superveloce 1000", emoji: "🏍️", price: 447000, prestige: 3, cat: "car", owned: false, desc: "Livrée en configuration usine, jamais modifiée." },
+    { id: "v_arch_method_143", name: "Arch Method 143", emoji: "🏍️", price: 727000, prestige: 5, cat: "car", owned: false, desc: "Le genre de voiture qu'on écoute avant de la regarder." },
+    { id: "v_harley_davidson_custom_nassau", name: "Harley-Davidson Custom Nassau", emoji: "🏍️", price: 659000, prestige: 5, cat: "car", owned: false, desc: "Elle fait se retourner une rue entière." },
+    { id: "v_bmw_m_1000_rr_titanium", name: "BMW M 1000 RR Titanium", emoji: "🏍️", price: 410000, prestige: 3, cat: "car", owned: false, desc: "Peinture au choix, délai de neuf mois." },
+    { id: "v_energica_ego_corsa", name: "Energica Ego Corsa", emoji: "🏍️", price: 922000, prestige: 5, cat: "car", owned: false, desc: "Entretenue par le constructeur, deux fois par an." },
+    { id: "v_riva_aquarama_restaure", name: "Riva Aquarama restauré", emoji: "🛶", price: 4870000, prestige: 16, cat: "boat", owned: false, desc: "Acajou verni, moteurs V8. L'italien des années soixante." },
+    { id: "v_riva_76_perseo_super", name: "Riva 76 Perseo Super", emoji: "🛥️", price: 18400000, prestige: 22, cat: "boat", owned: false, desc: "Vingt-trois mètres de sport italien." },
+    { id: "v_riva_130_bellissima", name: "Riva 130 Bellissima", emoji: "🛥️", price: 83200000, prestige: 38, cat: "boat", owned: false, desc: "Le vaisseau amiral du chantier de Sarnico." },
+    { id: "v_wally_why200", name: "Wally WHY200", emoji: "⛵", price: 41300000, prestige: 30, cat: "boat", owned: false, desc: "Coque courte, volume intérieur immense." },
+    { id: "v_wallywind110", name: "Wallywind110", emoji: "⛵", price: 46900000, prestige: 30, cat: "boat", owned: false, desc: "Voilier de régate habitable." },
+    { id: "v_sunseeker_predator_55", name: "Sunseeker Predator 55", emoji: "🚤", price: 10200000, prestige: 22, cat: "boat", owned: false, desc: "Rapide, nerveux, fait pour les sorties à la journée." },
+    { id: "v_sunseeker_100_yacht", name: "Sunseeker 100 Yacht", emoji: "🛥️", price: 34100000, prestige: 30, cat: "boat", owned: false, desc: "Cinq cabines, flybridge panoramique." },
+    { id: "v_sunseeker_ocean_182", name: "Sunseeker Ocean 182", emoji: "🛥️", price: 68200000, prestige: 38, cat: "boat", owned: false, desc: "Cinquante-cinq mètres, portes de coque ouvrantes." },
+    { id: "v_ferretti_1000", name: "Ferretti 1000", emoji: "🛥️", price: 46900000, prestige: 30, cat: "boat", owned: false, desc: "Trente mètres, trois ponts." },
+    { id: "v_pershing_140", name: "Pershing 140", emoji: "🛥️", price: 80700000, prestige: 38, cat: "boat", owned: false, desc: "Quarante-trois mètres taillés pour la vitesse." },
+    { id: "v_azimut_grande_36m", name: "Azimut Grande 36M", emoji: "🛥️", price: 46900000, prestige: 30, cat: "boat", owned: false, desc: "Terrasse arrière sur deux niveaux." },
+    { id: "v_benetti_oasis_40m", name: "Benetti Oasis 40M", emoji: "🛳️", price: 83200000, prestige: 38, cat: "boat", owned: false, desc: "Plage arrière en forme de fer à cheval." },
+    { id: "v_benetti_b_now_50m", name: "Benetti B.Now 50M", emoji: "🛳️", price: 123000000, prestige: 48, cat: "boat", owned: false, desc: "Coque hybride, autonomie transatlantique." },
+    { id: "v_sanlorenzo_sd118", name: "Sanlorenzo SD118", emoji: "🛳️", price: 70700000, prestige: 38, cat: "boat", owned: false, desc: "Explorateur de trente-six mètres." },
+    { id: "v_sanlorenzo_50steel", name: "Sanlorenzo 50Steel", emoji: "🛳️", price: 130000000, prestige: 48, cat: "boat", owned: false, desc: "Piscine à débordement sur le pont principal." },
+    { id: "v_heesen_project_cosmos", name: "Heesen Project Cosmos", emoji: "🛳️", price: 228000000, prestige: 48, cat: "boat", owned: false, desc: "Quatre-vingts mètres en aluminium, trente nœuds." },
+    { id: "v_amels_60", name: "Amels 60", emoji: "🛳️", price: 167000000, prestige: 48, cat: "boat", owned: false, desc: "Soixante mètres, six cabines invités." },
+    { id: "v_feadship_moonrise", name: "Feadship Moonrise", emoji: "🛳️", price: 387000000, prestige: 62, cat: "boat", owned: false, desc: "Quatre-vingt-dix-neuf mètres, piscine traversante." },
+    { id: "v_feadship_project_821", name: "Feadship Project 821", emoji: "🛳️", price: 622000000, prestige: 80, cat: "boat", owned: false, desc: "Le premier superyacht à hydrogène." },
+    { id: "v_lurssen_ahpo", name: "Lürssen Ahpo", emoji: "🛳️", price: 638000000, prestige: 80, cat: "boat", owned: false, desc: "Cent quinze mètres, spa sur deux niveaux." },
+    { id: "v_lurssen_blue", name: "Lürssen Blue", emoji: "🛳️", price: 1045000000, prestige: 95, cat: "boat", owned: false, desc: "Cent soixante mètres. Un immeuble couché sur l'eau." },
+    { id: "v_oceanco_bravo_eugenia", name: "Oceanco Bravo Eugenia", emoji: "🛳️", price: 422000000, prestige: 62, cat: "boat", owned: false, desc: "Coque optimisée, trente pour cent de carburant en moins." },
+    { id: "v_oceanco_koru", name: "Oceanco Koru", emoji: "⛵", price: 824000000, prestige: 80, cat: "boat", owned: false, desc: "Le plus grand voilier du monde. Trois mâts." },
+    { id: "v_abeking_rasmussen_excellence", name: "Abeking & Rasmussen Excellence", emoji: "🛳️", price: 351000000, prestige: 62, cat: "boat", owned: false, desc: "Proue verticale, cheminée inversée." },
+    { id: "v_nobiskrug_artefact", name: "Nobiskrug Artefact", emoji: "🛳️", price: 456000000, prestige: 62, cat: "boat", owned: false, desc: "Silhouette anguleuse, propulsion hybride." },
+    { id: "v_codecasa_explorer_50m", name: "Codecasa Explorer 50M", emoji: "🛳️", price: 107000000, prestige: 38, cat: "boat", owned: false, desc: "Acier, autonomie de six mille milles." },
+    { id: "v_damen_seaxplorer_77", name: "Damen SeaXplorer 77", emoji: "🧊", price: 277000000, prestige: 62, cat: "boat", owned: false, desc: "Coque brise-glace. Conçu pour les pôles." },
+    { id: "v_silveryachts_silver_fast", name: "SilverYachts Silver Fast", emoji: "🛥️", price: 198000000, prestige: 48, cat: "boat", owned: false, desc: "Soixante-dix-sept mètres, vingt-sept nœuds." },
+    { id: "v_perini_navi_60m", name: "Perini Navi 60M", emoji: "⛵", price: 145000000, prestige: 48, cat: "boat", owned: false, desc: "Gréement automatisé, trois ponts." },
+    { id: "v_baltic_146_path", name: "Baltic 146 Path", emoji: "⛵", price: 123000000, prestige: 48, cat: "boat", owned: false, desc: "Voilier de performance en carbone." },
+    { id: "v_royal_huisman_sea_eagle_ii", name: "Royal Huisman Sea Eagle II", emoji: "⛵", price: 218000000, prestige: 48, cat: "boat", owned: false, desc: "Le plus grand ketch en aluminium." },
+    { id: "v_maltese_falcon", name: "Maltese Falcon", emoji: "⛵", price: 277000000, prestige: 62, cat: "boat", owned: false, desc: "Trois mâts tournants. Une silhouette unique." },
+    { id: "v_princess_y95", name: "Princess Y95", emoji: "🛥️", price: 35500000, prestige: 30, cat: "boat", owned: false, desc: "Vingt-neuf mètres, flybridge immense." },
+    { id: "v_pardo_gt75", name: "Pardo GT75", emoji: "🚤", price: 21700000, prestige: 30, cat: "boat", owned: false, desc: "Sportif, lignes épurées, pont ouvert." },
+    { id: "v_axopar_45_cross_top", name: "Axopar 45 Cross Top", emoji: "🚤", price: 3480000, prestige: 12, cat: "boat", owned: false, desc: "Petit, rapide, increvable." },
+    { id: "v_brabus_shadow_1200_xc", name: "Brabus Shadow 1200 XC", emoji: "🚤", price: 5740000, prestige: 16, cat: "boat", owned: false, desc: "Mille deux cents chevaux, finition noire." },
+    { id: "v_technohull_omega_45", name: "Technohull Omega 45", emoji: "🚤", price: 4870000, prestige: 16, cat: "boat", owned: false, desc: "Semi-rigide de luxe, soixante-dix nœuds." },
+    { id: "v_van_dutch_75", name: "Van Dutch 75", emoji: "🚤", price: 13900000, prestige: 22, cat: "boat", owned: false, desc: "Le day-boat devenu objet culte." },
+    { id: "v_zodiac_hurricane_custom", name: "Zodiac Hurricane Custom", emoji: "🚤", price: 2230000, prestige: 12, cat: "boat", owned: false, desc: "Annexe militaire reconvertie." },
+    { id: "v_hydrofoil_candela_c_8", name: "Hydrofoil Candela C-8", emoji: "🪽", price: 2490000, prestige: 12, cat: "boat", owned: false, desc: "Il vole au-dessus de l'eau, en silence." },
+    { id: "v_jet_ski_seadoo_rxp_x_carbone", name: "Jet Ski Seadoo RXP-X Carbone", emoji: "🏄", price: 372000, prestige: 3, cat: "boat", owned: false, desc: "Deux cent cinquante chevaux sous les pieds." },
+    { id: "v_yacht_submersible_migaloo_m5", name: "Yacht submersible Migaloo M5", emoji: "🛸", price: 387000000, prestige: 62, cat: "boat", owned: false, desc: "Il plonge. Vraiment." },
+    { id: "v_u_boat_worx_nexus_sub", name: "U-Boat Worx Nexus Sub", emoji: "🛸", price: 23300000, prestige: 30, cat: "boat", owned: false, desc: "Sous-marin privé neuf places." },
+    { id: "v_triton_3300_6_submersible", name: "Triton 3300/6 Submersible", emoji: "🛸", price: 20100000, prestige: 30, cat: "boat", owned: false, desc: "Mille mètres de profondeur, bulle panoramique." },
+    { id: "v_catamaran_sunreef_100_eco", name: "Catamaran Sunreef 100 Eco", emoji: "⛵", price: 41300000, prestige: 30, cat: "boat", owned: false, desc: "Toute la coque est un panneau solaire." },
+    { id: "v_catamaran_lagoon_seventy_8", name: "Catamaran Lagoon Seventy 8", emoji: "⛵", price: 20100000, prestige: 30, cat: "boat", owned: false, desc: "Flybridge, quatre cabines doubles." },
+    { id: "v_yacht_de_glace_arksen_85", name: "Yacht de glace Arksen 85", emoji: "🧊", price: 49700000, prestige: 30, cat: "boat", owned: false, desc: "Explorateur hauturier à faible empreinte." },
+    { id: "v_bateau_maison_arkup_75", name: "Bateau-maison Arkup 75", emoji: "🏠", price: 21700000, prestige: 30, cat: "boat", owned: false, desc: "Il se hisse sur pilotis en trente secondes." },
+    { id: "v_chris_craft_launch_28_gt", name: "Chris-Craft Launch 28 GT", emoji: "🛶", price: 2490000, prestige: 12, cat: "boat", owned: false, desc: "Le classique américain, version moderne." },
+    { id: "v_goelette_classique_1920_restauree", name: "Goélette classique 1920 restaurée", emoji: "⛵", price: 29600000, prestige: 30, cat: "boat", owned: false, desc: "Bois, cuivre, et un siècle d'histoire." },
+    { id: "v_ketch_ocean_racer_custom", name: "Ketch Ocean Racer Custom", emoji: "⛵", price: 26500000, prestige: 30, cat: "boat", owned: false, desc: "Construit pour un tour du monde en solitaire." },
+    { id: "v_porte_helicoptere_prive_90m", name: "Porte-hélicoptère privé 90M", emoji: "🛳️", price: 557000000, prestige: 80, cat: "boat", owned: false, desc: "Deux hélicoptères sur le pont arrière." },
+    { id: "v_cessna_citation_m2_gen3", name: "Cessna Citation M2 Gen3", emoji: "🛩️", price: 23300000, prestige: 30, cat: "plane", owned: false, desc: "Biréacteur léger, deux pilotes, sept passagers." },
+    { id: "v_cessna_citation_cj4_gen3", name: "Cessna Citation CJ4 Gen3", emoji: "🛩️", price: 38500000, prestige: 30, cat: "plane", owned: false, desc: "Rapide sur les courtes distances." },
+    { id: "v_cessna_citation_latitude", name: "Cessna Citation Latitude", emoji: "🛩️", price: 60400000, prestige: 38, cat: "plane", owned: false, desc: "Cabine debout, neuf places." },
+    { id: "v_cessna_citation_longitude", name: "Cessna Citation Longitude", emoji: "🛩️", price: 88000000, prestige: 38, cat: "plane", owned: false, desc: "Transatlantique, douze places." },
+    { id: "v_embraer_phenom_300e", name: "Embraer Phenom 300E", emoji: "🛩️", price: 41300000, prestige: 30, cat: "plane", owned: false, desc: "Le jet léger le plus vendu au monde." },
+    { id: "v_embraer_praetor_600", name: "Embraer Praetor 600", emoji: "🛩️", price: 68200000, prestige: 38, cat: "plane", owned: false, desc: "Autonomie Londres-New York sans escale." },
+    { id: "v_embraer_lineage_1000e", name: "Embraer Lineage 1000E", emoji: "✈️", price: 145000000, prestige: 48, cat: "plane", owned: false, desc: "Un airbus d'affaires. Cinq zones à bord." },
+    { id: "v_hondajet_elite_ii", name: "HondaJet Elite II", emoji: "🛩️", price: 28000000, prestige: 30, cat: "plane", owned: false, desc: "Réacteurs montés sur les ailes." },
+    { id: "v_pilatus_pc_24", name: "Pilatus PC-24", emoji: "🛩️", price: 41300000, prestige: 30, cat: "plane", owned: false, desc: "Il se pose sur une piste en herbe." },
+    { id: "v_pilatus_pc_12_ngx", name: "Pilatus PC-12 NGX", emoji: "🛩️", price: 24900000, prestige: 30, cat: "plane", owned: false, desc: "Monoturbopropulseur, neuf places." },
+    { id: "v_beechcraft_king_air_360", name: "Beechcraft King Air 360", emoji: "🛩️", price: 32600000, prestige: 30, cat: "plane", owned: false, desc: "L'increvable des liaisons régionales." },
+    { id: "v_daher_tbm_960", name: "Daher TBM 960", emoji: "🛩️", price: 20100000, prestige: 30, cat: "plane", owned: false, desc: "Le plus rapide des monomoteurs." },
+    { id: "v_bombardier_challenger_3500", name: "Bombardier Challenger 3500", emoji: "🛩️", price: 83200000, prestige: 38, cat: "plane", owned: false, desc: "Cabine la plus large de sa catégorie." },
+    { id: "v_bombardier_challenger_650", name: "Bombardier Challenger 650", emoji: "🛩️", price: 100000000, prestige: 38, cat: "plane", owned: false, desc: "Douze places, quatre mille milles." },
+    { id: "v_bombardier_global_6500", name: "Bombardier Global 6500", emoji: "✈️", price: 156000000, prestige: 48, cat: "plane", owned: false, desc: "Seize places, suite arrière." },
+    { id: "v_bombardier_global_7500", name: "Bombardier Global 7500", emoji: "✈️", price: 198000000, prestige: 48, cat: "plane", owned: false, desc: "Quatre zones de vie. Un vrai appartement." },
+    { id: "v_bombardier_global_8000", name: "Bombardier Global 8000", emoji: "✈️", price: 208000000, prestige: 48, cat: "plane", owned: false, desc: "Le jet d'affaires le plus rapide du monde." },
+    { id: "v_gulfstream_g280", name: "Gulfstream G280", emoji: "🛩️", price: 78200000, prestige: 38, cat: "plane", owned: false, desc: "Dix places, performance sur piste courte." },
+    { id: "v_gulfstream_g500", name: "Gulfstream G500", emoji: "✈️", price: 130000000, prestige: 48, cat: "plane", owned: false, desc: "Cabine silencieuse, hublots surdimensionnés." },
+    { id: "v_gulfstream_g600", name: "Gulfstream G600", emoji: "✈️", price: 156000000, prestige: 48, cat: "plane", owned: false, desc: "Six mille cinq cents milles d'autonomie." },
+    { id: "v_gulfstream_g650er", name: "Gulfstream G650ER", emoji: "✈️", price: 188000000, prestige: 48, cat: "plane", owned: false, desc: "La référence absolue depuis dix ans." },
+    { id: "v_gulfstream_g700", name: "Gulfstream G700", emoji: "✈️", price: 198000000, prestige: 48, cat: "plane", owned: false, desc: "Cinq zones, la plus longue cabine du marché." },
+    { id: "v_gulfstream_g800", name: "Gulfstream G800", emoji: "✈️", price: 208000000, prestige: 48, cat: "plane", owned: false, desc: "Il relie presque deux points quelconques du globe." },
+    { id: "v_dassault_falcon_2000lxs", name: "Dassault Falcon 2000LXS", emoji: "✈️", price: 100000000, prestige: 38, cat: "plane", owned: false, desc: "Le français increvable." },
+    { id: "v_dassault_falcon_8x", name: "Dassault Falcon 8X", emoji: "✈️", price: 160000000, prestige: 48, cat: "plane", owned: false, desc: "Trois réacteurs, cabine modulable." },
+    { id: "v_dassault_falcon_6x", name: "Dassault Falcon 6X", emoji: "✈️", price: 130000000, prestige: 48, cat: "plane", owned: false, desc: "La cabine la plus haute de sa catégorie." },
+    { id: "v_dassault_falcon_10x", name: "Dassault Falcon 10X", emoji: "✈️", price: 188000000, prestige: 48, cat: "plane", owned: false, desc: "Quatre salons, salle de bain complète." },
+    { id: "v_airbus_acj319neo", name: "Airbus ACJ319neo", emoji: "✈️", price: 238000000, prestige: 48, cat: "plane", owned: false, desc: "Un A319 reconverti en résidence volante." },
+    { id: "v_airbus_acj320neo", name: "Airbus ACJ320neo", emoji: "✈️", price: 257000000, prestige: 62, cat: "plane", owned: false, desc: "Chambre, bureau, salle à manger." },
+    { id: "v_airbus_acj_twotwenty", name: "Airbus ACJ TwoTwenty", emoji: "✈️", price: 208000000, prestige: 48, cat: "plane", owned: false, desc: "Six zones sur mesure." },
+    { id: "v_airbus_acj330neo", name: "Airbus ACJ330neo", emoji: "✈️", price: 524000000, prestige: 80, cat: "plane", owned: false, desc: "Deux cents mètres carrés en vol." },
+    { id: "v_airbus_acj350", name: "Airbus ACJ350", emoji: "✈️", price: 622000000, prestige: 80, cat: "plane", owned: false, desc: "Vingt-deux heures d'autonomie." },
+    { id: "v_boeing_bbj_max_8", name: "Boeing BBJ MAX 8", emoji: "✈️", price: 267000000, prestige: 62, cat: "plane", owned: false, desc: "Le 737 en version privée." },
+    { id: "v_boeing_bbj_787_8_dreamliner", name: "Boeing BBJ 787-8 Dreamliner", emoji: "✈️", price: 670000000, prestige: 80, cat: "plane", owned: false, desc: "Cinq suites, cinéma, salle de sport." },
+    { id: "v_boeing_bbj_777x", name: "Boeing BBJ 777X", emoji: "✈️", price: 824000000, prestige: 80, cat: "plane", owned: false, desc: "Le plus grand bimoteur jamais aménagé." },
+    { id: "v_boeing_747_8_vip", name: "Boeing 747-8 VIP", emoji: "🛫", price: 748000000, prestige: 80, cat: "plane", owned: false, desc: "Deux étages. Un escalier central en marbre." },
+    { id: "v_airbus_a380_prive_sur_mesure", name: "Airbus A380 privé sur mesure", emoji: "🛬", price: 638000000, prestige: 80, cat: "plane", owned: false, desc: "Cinq cents mètres carrés. Un palais volant." },
+    { id: "v_antonov_an_124_cargo_prive", name: "Antonov An-124 cargo privé", emoji: "🛫", price: 198000000, prestige: 48, cat: "plane", owned: false, desc: "Pour transporter les voitures avec soi." },
+    { id: "v_helicoptere_airbus_h125", name: "Hélicoptère Airbus H125", emoji: "🚁", price: 14900000, prestige: 22, cat: "plane", owned: false, desc: "Le cheval de trait de la montagne." },
+    { id: "v_helicoptere_airbus_h145", name: "Hélicoptère Airbus H145", emoji: "🚁", price: 35500000, prestige: 30, cat: "plane", owned: false, desc: "Bimoteur, cinq pales, cabine spacieuse." },
+    { id: "v_helicoptere_airbus_ach160_exclusiv", name: "Hélicoptère Airbus ACH160 Exclusive", emoji: "🚁", price: 57700000, prestige: 38, cat: "plane", owned: false, desc: "Le plus silencieux de sa catégorie." },
+    { id: "v_helicoptere_agustawestland_aw139", name: "Hélicoptère AgustaWestland AW139", emoji: "🚁", price: 49700000, prestige: 30, cat: "plane", owned: false, desc: "Quinze places, rayon d'action offshore." },
+    { id: "v_helicoptere_aw609_convertible", name: "Hélicoptère AW609 convertible", emoji: "🚁", price: 75700000, prestige: 38, cat: "plane", owned: false, desc: "Rotors basculants : il décolle à la verticale, vole comme un avion." },
+    { id: "v_helicoptere_bell_525_relentless", name: "Hélicoptère Bell 525 Relentless", emoji: "🚁", price: 57700000, prestige: 38, cat: "plane", owned: false, desc: "Commandes électriques, seize places." },
+    { id: "v_helicoptere_sikorsky_s_92_vip", name: "Hélicoptère Sikorsky S-92 VIP", emoji: "🚁", price: 88000000, prestige: 38, cat: "plane", owned: false, desc: "Celui des chefs d'État." },
+    { id: "v_helicoptere_robinson_r66_turbine", name: "Hélicoptère Robinson R66 Turbine", emoji: "🚁", price: 6170000, prestige: 16, cat: "plane", owned: false, desc: "Le premier appareil qu'on apprend à piloter." },
+    { id: "v_cirrus_vision_jet_sf50", name: "Cirrus Vision Jet SF50", emoji: "🛩️", price: 14900000, prestige: 22, cat: "plane", owned: false, desc: "Jet personnel à parachute balistique." },
+    { id: "v_icon_a5_amphibie", name: "Icon A5 amphibie", emoji: "🪽", price: 2490000, prestige: 12, cat: "plane", owned: false, desc: "Il se pose sur l'eau et replie ses ailes." },
+    { id: "v_dirigeable_zeppelin_nt_prive", name: "Dirigeable Zeppelin NT privé", emoji: "🎈", price: 49700000, prestige: 30, cat: "plane", owned: false, desc: "Douze places, deux cents mètres d'altitude, à vitesse de marche." },
+    { id: "v_montgolfiere_sur_mesure", name: "Montgolfière sur mesure", emoji: "🎈", price: 1110000, prestige: 8, cat: "plane", owned: false, desc: "Pour les matins où l'on ne va nulle part." },
+    { id: "v_evtol_lilium_pioneer", name: "eVTOL Lilium Pioneer", emoji: "🪽", price: 29600000, prestige: 30, cat: "plane", owned: false, desc: "Électrique, décollage vertical, silencieux." },
+    { id: "v_warbird_p_51_mustang_restaure", name: "Warbird P-51 Mustang restauré", emoji: "🏛️", price: 16700000, prestige: 22, cat: "plane", owned: false, desc: "Un chasseur de 1944 en état de vol." },
 ];
+// ─── LA BOUTIQUE ────────────────────────────────────────────────────────────
+// Trois rayons : ce qui a appartenu à quelqu'un d'autre, ce qui se porte, et
+// ce qui s'installe. Deux articles en conditionnent d'autres — sans hangar on
+// ne fait pas livrer un avion, sans anneau de port on n'amarre pas un bateau.
+const RAYONS_BOUTIQUE = [
+    { id: "collection", label: "🏅 Pièces de collection", intro: "Ce qui a appartenu à quelqu'un d'autre, et qui le restera toujours un peu." },
+    { id: "mode", label: "💎 Mode & joaillerie", intro: "Rien qui se démode. Tout se transmet." },
+    { id: "objets", label: "🏛️ Objets & lieux", intro: "Ce qu'on installe chez soi et qu'on ne déplace plus." },
+];
+const BOUTIQUE_CAT = [
+    { id: "b_maillot_de_zinedine_zidane_finale_", name: "Maillot de Zinédine Zidane, finale 1998, signé", emoji: "👕", price: 2740000, prestige: 7, cat: "collection", desc: "Porté le soir des deux têtes. Encadré, certificat de match." },
+    { id: "b_maillot_de_pele_coupe_du_monde_197", name: "Maillot de Pelé, Coupe du monde 1970", emoji: "👕", price: 6170000, prestige: 10, cat: "collection", desc: "Le Brésil de Mexico. Le plus beau maillot jamais porté." },
+    { id: "b_maillot_de_diego_maradona_mexico_1", name: "Maillot de Diego Maradona, Mexico 1986", emoji: "👕", price: 31100000, prestige: 18, cat: "collection", desc: "Celui du match contre l'Angleterre." },
+    { id: "b_crampons_de_ronaldo_finale_2002", name: "Crampons de Ronaldo, finale 2002", emoji: "👟", price: 1290000, prestige: 5, cat: "collection", desc: "Les deux buts de Yokohama." },
+    { id: "b_maillot_de_lionel_messi_finale_202", name: "Maillot de Lionel Messi, finale 2022, signé", emoji: "👕", price: 4870000, prestige: 10, cat: "collection", desc: "Porté à Lusail, le soir du titre." },
+    { id: "b_maillot_de_cristiano_ronaldo_lisbo", name: "Maillot de Cristiano Ronaldo, Lisbonne 2014", emoji: "👕", price: 2070000, prestige: 7, cat: "collection", desc: "La finale de la Decima." },
+    { id: "b_ballon_d_or_en_bronze_de_collectio", name: "Ballon d'Or en bronze de collection", emoji: "🏆", price: 2490000, prestige: 7, cat: "collection", desc: "Un exemplaire d'atelier, jamais remis." },
+    { id: "b_maillot_de_thierry_henry_highbury", name: "Maillot de Thierry Henry, Highbury", emoji: "👕", price: 1110000, prestige: 5, cat: "collection", desc: "Signé, encadré, provenance club." },
+    { id: "b_gants_de_gianluigi_buffon_berlin_2", name: "Gants de Gianluigi Buffon, Berlin 2006", emoji: "🧤", price: 922000, prestige: 3, cat: "collection", desc: "La finale aux tirs au but." },
+    { id: "b_maillot_de_ronaldinho_camp_nou_200", name: "Maillot de Ronaldinho, Camp Nou 2005", emoji: "👕", price: 1750000, prestige: 5, cat: "collection", desc: "L'année de l'ovation du Bernabéu." },
+    { id: "b_maillot_de_kylian_mbappe_finale_20", name: "Maillot de Kylian Mbappé, finale 2018", emoji: "👕", price: 1860000, prestige: 5, cat: "collection", desc: "Dix-neuf ans, champion du monde." },
+    { id: "b_chaussures_de_neymar_jr_copa_2019", name: "Chaussures de Neymar JR, Copa 2019", emoji: "👟", price: 760000, prestige: 3, cat: "collection", desc: "Signées sur la semelle." },
+    { id: "b_maillot_de_johan_cruyff_1974", name: "Maillot de Johan Cruyff, 1974", emoji: "👕", price: 3950000, prestige: 7, cat: "collection", desc: "Deux bandes au lieu de trois. Il refusait le sponsor." },
+    { id: "b_maillot_de_george_best_1968", name: "Maillot de George Best, 1968", emoji: "👕", price: 2230000, prestige: 7, cat: "collection", desc: "Le premier footballeur devenu une pop star." },
+    { id: "b_brassard_de_capitaine_de_franz_bec", name: "Brassard de capitaine de Franz Beckenbauer", emoji: "🎗️", price: 693000, prestige: 3, cat: "collection", desc: "Munich, 1974." },
+    { id: "b_maillot_de_michael_jordan_finale_1", name: "Maillot de Michael Jordan, finale 1998", emoji: "🏀", price: 35000000, prestige: 18, cat: "collection", desc: "Le dernier tir. Le dernier titre." },
+    { id: "b_paire_d_air_jordan_1_portees_en_19", name: "Paire d'Air Jordan 1 portées en 1985", emoji: "👟", price: 2740000, prestige: 7, cat: "collection", desc: "Les originales. Semelles usées." },
+    { id: "b_maillot_de_kobe_bryant_saison_2008", name: "Maillot de Kobe Bryant, saison 2008", emoji: "🏀", price: 20700000, prestige: 18, cat: "collection", desc: "Son année de MVP." },
+    { id: "b_ballon_du_match_des_100_points_de_", name: "Ballon du match des 100 points de Chamberlain", emoji: "🏀", price: 3950000, prestige: 7, cat: "collection", desc: "Hershey, 1962. Un record intouchable." },
+    { id: "b_maillot_de_lebron_james_finale_201", name: "Maillot de LeBron James, finale 2016", emoji: "🏀", price: 7010000, prestige: 10, cat: "collection", desc: "Le retour de Cleveland." },
+    { id: "b_maillot_de_shaquille_o_neal_lakers", name: "Maillot de Shaquille O'Neal, Lakers 2000", emoji: "🏀", price: 2390000, prestige: 7, cat: "collection", desc: "Trois titres consécutifs." },
+    { id: "b_maillot_de_stephen_curry_2016", name: "Maillot de Stephen Curry, 2016", emoji: "🏀", price: 1910000, prestige: 5, cat: "collection", desc: "Soixante-treize victoires." },
+    { id: "b_panneau_de_panier_du_forum_los_ang", name: "Panneau de panier du Forum, Los Angeles", emoji: "🏀", price: 1170000, prestige: 5, cat: "collection", desc: "Démonté lors de la rénovation." },
+    { id: "b_gants_de_muhammad_ali_kinshasa_197", name: "Gants de Muhammad Ali, Kinshasa 1974", emoji: "🥊", price: 22300000, prestige: 18, cat: "collection", desc: "Le combat contre Foreman." },
+    { id: "b_short_de_mike_tyson_1988", name: "Short de Mike Tyson, 1988", emoji: "🥊", price: 1630000, prestige: 5, cat: "collection", desc: "Quatre-vingt-onze secondes." },
+    { id: "b_casque_de_ayrton_senna_monaco_1988", name: "Casque de Ayrton Senna, Monaco 1988", emoji: "🪖", price: 4870000, prestige: 10, cat: "collection", desc: "La pole la plus célèbre de l'histoire." },
+    { id: "b_combinaison_de_michael_schumacher_", name: "Combinaison de Michael Schumacher, 2004", emoji: "🏁", price: 2740000, prestige: 7, cat: "collection", desc: "Sa dernière saison de titre." },
+    { id: "b_volant_de_formule_1_de_lewis_hamil", name: "Volant de Formule 1 de Lewis Hamilton", emoji: "🏎️", price: 1350000, prestige: 5, cat: "collection", desc: "Démonté après une victoire à Silverstone." },
+    { id: "b_raquette_de_roger_federer_wimbledo", name: "Raquette de Roger Federer, Wimbledon 2017", emoji: "🎾", price: 1520000, prestige: 5, cat: "collection", desc: "Son huitième titre." },
+    { id: "b_raquette_de_serena_williams_us_ope", name: "Raquette de Serena Williams, US Open", emoji: "🎾", price: 1170000, prestige: 5, cat: "collection", desc: "Signée sur le cordage." },
+    { id: "b_batte_de_babe_ruth_1927", name: "Batte de Babe Ruth, 1927", emoji: "⚾", price: 19400000, prestige: 13, cat: "collection", desc: "Soixante home runs cette année-là." },
+    { id: "b_crosse_de_wayne_gretzky_1985", name: "Crosse de Wayne Gretzky, 1985", emoji: "🏒", price: 2390000, prestige: 7, cat: "collection", desc: "Le plus grand joueur de hockey du siècle." },
+    { id: "b_velo_de_tour_de_france_d_un_vainqu", name: "Vélo de Tour de France d'un vainqueur d'étape", emoji: "🚴", price: 693000, prestige: 3, cat: "collection", desc: "Alpe d'Huez, signé sur le cadre." },
+    { id: "b_planche_de_surf_de_kelly_slater", name: "Planche de surf de Kelly Slater", emoji: "🏄", price: 922000, prestige: 3, cat: "collection", desc: "Pipeline, Hawaï." },
+    { id: "b_gants_de_floyd_mayweather_2015", name: "Gants de Floyd Mayweather, 2015", emoji: "🥊", price: 1960000, prestige: 5, cat: "collection", desc: "Le combat du siècle." },
+    { id: "b_veste_de_michael_jackson_tournee_b", name: "Veste de Michael Jackson, tournée Bad", emoji: "🧥", price: 7010000, prestige: 10, cat: "collection", desc: "Boucles, zips, et deux cents soirs de scène." },
+    { id: "b_gant_blanc_de_michael_jackson", name: "Gant blanc de Michael Jackson", emoji: "🧤", price: 2900000, prestige: 7, cat: "collection", desc: "Motown 25. Le moonwalk." },
+    { id: "b_guitare_de_jimi_hendrix_woodstock", name: "Guitare de Jimi Hendrix, Woodstock", emoji: "🎸", price: 8620000, prestige: 13, cat: "collection", desc: "Fender Stratocaster, cordes à l'envers." },
+    { id: "b_guitare_de_kurt_cobain_mtv_unplugg", name: "Guitare de Kurt Cobain, MTV Unplugged", emoji: "🎸", price: 21400000, prestige: 18, cat: "collection", desc: "Martin D-18E de 1959." },
+    { id: "b_piano_de_john_lennon", name: "Piano de John Lennon", emoji: "🎹", price: 9790000, prestige: 13, cat: "collection", desc: "Steinway blanc, Tittenhurst Park." },
+    { id: "b_veste_de_scene_de_freddie_mercury", name: "Veste de scène de Freddie Mercury", emoji: "🧥", price: 4870000, prestige: 10, cat: "collection", desc: "Wembley, 1986." },
+    { id: "b_manuscrit_original_d_une_chanson_d", name: "Manuscrit original d'une chanson de Bob Dylan", emoji: "📝", price: 9020000, prestige: 13, cat: "collection", desc: "Ratures au crayon, deuxième version." },
+    { id: "b_basse_de_prince_purple_rain", name: "Basse de Prince, Purple Rain", emoji: "🎸", price: 6170000, prestige: 10, cat: "collection", desc: "Peinte à la main par lui." },
+    { id: "b_lunettes_de_scene_d_elton_john", name: "Lunettes de scène d'Elton John", emoji: "👓", price: 1520000, prestige: 5, cat: "collection", desc: "Quatre cents paires. Celle-ci, c'est la bonne." },
+    { id: "b_chapeau_de_slash", name: "Chapeau de Slash", emoji: "🎩", price: 760000, prestige: 3, cat: "collection", desc: "Il ne l'a jamais enlevé sur scène." },
+    { id: "b_veste_de_tupac_1995", name: "Veste de Tupac, 1995", emoji: "🧥", price: 3720000, prestige: 7, cat: "collection", desc: "Portée pour un clip. Provenance familiale." },
+    { id: "b_chaine_de_biggie_smalls", name: "Chaîne de Biggie Smalls", emoji: "📿", price: 2590000, prestige: 7, cat: "collection", desc: "Jésus en or, sertie de rubis." },
+    { id: "b_carnet_de_textes_manuscrits_de_jay", name: "Carnet de textes manuscrits de Jay-Z", emoji: "📓", price: 2390000, prestige: 7, cat: "collection", desc: "Il disait ne jamais rien écrire." },
+    { id: "b_platines_de_grandmaster_flash", name: "Platines de Grandmaster Flash", emoji: "🎚️", price: 1290000, prestige: 5, cat: "collection", desc: "Technics 1200, modifiées à la main." },
+    { id: "b_micro_de_scene_de_whitney_houston", name: "Micro de scène de Whitney Houston", emoji: "🎤", price: 1750000, prestige: 5, cat: "collection", desc: "Plaqué or. Super Bowl 1991." },
+    { id: "b_robe_de_scene_de_beyonce_2016", name: "Robe de scène de Beyoncé, 2016", emoji: "👗", price: 2180000, prestige: 7, cat: "collection", desc: "Perles cousues une par une." },
+    { id: "b_veste_a_clous_de_johnny_hallyday", name: "Veste à clous de Johnny Hallyday", emoji: "🧥", price: 1290000, prestige: 5, cat: "collection", desc: "Trois cents représentations." },
+    { id: "b_accordeon_d_edith_piaf", name: "Accordéon d'Édith Piaf", emoji: "🪗", price: 1110000, prestige: 5, cat: "collection", desc: "Son premier accompagnateur." },
+    { id: "b_costume_de_scene_de_james_brown", name: "Costume de scène de James Brown", emoji: "🕴️", price: 1910000, prestige: 5, cat: "collection", desc: "Cape comprise." },
+    { id: "b_disque_d_or_original_des_beatles", name: "Disque d'or original des Beatles", emoji: "💿", price: 3090000, prestige: 7, cat: "collection", desc: "Attribué en 1964." },
+    { id: "b_veste_de_daft_punk_casque_d_origin", name: "Veste de Daft Punk, casque d'origine", emoji: "🪩", price: 4410000, prestige: 10, cat: "collection", desc: "Un seul des deux. L'autre reste introuvable." },
+    { id: "b_costume_de_marilyn_monroe_1955", name: "Costume de Marilyn Monroe, 1955", emoji: "👗", price: 18700000, prestige: 13, cat: "collection", desc: "La robe blanche. Celle de la bouche de métro." },
+    { id: "b_chapeau_d_indiana_jones_1981", name: "Chapeau d'Indiana Jones, 1981", emoji: "🤠", price: 3620000, prestige: 7, cat: "collection", desc: "Feutre, bosselé, authentifié par le studio." },
+    { id: "b_sabre_laser_de_la_premiere_trilogi", name: "Sabre laser de la première trilogie", emoji: "⚔️", price: 15300000, prestige: 13, cat: "collection", desc: "Accessoire de tournage, 1977." },
+    { id: "b_costume_de_batman_1989", name: "Costume de Batman, 1989", emoji: "🦇", price: 1690000, prestige: 5, cat: "collection", desc: "Moulé sur l'acteur." },
+    { id: "b_robe_d_audrey_hepburn_1961", name: "Robe d'Audrey Hepburn, 1961", emoji: "👗", price: 4320000, prestige: 10, cat: "collection", desc: "Noire, longue, et copiée depuis soixante ans." },
+    { id: "b_delorean_de_tournage", name: "DeLorean de tournage", emoji: "🚗", price: 3720000, prestige: 7, cat: "collection", desc: "Condensateur temporel non fonctionnel." },
+    { id: "b_masque_de_dark_vador_original", name: "Masque de Dark Vador original", emoji: "🖤", price: 4870000, prestige: 10, cat: "collection", desc: "Fibre de verre, repeint trois fois." },
+    { id: "b_canne_de_charlie_chaplin", name: "Canne de Charlie Chaplin", emoji: "🚶", price: 1860000, prestige: 5, cat: "collection", desc: "Bambou, usée à l'extrémité." },
+    { id: "b_scenario_annote_de_stanley_kubrick", name: "Scénario annoté de Stanley Kubrick", emoji: "📜", price: 2590000, prestige: 7, cat: "collection", desc: "Trois cents pages de notes au crayon rouge." },
+    { id: "b_costume_de_jean_paul_belmondo_1964", name: "Costume de Jean-Paul Belmondo, 1964", emoji: "🕴️", price: 922000, prestige: 3, cat: "collection", desc: "Cascades comprises." },
+    { id: "b_oscar_d_un_film_des_annees_cinquan", name: "Oscar d'un film des années cinquante", emoji: "🏆", price: 2490000, prestige: 7, cat: "collection", desc: "Vendu par les héritiers." },
+    { id: "b_montre_de_steve_jobs", name: "Montre de Steve Jobs", emoji: "⌚", price: 7420000, prestige: 10, cat: "collection", desc: "Seiko. Il la portait sur la photo de 1984." },
+    { id: "b_prototype_de_telephone_signe_par_s", name: "Prototype de téléphone signé par son concepteur", emoji: "📱", price: 2230000, prestige: 7, cat: "collection", desc: "Jamais commercialisé." },
+    { id: "b_machine_a_ecrire_d_ernest_hemingwa", name: "Machine à écrire d'Ernest Hemingway", emoji: "⌨️", price: 3950000, prestige: 7, cat: "collection", desc: "Royal Quiet De Luxe, Cuba." },
+    { id: "b_manuscrit_annote_d_un_prix_nobel_d", name: "Manuscrit annoté d'un prix Nobel de littérature", emoji: "📚", price: 4640000, prestige: 10, cat: "collection", desc: "Quatre chapitres entièrement récrits." },
+    { id: "b_palette_de_peintre_d_un_maitre_du_", name: "Palette de peintre d'un maître du XXe siècle", emoji: "🎨", price: 2070000, prestige: 7, cat: "collection", desc: "Couleurs encore sèches dessus." },
+    { id: "b_carnet_de_croquis_d_un_grand_coutu", name: "Carnet de croquis d'un grand couturier", emoji: "✏️", price: 1860000, prestige: 5, cat: "collection", desc: "Une collection entière, dessinée en trois jours." },
+    { id: "b_telescope_d_un_astronome_celebre", name: "Télescope d'un astronome célèbre", emoji: "🔭", price: 1350000, prestige: 5, cat: "collection", desc: "Il a servi à une découverte." },
+    { id: "b_stylo_de_signature_d_un_traite_his", name: "Stylo de signature d'un traité historique", emoji: "🖋️", price: 2740000, prestige: 7, cat: "collection", desc: "Deux exemplaires existent. Voici le second." },
+    { id: "b_echiquier_de_bobby_fischer", name: "Échiquier de Bobby Fischer", emoji: "♟️", price: 1750000, prestige: 5, cat: "collection", desc: "Reykjavik, 1972." },
+    { id: "b_veste_d_astronaute_du_programme_ap", name: "Veste d'astronaute du programme Apollo", emoji: "🧑‍🚀", price: 5740000, prestige: 10, cat: "collection", desc: "Elle a été portée en vol. Pas sur la Lune." },
+    { id: "b_fragment_de_roche_lunaire_certifie", name: "Fragment de roche lunaire certifié", emoji: "🌑", price: 12400000, prestige: 13, cat: "collection", desc: "Trois grammes. Provenance documentée." },
+    { id: "b_combinaison_de_vol_de_youri_gagari", name: "Combinaison de vol de Youri Gagarine", emoji: "🧑‍🚀", price: 13900000, prestige: 13, cat: "collection", desc: "Doublure d'origine, usée aux coudes." },
+    { id: "b_casque_de_pompier_du_11_septembre", name: "Casque de pompier du 11 septembre", emoji: "🪖", price: 1290000, prestige: 5, cat: "collection", desc: "Vendu au profit des familles." },
+    { id: "b_drapeau_signe_par_un_equipage_de_l", name: "Drapeau signé par un équipage de la Station spatiale", emoji: "🚩", price: 1050000, prestige: 5, cat: "collection", desc: "Il a passé six mois en orbite." },
+    { id: "b_velo_d_un_vainqueur_de_paris_rouba", name: "Vélo d'un vainqueur de Paris-Roubaix", emoji: "🚲", price: 625000, prestige: 3, cat: "collection", desc: "Boue d'origine, jamais nettoyée." },
+    { id: "b_gants_de_chirurgien_d_une_premiere", name: "Gants de chirurgien d'une première mondiale", emoji: "🧤", price: 727000, prestige: 3, cat: "collection", desc: "Première transplantation de son type." },
+    { id: "b_cahier_d_ecole_d_un_futur_prix_nob", name: "Cahier d'école d'un futur prix Nobel", emoji: "📓", price: 922000, prestige: 3, cat: "collection", desc: "Il avait neuf ans. Les marges sont pleines." },
+    { id: "b_dedicace_manuscrite_d_un_auteur_cu", name: "Dédicace manuscrite d'un auteur culte", emoji: "✍️", price: 760000, prestige: 3, cat: "collection", desc: "Trois lignes, à un inconnu, en 1962." },
+    { id: "b_appareil_photo_d_un_grand_reporter", name: "Appareil photo d'un grand reporter de guerre", emoji: "📷", price: 1580000, prestige: 5, cat: "collection", desc: "Un impact de balle sur le boîtier." },
+    { id: "b_carnet_de_bord_d_un_navigateur_en_", name: "Carnet de bord d'un navigateur en solitaire", emoji: "🧭", price: 1170000, prestige: 5, cat: "collection", desc: "Quatre-vingt-dix jours de mer, écrits à la main." },
+    { id: "b_toque_d_un_chef_trois_etoiles", name: "Toque d'un chef trois étoiles", emoji: "👨‍🍳", price: 555000, prestige: 3, cat: "collection", desc: "Avec le menu du dernier service." },
+    { id: "b_tablier_d_un_maitre_chocolatier", name: "Tablier d'un maître chocolatier", emoji: "🍫", price: 410000, prestige: 2, cat: "collection", desc: "Il a formé trois générations." },
+    { id: "b_partition_annotee_d_un_grand_chef_", name: "Partition annotée d'un grand chef d'orchestre", emoji: "🎼", price: 1960000, prestige: 5, cat: "collection", desc: "Chaque mesure porte une indication." },
+    { id: "b_archet_d_un_violoniste_virtuose", name: "Archet d'un violoniste virtuose", emoji: "🎻", price: 1460000, prestige: 5, cat: "collection", desc: "Il en a usé douze. Voici le premier." },
+    { id: "b_paire_de_pointes_d_une_etoile_de_l", name: "Paire de pointes d'une étoile de l'Opéra", emoji: "🩰", price: 484000, prestige: 2, cat: "collection", desc: "Dernière représentation. Satin usé." },
+    { id: "b_maillot_de_bain_olympique_d_un_rec", name: "Maillot de bain olympique d'un recordman", emoji: "🏊", price: 590000, prestige: 3, cat: "collection", desc: "Une finale, un record, une seule utilisation." },
+    { id: "b_javelot_d_un_champion_olympique", name: "Javelot d'un champion olympique", emoji: "🎯", price: 432000, prestige: 2, cat: "collection", desc: "Signé sur la hampe." },
+    { id: "b_trophee_d_un_championnat_du_monde_", name: "Trophée d'un championnat du monde d'échecs", emoji: "♟️", price: 2390000, prestige: 7, cat: "collection", desc: "Argent massif, gravé." },
+    { id: "b_manette_de_jeu_d_un_champion_du_mo", name: "Manette de jeu d'un champion du monde d'e-sport", emoji: "🎮", price: 333000, prestige: 2, cat: "collection", desc: "Les touches sont effacées." },
+    { id: "b_casque_de_pilote_de_rallye_legenda", name: "Casque de pilote de rallye légendaire", emoji: "🪖", price: 984000, prestige: 3, cat: "collection", desc: "Monte-Carlo, sous la neige." },
+    { id: "b_combinaison_de_plongee_d_un_record", name: "Combinaison de plongée d'un recordman d'apnée", emoji: "🤿", price: 520000, prestige: 3, cat: "collection", desc: "Moins deux cent quatorze mètres." },
+    { id: "b_piolet_d_un_alpiniste_sans_oxygene", name: "Piolet d'un alpiniste sans oxygène", emoji: "🧗", price: 1110000, prestige: 5, cat: "collection", desc: "Quatorze sommets de huit mille mètres." },
+    { id: "b_traineau_d_une_expedition_polaire", name: "Traîneau d'une expédition polaire", emoji: "🛷", price: 858000, prestige: 3, cat: "collection", desc: "Mille deux cents kilomètres à pied." },
+    { id: "b_voile_de_char_a_glace_d_un_record_", name: "Voile de char à glace d'un record de vitesse", emoji: "⛵", price: 372000, prestige: 2, cat: "collection", desc: "Deux cent vingt kilomètres heure sur un lac gelé." },
+    { id: "b_guitare_acoustique_d_un_chanteur_e", name: "Guitare acoustique d'un chanteur engagé", emoji: "🎸", price: 1910000, prestige: 5, cat: "collection", desc: "Un slogan gravé dans le bois." },
+    { id: "b_lettre_manuscrite_d_un_chef_d_etat", name: "Lettre manuscrite d'un chef d'État", emoji: "✉️", price: 3090000, prestige: 7, cat: "collection", desc: "Trois pages, jamais publiées." },
+    { id: "b_robe_de_mariee_d_une_actrice_des_a", name: "Robe de mariée d'une actrice des années soixante", emoji: "👰", price: 2180000, prestige: 7, cat: "collection", desc: "Portée une seule journée." },
+    { id: "b_service_de_porcelaine_d_un_palais_", name: "Service de porcelaine d'un palais européen", emoji: "🍽️", price: 1750000, prestige: 5, cat: "collection", desc: "Quatre-vingt-dix pièces, deux manquantes." },
+    { id: "b_cle_d_un_hotel_mythique_suite_100", name: "Clé d'un hôtel mythique, suite 100", emoji: "🔑", price: 693000, prestige: 3, cat: "collection", desc: "L'hôtel a fermé. La clé reste." },
+    { id: "b_patek_philippe_nautilus_5711", name: "Patek Philippe Nautilus 5711", emoji: "⌚", price: 1290000, prestige: 5, cat: "mode", desc: "Arrêtée de production. Le prix a triplé depuis." },
+    { id: "b_patek_philippe_grandmaster_chime", name: "Patek Philippe Grandmaster Chime", emoji: "⌚", price: 83200000, prestige: 23, cat: "mode", desc: "Vingt complications, deux cadrans réversibles." },
+    { id: "b_patek_philippe_sky_moon_tourbillon", name: "Patek Philippe Sky Moon Tourbillon", emoji: "⌚", price: 7420000, prestige: 10, cat: "mode", desc: "Douze complications. Deux ans d'attente." },
+    { id: "b_patek_philippe_perpetual_calendar_", name: "Patek Philippe Perpetual Calendar 3970", emoji: "⌚", price: 1690000, prestige: 5, cat: "mode", desc: "Il saura quelle date on est en 2100." },
+    { id: "b_audemars_piguet_royal_oak_offshore", name: "Audemars Piguet Royal Oak Offshore", emoji: "⌚", price: 922000, prestige: 3, cat: "mode", desc: "Le sport de luxe inventé en 1972." },
+    { id: "b_audemars_piguet_royal_oak_concept", name: "Audemars Piguet Royal Oak Concept", emoji: "⌚", price: 4870000, prestige: 10, cat: "mode", desc: "Tourbillon volant, boîtier en céramique noire." },
+    { id: "b_richard_mille_rm_27_04_nadal", name: "Richard Mille RM 27-04 Nadal", emoji: "⌚", price: 6170000, prestige: 10, cat: "mode", desc: "Le boîtier pèse trente grammes." },
+    { id: "b_richard_mille_rm_52_05_pharrell", name: "Richard Mille RM 52-05 Pharrell", emoji: "⌚", price: 5310000, prestige: 10, cat: "mode", desc: "Un casque d'astronaute sur le cadran." },
+    { id: "b_vacheron_constantin_les_cabinotier", name: "Vacheron Constantin Les Cabinotiers", emoji: "⌚", price: 10200000, prestige: 13, cat: "mode", desc: "Pièce unique, commandée sur dessin." },
+    { id: "b_a_lange_sohne_grand_complication", name: "A. Lange & Söhne Grand Complication", emoji: "⌚", price: 10900000, prestige: 13, cat: "mode", desc: "Six exemplaires au monde." },
+    { id: "b_rolex_daytona_paul_newman", name: "Rolex Daytona Paul Newman", emoji: "⌚", price: 18400000, prestige: 13, cat: "mode", desc: "Celle de la vente de 2017." },
+    { id: "b_rolex_gmt_master_ii_en_or", name: "Rolex GMT-Master II en or", emoji: "⌚", price: 410000, prestige: 2, cat: "mode", desc: "Deux fuseaux horaires, une seule vie." },
+    { id: "b_rolex_submariner_vintage_1960", name: "Rolex Submariner vintage 1960", emoji: "⌚", price: 1860000, prestige: 5, cat: "mode", desc: "Cadran tropicalisé, patine brune." },
+    { id: "b_jaeger_lecoultre_reverso_tribute", name: "Jaeger-LeCoultre Reverso Tribute", emoji: "⌚", price: 727000, prestige: 3, cat: "mode", desc: "Le boîtier pivote. Inventé pour les joueurs de polo." },
+    { id: "b_breguet_classique_tourbillon", name: "Breguet Classique Tourbillon", emoji: "⌚", price: 1520000, prestige: 5, cat: "mode", desc: "Celui qui a inventé le tourbillon, en 1801." },
+    { id: "b_f_p_journe_chronometre_bleu", name: "F.P. Journe Chronomètre Bleu", emoji: "⌚", price: 1110000, prestige: 5, cat: "mode", desc: "Tantale. Il n'en fait presque pas." },
+    { id: "b_greubel_forsey_double_tourbillon", name: "Greubel Forsey Double Tourbillon", emoji: "⌚", price: 3950000, prestige: 7, cat: "mode", desc: "Deux cages inclinées à trente degrés." },
+    { id: "b_mb_f_horological_machine_n_9", name: "MB&F Horological Machine N°9", emoji: "⌚", price: 3240000, prestige: 7, cat: "mode", desc: "Ça ne ressemble pas à une montre." },
+    { id: "b_hublot_big_bang_en_saphir_integral", name: "Hublot Big Bang en saphir intégral", emoji: "⌚", price: 2740000, prestige: 7, cat: "mode", desc: "Le boîtier entier est transparent." },
+    { id: "b_cartier_crash", name: "Cartier Crash", emoji: "⌚", price: 6170000, prestige: 10, cat: "mode", desc: "Déformée exprès. Dessinée en 1967." },
+    { id: "b_omega_speedmaster_apollo_11_or", name: "Omega Speedmaster Apollo 11 Or", emoji: "⌚", price: 922000, prestige: 3, cat: "mode", desc: "Numérotée. Cinquante exemplaires." },
+    { id: "b_chopard_l_u_c_full_strike", name: "Chopard L.U.C Full Strike", emoji: "⌚", price: 2230000, prestige: 7, cat: "mode", desc: "Le gong est taillé dans le verre saphir." },
+    { id: "b_collier_de_diamants_cartier_piece_", name: "Collier de diamants Cartier, pièce unique", emoji: "💎", price: 31100000, prestige: 18, cat: "mode", desc: "Quarante-deux carats, taille ancienne." },
+    { id: "b_parure_d_emeraudes_de_colombie", name: "Parure d'émeraudes de Colombie", emoji: "💚", price: 23900000, prestige: 18, cat: "mode", desc: "Collier, bracelet, boucles. Même gisement." },
+    { id: "b_bague_saphir_du_cachemire_15_carat", name: "Bague saphir du Cachemire 15 carats", emoji: "💙", price: 19400000, prestige: 13, cat: "mode", desc: "Le bleu le plus recherché du monde." },
+    { id: "b_diamant_jaune_fancy_20_carats", name: "Diamant jaune fancy 20 carats", emoji: "💛", price: 28000000, prestige: 18, cat: "mode", desc: "Certificat GIA, pureté interne." },
+    { id: "b_rubis_birman_non_chauffe_8_carats", name: "Rubis birman non chauffé 8 carats", emoji: "❤️", price: 16300000, prestige: 13, cat: "mode", desc: "Sang de pigeon. Aucun traitement." },
+    { id: "b_perles_naturelles_du_golfe_rang_de", name: "Perles naturelles du Golfe, rang de 60", emoji: "🤍", price: 9790000, prestige: 13, cat: "mode", desc: "Pêchées avant 1930. Non cultivées." },
+    { id: "b_bracelet_van_cleef_arpels_mystery_", name: "Bracelet Van Cleef & Arpels Mystery Set", emoji: "💠", price: 8620000, prestige: 13, cat: "mode", desc: "Les griffes sont invisibles. Brevet de 1933." },
+    { id: "b_broche_boucheron_piece_de_haute_jo", name: "Broche Boucheron pièce de haute joaillerie", emoji: "🦋", price: 7010000, prestige: 10, cat: "mode", desc: "Trois mille pierres, six mille heures." },
+    { id: "b_chevaliere_gravee_sur_mesure_or_et", name: "Chevalière gravée sur mesure, or et onyx", emoji: "💍", price: 693000, prestige: 3, cat: "mode", desc: "Ton monogramme, en creux." },
+    { id: "b_chaine_cubaine_or_18_carats_500_gr", name: "Chaîne cubaine or 18 carats, 500 grammes", emoji: "📿", price: 1350000, prestige: 5, cat: "mode", desc: "Faite à la main, maillon par maillon." },
+    { id: "b_pendentif_diamant_taille_poire_30_", name: "Pendentif diamant taille poire 30 carats", emoji: "💎", price: 35000000, prestige: 18, cat: "mode", desc: "D couleur, flawless." },
+    { id: "b_montre_bracelet_sertie_neige_1200_", name: "Montre-bracelet sertie neige, 1200 diamants", emoji: "💎", price: 4190000, prestige: 10, cat: "mode", desc: "On ne voit plus le métal." },
+    { id: "b_boutons_de_manchette_en_lapis_lazu", name: "Boutons de manchette en lapis-lazuli et or", emoji: "🔷", price: 387000, prestige: 2, cat: "mode", desc: "Afghanistan. Monture parisienne." },
+    { id: "b_bague_homme_en_platine_et_diamant_", name: "Bague homme en platine et diamant noir", emoji: "🖤", price: 1520000, prestige: 5, cat: "mode", desc: "Quinze carats, taille coussin." },
+    { id: "b_collier_de_jade_imperial", name: "Collier de jade impérial", emoji: "💚", price: 14600000, prestige: 13, cat: "mode", desc: "Birmanie. Une seule pièce de jade, creusée." },
+    { id: "b_alliance_en_or_gris_gravee_a_la_ma", name: "Alliance en or gris gravée à la main", emoji: "💍", price: 277000, prestige: 2, cat: "mode", desc: "Une phrase à l'intérieur. Personne ne la lira." },
+    { id: "b_malle_louis_vuitton_courrier_110_v", name: "Malle Louis Vuitton Courrier 110 vintage", emoji: "🧳", price: 1290000, prestige: 5, cat: "mode", desc: "1910. Monogramme toilé, serrure d'origine." },
+    { id: "b_malle_bar_louis_vuitton_sur_mesure", name: "Malle-bar Louis Vuitton sur mesure", emoji: "🧳", price: 1170000, prestige: 5, cat: "mode", desc: "Six carafes, douze verres, un tiroir à cigares." },
+    { id: "b_malle_secretaire_goyard", name: "Malle-secrétaire Goyard", emoji: "🧳", price: 1050000, prestige: 5, cat: "mode", desc: "Elle s'ouvre en bureau complet." },
+    { id: "b_malle_a_chaussures_louis_vuitton_3", name: "Malle à chaussures Louis Vuitton, 30 paires", emoji: "🧳", price: 922000, prestige: 3, cat: "mode", desc: "Un tiroir par paire." },
+    { id: "b_hermes_birkin_himalaya_crocodile", name: "Hermès Birkin Himalaya crocodile", emoji: "👜", price: 2490000, prestige: 7, cat: "mode", desc: "La plus chère jamais vendue aux enchères." },
+    { id: "b_hermes_kelly_sellier_crocodile_noi", name: "Hermès Kelly Sellier crocodile noir", emoji: "👜", price: 1110000, prestige: 5, cat: "mode", desc: "Liste d'attente abolie : tu achètes la revente." },
+    { id: "b_hermes_constance_en_lezard", name: "Hermès Constance en lézard", emoji: "👜", price: 625000, prestige: 3, cat: "mode", desc: "Fermoir H en or blanc." },
+    { id: "b_hermes_haut_a_courroies_50", name: "Hermès Haut à Courroies 50", emoji: "👜", price: 760000, prestige: 3, cat: "mode", desc: "Conçu pour transporter une selle." },
+    { id: "b_sac_de_voyage_louis_vuitton_keepal", name: "Sac de voyage Louis Vuitton Keepall cuir", emoji: "🧳", price: 277000, prestige: 2, cat: "mode", desc: "Taurillon naturel. Il vieillira mieux que toi." },
+    { id: "b_attache_case_bottega_veneta_intrec", name: "Attaché-case Bottega Veneta intrecciato", emoji: "💼", price: 227000, prestige: 2, cat: "mode", desc: "Tressé à la main, sans un logo." },
+    { id: "b_porte_documents_berluti_patine", name: "Porte-documents Berluti patiné", emoji: "💼", price: 192000, prestige: 2, cat: "mode", desc: "Chaque pièce a sa teinte." },
+    { id: "b_set_de_bagages_rimowa_or_18_carats", name: "Set de bagages Rimowa or 18 carats", emoji: "🧳", price: 447000, prestige: 2, cat: "mode", desc: "Il en existe très peu." },
+    { id: "b_manteau_de_vison_noir_pleine_peau", name: "Manteau de vison noir pleine peau", emoji: "🧥", price: 693000, prestige: 3, cat: "mode", desc: "Doublure soie, coupe droite." },
+    { id: "b_manteau_de_zibeline_russe", name: "Manteau de zibeline russe", emoji: "🧥", price: 1170000, prestige: 5, cat: "mode", desc: "La fourrure la plus légère et la plus chère." },
+    { id: "b_veste_en_chinchilla", name: "Veste en chinchilla", emoji: "🧥", price: 922000, prestige: 3, cat: "mode", desc: "Elle pèse huit cents grammes." },
+    { id: "b_parka_de_lynx_du_canada", name: "Parka de lynx du Canada", emoji: "🧥", price: 760000, prestige: 3, cat: "mode", desc: "Pour les hivers qu'on choisit." },
+    { id: "b_manteau_de_cachemire_loro_piana_re", name: "Manteau de cachemire Loro Piana Record Bale", emoji: "🧥", price: 432000, prestige: 2, cat: "mode", desc: "La laine la plus fine jamais récoltée." },
+    { id: "b_costume_sur_mesure_savile_row_troi", name: "Costume sur mesure Savile Row, trois essayages", emoji: "🕴️", price: 309000, prestige: 2, cat: "mode", desc: "Soixante-dix heures de travail à la main." },
+    { id: "b_smoking_tom_ford_sur_mesure", name: "Smoking Tom Ford sur mesure", emoji: "🤵", price: 277000, prestige: 2, cat: "mode", desc: "Revers satin, coupe italienne." },
+    { id: "b_trench_burberry_en_gabardine_herit", name: "Trench Burberry en gabardine Heritage", emoji: "🧥", price: 138000, prestige: 2, cat: "mode", desc: "Le tissu a été inventé en 1879." },
+    { id: "b_veste_en_cuir_d_agneau_saint_laure", name: "Veste en cuir d'agneau Saint Laurent, pièce défilé", emoji: "🧥", price: 357000, prestige: 2, cat: "mode", desc: "Elle n'a jamais été commercialisée." },
+    { id: "b_doudoune_moncler_genius_edition_li", name: "Doudoune Moncler Genius édition limitée", emoji: "🧥", price: 165000, prestige: 2, cat: "mode", desc: "Cinquante exemplaires numérotés." },
+    { id: "b_blouson_en_crocodile_hermes", name: "Blouson en crocodile Hermès", emoji: "🧥", price: 1050000, prestige: 5, cat: "mode", desc: "Deux ans de fabrication." },
+    { id: "b_gilet_pare_balles_de_ville_cuir_et", name: "Gilet pare-balles de ville, cuir et kevlar", emoji: "🛡️", price: 410000, prestige: 2, cat: "mode", desc: "Il ressemble à un gilet de costume." },
+    { id: "b_chemises_sur_mesure_charvet_lot_de", name: "Chemises sur mesure Charvet, lot de douze", emoji: "👔", price: 293000, prestige: 2, cat: "mode", desc: "Prise de mesure à Paris, place Vendôme." },
+    { id: "b_kimono_de_soie_ancien_brode_main", name: "Kimono de soie ancien, brodé main", emoji: "👘", price: 555000, prestige: 3, cat: "mode", desc: "Époque Meiji. Il se porte ou il s'encadre." },
+    { id: "b_cape_de_laine_double_face_loro_pia", name: "Cape de laine double face Loro Piana", emoji: "🧣", price: 227000, prestige: 2, cat: "mode", desc: "Pas une couture apparente." },
+    { id: "b_pyjama_de_soie_sur_mesure_monogram", name: "Pyjama de soie sur mesure, monogrammé", emoji: "🛏️", price: 109000, prestige: 2, cat: "mode", desc: "Parce que personne ne le verra." },
+    { id: "b_peignoir_en_cachemire_brode", name: "Peignoir en cachemire brodé", emoji: "🛁", price: 138000, prestige: 2, cat: "mode", desc: "Trois kilos de laine du Ladakh." },
+    { id: "b_richelieu_berluti_alessandro_sur_m", name: "Richelieu Berluti Alessandro sur mesure", emoji: "👞", price: 138000, prestige: 2, cat: "mode", desc: "Patine réalisée après la prise de pied." },
+    { id: "b_bottines_john_lobb_sur_forme_perso", name: "Bottines John Lobb sur forme personnelle", emoji: "👢", price: 192000, prestige: 2, cat: "mode", desc: "Ta forme en bois reste à Londres." },
+    { id: "b_sneakers_de_haute_couture_en_pytho", name: "Sneakers de haute couture en python", emoji: "👟", price: 277000, prestige: 2, cat: "mode", desc: "Faites main, trente paires au monde." },
+    { id: "b_mocassins_en_cuir_de_veau_non_tein", name: "Mocassins en cuir de veau non teinté", emoji: "👞", price: 104000, prestige: 2, cat: "mode", desc: "Ils prendront ta couleur en dix ans." },
+    { id: "b_bottes_de_cavalier_sur_mesure", name: "Bottes de cavalier sur mesure", emoji: "🥾", price: 165000, prestige: 2, cat: "mode", desc: "Cuir de vachette, montées sur forme." },
+    { id: "b_ceinture_hermes_boucle_or_massif", name: "Ceinture Hermès boucle or massif", emoji: "🪢", price: 309000, prestige: 2, cat: "mode", desc: "La boucle vaut plus que la ceinture." },
+    { id: "b_echarpe_en_vigogne_fil_unique", name: "Écharpe en vigogne, fil unique", emoji: "🧣", price: 192000, prestige: 2, cat: "mode", desc: "La fibre la plus rare du monde animal." },
+    { id: "b_gants_de_pecari_doubles_cachemire", name: "Gants de pécari doublés cachemire", emoji: "🧤", price: 50000, prestige: 2, cat: "mode", desc: "Ils se portent cent ans." },
+    { id: "b_chapeau_borsalino_en_feutre_de_lap", name: "Chapeau Borsalino en feutre de lapin", emoji: "🎩", price: 58000, prestige: 2, cat: "mode", desc: "Formé à la vapeur, à la main." },
+    { id: "b_canne_en_ebene_a_pommeau_d_argent", name: "Canne en ébène à pommeau d'argent", emoji: "🚶", price: 156000, prestige: 2, cat: "mode", desc: "Un compartiment secret dans le fût." },
+    { id: "b_parapluie_brigg_sur_mesure_manche_", name: "Parapluie Brigg sur mesure, manche en châtaignier", emoji: "☂️", price: 41000, prestige: 2, cat: "mode", desc: "Monté à Londres depuis 1836." },
+    { id: "b_portefeuille_en_cuir_d_alligator", name: "Portefeuille en cuir d'alligator", emoji: "👛", price: 113000, prestige: 2, cat: "mode", desc: "Douze emplacements. Tu n'en utiliseras que trois." },
+    { id: "b_stylo_montblanc_skeleton_or_massif", name: "Stylo Montblanc Skeleton or massif", emoji: "🖋️", price: 410000, prestige: 2, cat: "mode", desc: "Plume gravée à la main." },
+    { id: "b_stylo_caran_d_ache_1010_diamonds", name: "Stylo Caran d'Ache 1010 Diamonds", emoji: "🖋️", price: 4870000, prestige: 10, cat: "mode", desc: "Huit cents diamants sur le corps." },
+    { id: "b_briquet_dupont_laque_de_chine_et_o", name: "Briquet Dupont laque de Chine et or", emoji: "🔥", price: 192000, prestige: 2, cat: "mode", desc: "Le bruit du clapet est déposé." },
+    { id: "b_etui_a_cigares_en_cedre_et_crocodi", name: "Étui à cigares en cèdre et crocodile", emoji: "🚬", price: 138000, prestige: 2, cat: "mode", desc: "Hygrométrie constante." },
+    { id: "b_coffret_de_rasage_thiers_issard", name: "Coffret de rasage Thiers-Issard", emoji: "🪒", price: 83000, prestige: 2, cat: "mode", desc: "Rasoir, blaireau, cuir, et un miroir de voyage." },
+    { id: "b_flacon_de_parfum_sur_mesure_grasse", name: "Flacon de parfum sur mesure, Grasse", emoji: "🧴", price: 693000, prestige: 3, cat: "mode", desc: "Ta formule reste dans leurs archives." },
+    { id: "b_boite_a_montres_remontoir_24_empla", name: "Boîte à montres remontoir, 24 emplacements", emoji: "⌚", price: 432000, prestige: 2, cat: "mode", desc: "Acajou massif, moteurs silencieux." },
+    { id: "b_coffre_fort_horloger_biometrique", name: "Coffre-fort horloger biométrique", emoji: "🔐", price: 555000, prestige: 3, cat: "mode", desc: "Deux tonnes. Il ne se déplace pas." },
+    { id: "b_set_de_valises_globe_trotter_sur_m", name: "Set de valises Globe-Trotter sur mesure", emoji: "🧳", price: 227000, prestige: 2, cat: "mode", desc: "Fibre vulcanisée. Même procédé qu'en 1897." },
+    { id: "b_carnet_de_voyage_relie_cuir_papier", name: "Carnet de voyage relié cuir, papier coton", emoji: "📓", price: 46000, prestige: 2, cat: "mode", desc: "Trois cents pages vierges." },
+    { id: "b_porte_passeport_en_cuir_hermes", name: "Porte-passeport en cuir Hermès", emoji: "🛂", price: 41000, prestige: 2, cat: "mode", desc: "Pour un document que tu montres rarement." },
+    { id: "b_blazer_en_soie_brode_fil_d_or", name: "Blazer en soie brodé fil d'or", emoji: "🧥", price: 491000, prestige: 2, cat: "mode", desc: "Trois cents heures de broderie à Mumbai." },
+    { id: "b_manteau_de_ceremonie_brode_main_pi", name: "Manteau de cérémonie brodé main, pièce unique", emoji: "🧥", price: 922000, prestige: 3, cat: "mode", desc: "Dessiné pour un seul porteur." },
+    { id: "b_costume_trois_pieces_en_laine_supe", name: "Costume trois-pièces en laine Super 250s", emoji: "🕴️", price: 387000, prestige: 2, cat: "mode", desc: "Le fil est plus fin qu'un cheveu." },
+    { id: "b_veste_de_chasse_en_tweed_harris_su", name: "Veste de chasse en tweed Harris sur mesure", emoji: "🧥", price: 113000, prestige: 2, cat: "mode", desc: "Tissée sur les Hébrides extérieures." },
+    { id: "b_pardessus_en_poil_de_chameau", name: "Pardessus en poil de chameau", emoji: "🧥", price: 175000, prestige: 2, cat: "mode", desc: "Il tient chaud sans peser." },
+    { id: "b_gilet_en_peau_de_pecari_retournee", name: "Gilet en peau de pécari retournée", emoji: "🦺", price: 128000, prestige: 2, cat: "mode", desc: "Il se portera mieux dans vingt ans." },
+    { id: "b_collection_de_cravates_en_soie_lot", name: "Collection de cravates en soie, lot de cinquante", emoji: "👔", price: 192000, prestige: 2, cat: "mode", desc: "Tissées à Côme, roulées à la main." },
+    { id: "b_n_ud_papillon_en_soie_fait_main_lo", name: "Nœud papillon en soie, fait main, lot de douze", emoji: "🎀", price: 61000, prestige: 2, cat: "mode", desc: "Ils ne sont pas pré-noués." },
+    { id: "b_boutons_de_col_en_or_et_nacre", name: "Boutons de col en or et nacre", emoji: "🔘", price: 104000, prestige: 2, cat: "mode", desc: "Pour les chemises à col détachable." },
+    { id: "b_epingle_de_cravate_en_platine_et_d", name: "Épingle de cravate en platine et diamant", emoji: "📌", price: 227000, prestige: 2, cat: "mode", desc: "Deux carats, taille baguette." },
+    { id: "b_bracelet_de_cheville_en_or_pour_fe", name: "Bracelet de cheville en or pour femme, pièce unique", emoji: "💫", price: 325000, prestige: 2, cat: "mode", desc: "Dessiné par un joaillier de la place Vendôme." },
+    { id: "b_tiare_de_haute_joaillerie", name: "Tiare de haute joaillerie", emoji: "👑", price: 12400000, prestige: 13, cat: "mode", desc: "Elle se démonte en collier et deux broches." },
+    { id: "b_peigne_a_cheveux_en_ecaille_et_dia", name: "Peigne à cheveux en écaille et diamants", emoji: "💇", price: 1290000, prestige: 5, cat: "mode", desc: "Art déco, vers 1925." },
+    { id: "b_eventail_en_nacre_et_dentelle_de_c", name: "Éventail en nacre et dentelle de Chantilly", emoji: "🪭", price: 760000, prestige: 3, cat: "mode", desc: "Il a appartenu à une cour européenne." },
+    { id: "b_mouchoirs_de_lin_brodes_lot_de_vin", name: "Mouchoirs de lin brodés, lot de vingt-quatre", emoji: "🤍", price: 36000, prestige: 2, cat: "mode", desc: "Initiales au point de bourdon." },
+    { id: "b_peignoir_de_boxe_brode_sur_mesure", name: "Peignoir de boxe brodé sur mesure", emoji: "🥊", price: 138000, prestige: 2, cat: "mode", desc: "Ton nom dans le dos, en fil d'or." },
+    { id: "b_survetement_de_luxe_en_cachemire_e", name: "Survêtement de luxe en cachemire et soie", emoji: "🩳", price: 104000, prestige: 2, cat: "mode", desc: "Le confort d'un pyjama, le prix d'une voiture." },
+    { id: "b_maillot_de_bain_sur_mesure_en_soie", name: "Maillot de bain sur mesure en soie technique", emoji: "🩱", price: 46000, prestige: 2, cat: "mode", desc: "Coupé d'après tes mesures." },
+    { id: "b_sandales_en_cuir_tresse_fait_main", name: "Sandales en cuir tressé fait main", emoji: "🩴", price: 41000, prestige: 2, cat: "mode", desc: "Un artisan de Capri, deux jours de travail." },
+    { id: "b_chaussons_d_interieur_en_vison", name: "Chaussons d'intérieur en vison", emoji: "🥿", price: 61000, prestige: 2, cat: "mode", desc: "Pour marcher chez soi sans faire de bruit." },
+    { id: "b_robe_de_soiree_haute_couture_piece", name: "Robe de soirée haute couture, pièce de défilé", emoji: "👗", price: 1520000, prestige: 5, cat: "mode", desc: "Quatre cents heures d'atelier." },
+    { id: "b_robe_du_soir_brodee_de_cristaux", name: "Robe du soir brodée de cristaux", emoji: "✨", price: 1290000, prestige: 5, cat: "mode", desc: "Elle pèse onze kilos." },
+    { id: "b_cape_d_opera_en_velours_de_soie", name: "Cape d'opéra en velours de soie", emoji: "🎭", price: 555000, prestige: 3, cat: "mode", desc: "Doublure écarlate, fermoir en or." },
+    { id: "b_corset_de_haute_couture_baleines_d", name: "Corset de haute couture, baleines d'acier", emoji: "🪡", price: 357000, prestige: 2, cat: "mode", desc: "Monté sur un buste à tes mesures." },
+    { id: "b_combinaison_de_soiree_en_lame_or", name: "Combinaison de soirée en lamé or", emoji: "✨", price: 760000, prestige: 3, cat: "mode", desc: "Elle a été refusée par trois clientes avant toi." },
+    { id: "b_etole_de_plumes_d_autruche_teintes", name: "Étole de plumes d'autruche teintes", emoji: "🪶", price: 387000, prestige: 2, cat: "mode", desc: "Deux mètres cinquante de plumes." },
+    { id: "b_gants_d_opera_en_chevreau_montant_", name: "Gants d'opéra en chevreau, montant au-dessus du coude", emoji: "🧤", price: 72000, prestige: 2, cat: "mode", desc: "Vingt-quatre boutons de nacre." },
+    { id: "b_sac_du_soir_en_minaudiere_or_et_di", name: "Sac du soir en minaudière or et diamants", emoji: "👛", price: 1860000, prestige: 5, cat: "mode", desc: "Il contient un rouge à lèvres. C'est tout." },
+    { id: "b_manteau_d_astrakan_noir", name: "Manteau d'astrakan noir", emoji: "🧥", price: 506000, prestige: 3, cat: "mode", desc: "Coupe droite, col montant." },
+    { id: "b_veste_de_smoking_en_velours_de_soi", name: "Veste de smoking en velours de soie bordeaux", emoji: "🤵", price: 261000, prestige: 2, cat: "mode", desc: "Pour les soirées où l'on reste assis." },
+    { id: "b_coffret_de_boutons_de_manchette_do", name: "Coffret de boutons de manchette, douze paires", emoji: "🔷", price: 555000, prestige: 3, cat: "mode", desc: "Pierres dures différentes à chaque fois." },
+    { id: "b_service_de_voyage_en_argent_massif", name: "Service de voyage en argent massif", emoji: "🍽️", price: 432000, prestige: 2, cat: "mode", desc: "Il tient dans une malle. Vingt-quatre pièces." },
+    { id: "b_flasque_en_argent_gravee_cuir_cous", name: "Flasque en argent gravée, cuir cousu main", emoji: "🥃", price: 83000, prestige: 2, cat: "mode", desc: "Elle contient exactement deux verres." },
+    { id: "b_hangar_prive_sur_aerodrome", name: "Hangar privé sur aérodrome", emoji: "🛫", price: 29600000, prestige: 18, cat: "objets", desc: "Trois mille mètres carrés, accès piste directe. Sans lui, aucun avion ne peut être livré.", cle: "hangar" },
+    { id: "b_anneau_de_port_en_eau_profonde", name: "Anneau de port en eau profonde", emoji: "⚓", price: 23300000, prestige: 18, cat: "objets", desc: "Quarante mètres de quai, électricité et eau à poste. Sans lui, aucun bateau ne peut être amarré.", cle: "port" },
+    { id: "b_deuxieme_hangar_aerodrome_prive", name: "Deuxième hangar, aérodrome privé", emoji: "🛫", price: 41300000, prestige: 18, cat: "objets", desc: "Celui où l'on gare ce qu'on ne montre pas." },
+    { id: "b_place_de_port_a_monaco", name: "Place de port à Monaco", emoji: "⚓", price: 32600000, prestige: 18, cat: "objets", desc: "La liste d'attente était de douze ans. Elle l'est toujours." },
+    { id: "b_heliport_prive_certifie", name: "Héliport privé certifié", emoji: "🚁", price: 14900000, prestige: 13, cat: "objets", desc: "Balisage, manche à air, et l'autorisation qui va avec." },
+    { id: "b_piste_d_atterrissage_privee_1800_m", name: "Piste d'atterrissage privée, 1800 m", emoji: "🛬", price: 46900000, prestige: 18, cat: "objets", desc: "Asphalte, balisage nocturne, douane sur demande." },
+    { id: "b_cave_a_vin_climatisee_5000_bouteil", name: "Cave à vin climatisée, 5000 bouteilles", emoji: "🍷", price: 4870000, prestige: 10, cat: "objets", desc: "Voûtes de pierre, hygrométrie constante, registre numérique." },
+    { id: "b_cave_a_vin_de_collection_20_000_bo", name: "Cave à vin de collection, 20 000 bouteilles", emoji: "🍷", price: 18400000, prestige: 13, cat: "objets", desc: "Deux étages sous terre. Un sommelier à demeure." },
+    { id: "b_lot_de_douze_romanee_conti_1990", name: "Lot de douze Romanée-Conti 1990", emoji: "🍷", price: 2740000, prestige: 7, cat: "objets", desc: "Une caisse d'origine, jamais ouverte." },
+    { id: "b_verticale_de_chateau_petrus_1945_a", name: "Verticale de Château Pétrus, 1945 à 2015", emoji: "🍷", price: 8620000, prestige: 13, cat: "objets", desc: "Soixante-dix millésimes consécutifs." },
+    { id: "b_imperiale_de_chateau_d_yquem_1921", name: "Impériale de Château d'Yquem 1921", emoji: "🍾", price: 2070000, prestige: 7, cat: "objets", desc: "Six litres. Le millésime du siècle." },
+    { id: "b_collection_de_whiskys_japonais_int", name: "Collection de whiskys japonais introuvables", emoji: "🥃", price: 1860000, prestige: 5, cat: "objets", desc: "Karuizawa, Hanyu, Yamazaki 55 ans." },
+    { id: "b_macallan_1926_fine_and_rare", name: "Macallan 1926 Fine and Rare", emoji: "🥃", price: 10200000, prestige: 13, cat: "objets", desc: "La bouteille la plus chère jamais vendue." },
+    { id: "b_cave_a_cigares_climatisee_3000_pie", name: "Cave à cigares climatisée, 3000 pièces", emoji: "🚬", price: 1290000, prestige: 5, cat: "objets", desc: "Cèdre d'Espagne, hygrométrie à 70 %." },
+    { id: "b_lot_de_cigares_pre_embargo_cubains", name: "Lot de cigares pré-embargo cubains", emoji: "🚬", price: 1050000, prestige: 5, cat: "objets", desc: "Roulés avant 1962. Ils fument encore." },
+    { id: "b_cuisine_professionnelle_sur_mesure", name: "Cuisine professionnelle sur mesure", emoji: "👨‍🍳", price: 3720000, prestige: 7, cat: "objets", desc: "Piano de cuisson à douze feux, chambre froide, passe." },
+    { id: "b_table_de_chef_prive_pour_douze", name: "Table de chef privé pour douze", emoji: "🍽️", price: 922000, prestige: 3, cat: "objets", desc: "Au milieu de la cuisine. On regarde travailler." },
+    { id: "b_four_a_pizza_napolitain_en_briques", name: "Four à pizza napolitain en briques", emoji: "🍕", price: 693000, prestige: 3, cat: "objets", desc: "Monté par un artisan venu de Naples." },
+    { id: "b_cellier_a_jambons_iberiques", name: "Cellier à jambons ibériques", emoji: "🍖", price: 410000, prestige: 2, cat: "objets", desc: "Douze pattes noires en affinage permanent." },
+    { id: "b_service_de_table_en_porcelaine_de_", name: "Service de table en porcelaine de Limoges, 120 pièces", emoji: "🍽️", price: 1290000, prestige: 5, cat: "objets", desc: "Peint à la main, filet or." },
+    { id: "b_argenterie_christofle_service_comp", name: "Argenterie Christofle, service complet", emoji: "🥄", price: 1520000, prestige: 5, cat: "objets", desc: "Deux cents pièces, poinçon de 1900." },
+    { id: "b_cristallerie_baccarat_service_de_6", name: "Cristallerie Baccarat, service de 60 verres", emoji: "🥂", price: 1110000, prestige: 5, cat: "objets", desc: "Six tailles différentes. Soufflé bouche." },
+    { id: "b_cinema_prive_20_places", name: "Cinéma privé 20 places", emoji: "🎬", price: 4640000, prestige: 10, cat: "objets", desc: "Projection laser, Dolby Atmos, fauteuils en cuir." },
+    { id: "b_salle_de_projection_4k_avec_cabine", name: "Salle de projection 4K avec cabine de montage", emoji: "🎬", price: 7010000, prestige: 10, cat: "objets", desc: "Tu peux y faire des étalonnages. Et y dormir." },
+    { id: "b_studio_d_enregistrement_prive_regi", name: "Studio d'enregistrement privé, régie SSL", emoji: "🎚️", price: 8620000, prestige: 13, cat: "objets", desc: "Console analogique, cabine flottante, traitement acoustique sur mesure." },
+    { id: "b_salle_de_mastering_certifiee", name: "Salle de mastering certifiée", emoji: "🎛️", price: 4870000, prestige: 10, cat: "objets", desc: "Acoustique mesurée au laser. Un seul fauteuil." },
+    { id: "b_salle_de_sport_complete_avec_coach", name: "Salle de sport complète avec coach à demeure", emoji: "🏋️", price: 2740000, prestige: 7, cat: "objets", desc: "Tout le matériel d'un club, pour une personne." },
+    { id: "b_ring_de_boxe_professionnel_homolog", name: "Ring de boxe professionnel homologué", emoji: "🥊", price: 922000, prestige: 3, cat: "objets", desc: "Six mètres sur six, cordes neuves." },
+    { id: "b_piscine_a_debordement_chauffee_25_", name: "Piscine à débordement chauffée, 25 mètres", emoji: "🏊", price: 7820000, prestige: 10, cat: "objets", desc: "Nage à contre-courant, éclairage subaquatique." },
+    { id: "b_spa_et_hammam_en_marbre_de_carrare", name: "Spa et hammam en marbre de Carrare", emoji: "🧖", price: 4320000, prestige: 10, cat: "objets", desc: "Deux cents mètres carrés, fontaine de glace." },
+    { id: "b_sauna_finlandais_en_epicea_massif", name: "Sauna finlandais en épicéa massif", emoji: "🔥", price: 760000, prestige: 3, cat: "objets", desc: "Poêle à bois. Rien d'électrique." },
+    { id: "b_court_de_tennis_en_terre_battue", name: "Court de tennis en terre battue", emoji: "🎾", price: 2590000, prestige: 7, cat: "objets", desc: "Éclairé, drainé, arrosé automatiquement." },
+    { id: "b_terrain_de_basket_couvert", name: "Terrain de basket couvert", emoji: "🏀", price: 2390000, prestige: 7, cat: "objets", desc: "Parquet d'érable, panneaux professionnels." },
+    { id: "b_parcours_de_golf_prive_9_trous", name: "Parcours de golf privé 9 trous", emoji: "⛳", price: 24900000, prestige: 18, cat: "objets", desc: "Greens entretenus toute l'année." },
+    { id: "b_simulateur_de_golf_professionnel", name: "Simulateur de golf professionnel", emoji: "⛳", price: 1290000, prestige: 5, cat: "objets", desc: "Deux cents parcours du monde entier." },
+    { id: "b_bowling_prive_quatre_pistes", name: "Bowling privé, quatre pistes", emoji: "🎳", price: 2740000, prestige: 7, cat: "objets", desc: "Système de remise automatique, bar intégré." },
+    { id: "b_salle_de_billard_table_brunswick_a", name: "Salle de billard, table Brunswick ancienne", emoji: "🎱", price: 922000, prestige: 3, cat: "objets", desc: "Ardoise de trois tonnes, tapis changé chaque année." },
+    { id: "b_salle_d_arcade_bornes_originales", name: "Salle d'arcade, bornes originales", emoji: "🕹️", price: 1170000, prestige: 5, cat: "objets", desc: "Vingt bornes des années quatre-vingt, en état de marche." },
+    { id: "b_simulateur_de_course_automobile_pr", name: "Simulateur de course automobile professionnel", emoji: "🏎️", price: 1860000, prestige: 5, cat: "objets", desc: "Vérins hydrauliques. Le même que les écuries." },
+    { id: "b_simulateur_de_vol_certifie_a320", name: "Simulateur de vol certifié A320", emoji: "✈️", price: 4870000, prestige: 10, cat: "objets", desc: "Il compte pour les heures de qualification." },
+    { id: "b_mur_d_escalade_interieur_12_metres", name: "Mur d'escalade intérieur, 12 mètres", emoji: "🧗", price: 1630000, prestige: 5, cat: "objets", desc: "Voies modifiables, assurage automatique." },
+    { id: "b_piste_de_karting_privee_900_metres", name: "Piste de karting privée, 900 mètres", emoji: "🏁", price: 8620000, prestige: 13, cat: "objets", desc: "Chicanes modulables, chronométrage." },
+    { id: "b_ecurie_pour_six_chevaux_et_carrier", name: "Écurie pour six chevaux et carrière", emoji: "🐎", price: 10200000, prestige: 13, cat: "objets", desc: "Box en chêne, sellerie chauffée." },
+    { id: "b_chenil_professionnel_et_parcours_d", name: "Chenil professionnel et parcours d'agility", emoji: "🐕", price: 1860000, prestige: 5, cat: "objets", desc: "Pour ceux qui préfèrent les chiens aux gens." },
+    { id: "b_voliere_tropicale_chauffee", name: "Volière tropicale chauffée", emoji: "🦜", price: 1350000, prestige: 5, cat: "objets", desc: "Quinze mètres de haut. Un microclimat." },
+    { id: "b_aquarium_recifal_de_40_000_litres", name: "Aquarium récifal de 40 000 litres", emoji: "🐠", price: 3720000, prestige: 7, cat: "objets", desc: "Un technicien passe deux fois par semaine." },
+    { id: "b_tableau_de_rene_magritte", name: "Tableau de René Magritte", emoji: "🖼️", price: 41300000, prestige: 18, cat: "objets", desc: "Huile sur toile, 1948. Provenance documentée." },
+    { id: "b_tableau_de_claude_monet_serie_des_", name: "Tableau de Claude Monet, série des Nymphéas", emoji: "🖼️", price: 123000000, prestige: 29, cat: "objets", desc: "Giverny, vers 1916." },
+    { id: "b_toile_de_pablo_picasso_periode_ble", name: "Toile de Pablo Picasso, période bleue", emoji: "🖼️", price: 208000000, prestige: 29, cat: "objets", desc: "1902. Elle n'a quitté une collection privée qu'une fois." },
+    { id: "b_uvre_de_jean_michel_basquiat", name: "Œuvre de Jean-Michel Basquiat", emoji: "🖼️", price: 156000000, prestige: 29, cat: "objets", desc: "Acrylique et bâton à l'huile, 1982." },
+    { id: "b_toile_de_mark_rothko", name: "Toile de Mark Rothko", emoji: "🖼️", price: 134000000, prestige: 29, cat: "objets", desc: "Deux rectangles. Trente minutes devant, et tu comprends." },
+    { id: "b_uvre_d_andy_warhol_serigraphie_uni", name: "Œuvre d'Andy Warhol, sérigraphie unique", emoji: "🖼️", price: 68200000, prestige: 23, cat: "objets", desc: "Épreuve d'artiste, signée au dos." },
+    { id: "b_sculpture_d_alberto_giacometti", name: "Sculpture d'Alberto Giacometti", emoji: "🗿", price: 218000000, prestige: 29, cat: "objets", desc: "Bronze, patine d'origine, fonte du vivant." },
+    { id: "b_mobile_d_alexander_calder", name: "Mobile d'Alexander Calder", emoji: "🎐", price: 46900000, prestige: 18, cat: "objets", desc: "Il bouge avec l'air de la pièce." },
+    { id: "b_uvre_de_yayoi_kusama_infinity_net", name: "Œuvre de Yayoi Kusama, Infinity Net", emoji: "🖼️", price: 29600000, prestige: 18, cat: "objets", desc: "Cent mille points peints à la main." },
+    { id: "b_installation_de_banksy_mur_decoupe", name: "Installation de Banksy, mur découpé", emoji: "🧱", price: 38500000, prestige: 18, cat: "objets", desc: "Le mur entier, descellé et encadré." },
+    { id: "b_toile_de_gerhard_richter_abstracti", name: "Toile de Gerhard Richter, abstraction", emoji: "🖼️", price: 57700000, prestige: 23, cat: "objets", desc: "Raclée à la spatule. Aucun repentir possible." },
+    { id: "b_sculpture_de_jeff_koons_acier_poli", name: "Sculpture de Jeff Koons, acier poli", emoji: "🎈", price: 63000000, prestige: 23, cat: "objets", desc: "Elle reflète toute la pièce, déformée." },
+    { id: "b_dessin_de_leonard_de_vinci_feuille", name: "Dessin de Léonard de Vinci, feuille d'étude", emoji: "✏️", price: 83200000, prestige: 23, cat: "objets", desc: "Sanguine sur papier préparé. Écriture en miroir." },
+    { id: "b_estampe_japonaise_d_hokusai_tirage", name: "Estampe japonaise d'Hokusai, tirage ancien", emoji: "🌊", price: 10900000, prestige: 13, cat: "objets", desc: "Un des tout premiers tirages de la Grande Vague." },
+    { id: "b_statue_antique_grecque_marbre", name: "Statue antique grecque, marbre", emoji: "🏛️", price: 49700000, prestige: 18, cat: "objets", desc: "IVe siècle avant notre ère. Provenance vérifiée." },
+    { id: "b_masque_africain_fang_collection_an", name: "Masque africain Fang, collection ancienne", emoji: "🎭", price: 16000000, prestige: 13, cat: "objets", desc: "Il a influencé toute une génération de peintres." },
+    { id: "b_tapisserie_d_aubusson_du_xviie_sie", name: "Tapisserie d'Aubusson du XVIIe siècle", emoji: "🧵", price: 7820000, prestige: 10, cat: "objets", desc: "Six mètres sur quatre. Scène de chasse." },
+    { id: "b_vase_ming_dynastie_xuande", name: "Vase Ming, dynastie Xuande", emoji: "🏺", price: 32600000, prestige: 18, cat: "objets", desc: "Bleu et blanc. Quinze exemplaires connus." },
+    { id: "b_horloge_astronomique_de_table_xvii", name: "Horloge astronomique de table, XVIIIe", emoji: "🕰️", price: 12400000, prestige: 13, cat: "objets", desc: "Elle indique les phases de la lune et le zodiaque." },
+    { id: "b_globe_terrestre_de_coronelli_1688", name: "Globe terrestre de Coronelli, 1688", emoji: "🌍", price: 9020000, prestige: 13, cat: "objets", desc: "Un mètre dix de diamètre. L'Amérique y est incomplète." },
+    { id: "b_manuscrit_enlumine_medieval", name: "Manuscrit enluminé médiéval", emoji: "📜", price: 18400000, prestige: 13, cat: "objets", desc: "Parchemin, or à la feuille, XIIIe siècle." },
+    { id: "b_incunable_imprime_avant_1500", name: "Incunable imprimé avant 1500", emoji: "📖", price: 13900000, prestige: 13, cat: "objets", desc: "Un des quarante exemplaires recensés." },
+    { id: "b_collection_de_photographies_tirage", name: "Collection de photographies, tirages d'époque", emoji: "📷", price: 10200000, prestige: 13, cat: "objets", desc: "Cent clichés signés, argentiques, jamais réédités." },
+    { id: "b_piano_steinway_model_d_de_concert", name: "Piano Steinway Model D de concert", emoji: "🎹", price: 1520000, prestige: 5, cat: "objets", desc: "Choisi dans la salle de sélection de Hambourg." },
+    { id: "b_piano_a_queue_laque_sur_mesure", name: "Piano à queue laqué sur mesure", emoji: "🎹", price: 2390000, prestige: 7, cat: "objets", desc: "Même mécanique, finition dessinée pour la pièce." },
+    { id: "b_violon_de_cremone_ecole_de_stradiv", name: "Violon de Crémone, école de Stradivari", emoji: "🎻", price: 24900000, prestige: 18, cat: "objets", desc: "1715. Il n'est pas sous vitrine : il se joue." },
+    { id: "b_orgue_de_chambre_baroque_restaure", name: "Orgue de chambre baroque restauré", emoji: "🎼", price: 4640000, prestige: 10, cat: "objets", desc: "Huit jeux. Il faut deux personnes pour en jouer." },
+    { id: "b_collection_de_guitares_vintage_vin", name: "Collection de guitares vintage, vingt pièces", emoji: "🎸", price: 8620000, prestige: 13, cat: "objets", desc: "Gibson, Fender, Martin, toutes d'avant 1965." },
+    { id: "b_juke_box_wurlitzer_1946_restaure", name: "Juke-box Wurlitzer 1946 restauré", emoji: "🎶", price: 693000, prestige: 3, cat: "objets", desc: "Il n'accepte que les quarante-cinq tours." },
+    { id: "b_bibliotheque_sur_mesure_10_000_vol", name: "Bibliothèque sur mesure, 10 000 volumes", emoji: "📚", price: 3720000, prestige: 7, cat: "objets", desc: "Boiseries de chêne, échelle sur rail, verrière." },
+    { id: "b_bureau_d_ecriture_en_acajou_xviiie", name: "Bureau d'écriture en acajou, XVIIIe", emoji: "🪑", price: 2590000, prestige: 7, cat: "objets", desc: "Il a servi à signer des choses importantes." },
+    { id: "b_salon_de_reception_mobilier_d_epoq", name: "Salon de réception, mobilier d'époque", emoji: "🛋️", price: 6170000, prestige: 10, cat: "objets", desc: "Tout est ancien. Rien n'est à vendre." },
+    { id: "b_jardin_d_hiver_vitre", name: "Jardin d'hiver vitré", emoji: "🪴", price: 4320000, prestige: 10, cat: "objets", desc: "Structure en fonte, palmiers de six mètres." },
+    { id: "b_jardin_a_la_francaise_dessine_sur_", name: "Jardin à la française dessiné sur plan", emoji: "🌿", price: 10900000, prestige: 13, cat: "objets", desc: "Buis taillés, allées de gravier, bassin central." },
+    { id: "b_serre_tropicale_chauffee", name: "Serre tropicale chauffée", emoji: "🌺", price: 3290000, prestige: 7, cat: "objets", desc: "Orchidées rares, hygrométrie permanente." },
+    { id: "b_potager_biologique_et_verger_2_hec", name: "Potager biologique et verger, 2 hectares", emoji: "🥬", price: 2390000, prestige: 7, cat: "objets", desc: "Un maraîcher à demeure. Tu ne fais plus de courses." },
+    { id: "b_ruches_et_production_de_miel", name: "Ruches et production de miel", emoji: "🐝", price: 410000, prestige: 2, cat: "objets", desc: "Douze colonies. Le miel porte le nom du domaine." },
+    { id: "b_observatoire_astronomique_avec_cou", name: "Observatoire astronomique avec coupole", emoji: "🔭", price: 7010000, prestige: 10, cat: "objets", desc: "Télescope de cinquante centimètres, motorisé." },
+    { id: "b_bunker_prive_autonomie_six_mois", name: "Bunker privé, autonomie six mois", emoji: "🚪", price: 19400000, prestige: 13, cat: "objets", desc: "Filtration, groupe électrogène, réserve d'eau." },
+    { id: "b_chambre_forte_biometrique", name: "Chambre forte biométrique", emoji: "🔐", price: 4870000, prestige: 10, cat: "objets", desc: "Porte d'une tonne. Délai d'ouverture programmable." },
+    { id: "b_salle_de_securite_et_videosurveill", name: "Salle de sécurité et vidéosurveillance", emoji: "📹", price: 3720000, prestige: 7, cat: "objets", desc: "Quatre-vingts caméras, deux opérateurs en permanence." },
+    { id: "b_garage_souterrain_climatise_trente", name: "Garage souterrain climatisé, trente places", emoji: "🅿️", price: 10200000, prestige: 13, cat: "objets", desc: "Monte-voiture, sol en résine, atelier intégré." },
+    { id: "b_atelier_de_restauration_automobile", name: "Atelier de restauration automobile", emoji: "🔧", price: 5740000, prestige: 10, cat: "objets", desc: "Pont élévateur, cabine de peinture, mécanicien attitré." },
+    { id: "b_ascenseur_prive_en_verre", name: "Ascenseur privé en verre", emoji: "🛗", price: 2590000, prestige: 7, cat: "objets", desc: "Il dessert quatre niveaux. Il est inutile. Il est beau." },
+    { id: "b_cheminee_monumentale_en_pierre_de_", name: "Cheminée monumentale en pierre de taille", emoji: "🔥", price: 1860000, prestige: 5, cat: "objets", desc: "Elle vient d'un château démonté." },
+    { id: "b_escalier_d_honneur_en_marbre_et_fe", name: "Escalier d'honneur en marbre et fer forgé", emoji: "🪜", price: 5130000, prestige: 10, cat: "objets", desc: "Deux volées symétriques, rampe à la main." },
+    { id: "b_plafond_peint_a_la_fresque", name: "Plafond peint à la fresque", emoji: "🎨", price: 8620000, prestige: 13, cat: "objets", desc: "Six mois de travail, échafaudage compris." },
+    { id: "b_vitraux_d_atelier_sur_mesure", name: "Vitraux d'atelier sur mesure", emoji: "🪟", price: 3090000, prestige: 7, cat: "objets", desc: "Dessinés pour la lumière du matin." },
+    { id: "b_salle_de_meditation_et_de_priere", name: "Salle de méditation et de prière", emoji: "🕯️", price: 2180000, prestige: 7, cat: "objets", desc: "Pierre nue, une seule ouverture zénithale." },
+    { id: "b_chapelle_privee_consacree", name: "Chapelle privée consacrée", emoji: "⛪", price: 7820000, prestige: 10, cat: "objets", desc: "Quarante places. Un prêtre vient le dimanche." },
+    { id: "b_salle_de_banquet_pour_cent_couvert", name: "Salle de banquet pour cent couverts", emoji: "🍽️", price: 9020000, prestige: 13, cat: "objets", desc: "Office attenant, vestiaire, et une acoustique correcte." },
+    { id: "b_discotheque_privee_avec_cabine_dj", name: "Discothèque privée avec cabine DJ", emoji: "🪩", price: 4320000, prestige: 10, cat: "objets", desc: "Système Funktion-One, piste de danse rétroéclairée." },
+    { id: "b_bar_a_cocktails_avec_barman_a_deme", name: "Bar à cocktails avec barman à demeure", emoji: "🍸", price: 2070000, prestige: 7, cat: "objets", desc: "Trois cents références. Glace taillée à la main." },
+    { id: "b_fumoir_en_cuir_et_boiseries", name: "Fumoir en cuir et boiseries", emoji: "🚬", price: 1910000, prestige: 5, cat: "objets", desc: "Extraction silencieuse. On n'y sent rien le lendemain." },
+    { id: "b_salle_de_jeux_et_poker_avec_table_", name: "Salle de jeux et poker avec table officielle", emoji: "🃏", price: 1630000, prestige: 5, cat: "objets", desc: "Feutre changé après chaque partie." },
+    { id: "b_cabinet_de_curiosites_pieces_natur", name: "Cabinet de curiosités, pièces naturalisées", emoji: "🦴", price: 3860000, prestige: 7, cat: "objets", desc: "Météorites, fossiles, insectes. Tout est légal." },
+    { id: "b_squelette_de_dinosaure_monte", name: "Squelette de dinosaure monté", emoji: "🦖", price: 31100000, prestige: 18, cat: "objets", desc: "Sept mètres. Certificat d'exportation en règle." },
+    { id: "b_meteorite_de_mars_certifiee", name: "Météorite de Mars certifiée", emoji: "☄️", price: 6170000, prestige: 10, cat: "objets", desc: "Quatre cents grammes. Plus rare que l'or." },
+    { id: "b_collection_de_mineraux_rares", name: "Collection de minéraux rares", emoji: "💎", price: 4320000, prestige: 10, cat: "objets", desc: "Cristaux de deux mètres, non taillés." },
+    { id: "b_herbier_ancien_relie_xviiie_siecle", name: "Herbier ancien relié, XVIIIe siècle", emoji: "🌿", price: 2590000, prestige: 7, cat: "objets", desc: "Mille planches, toutes identifiées à la main." },
+    { id: "b_mappemonde_ancienne_et_cartes_mari", name: "Mappemonde ancienne et cartes marines", emoji: "🗺️", price: 5130000, prestige: 10, cat: "objets", desc: "Portulans du XVIe, encre et or." },
+    { id: "b_collection_de_montres_anciennes_ci", name: "Collection de montres anciennes, cinquante pièces", emoji: "⌚", price: 12400000, prestige: 13, cat: "objets", desc: "Toutes révisées, toutes en marche." },
+    { id: "b_collection_de_stylos_de_collection", name: "Collection de stylos de collection", emoji: "🖋️", price: 2180000, prestige: 7, cat: "objets", desc: "Cent vingt pièces, de 1890 à aujourd'hui." },
+    { id: "b_collection_de_disques_vinyles_50_0", name: "Collection de disques vinyles, 50 000 pièces", emoji: "💿", price: 7010000, prestige: 10, cat: "objets", desc: "Une pièce entière, classée par label." },
+    { id: "b_jukebox_de_rue_et_flipper_d_origin", name: "Jukebox de rue et flipper d'origine", emoji: "🕹️", price: 922000, prestige: 3, cat: "objets", desc: "Ils marchent encore avec des pièces." },
+    { id: "b_table_de_mixage_de_studio_historiq", name: "Table de mixage de studio historique", emoji: "🎚️", price: 2900000, prestige: 7, cat: "objets", desc: "Trois albums que tout le monde connaît sont passés dessus." },
+    { id: "b_micro_neumann_u47_de_1954", name: "Micro Neumann U47 de 1954", emoji: "🎤", price: 1290000, prestige: 5, cat: "objets", desc: "Lampe d'origine. Il n'en reste presque plus." },
+    { id: "b_salle_d_ecoute_haute_fidelite", name: "Salle d'écoute haute-fidélité", emoji: "🔊", price: 3860000, prestige: 7, cat: "objets", desc: "Électronique à tubes, enceintes sur mesure, un fauteuil." },
+    { id: "b_jardin_japonais_avec_bassin_a_carp", name: "Jardin japonais avec bassin à carpes koi", emoji: "🎋", price: 4820000, prestige: 10, cat: "objets", desc: "Un jardinier vient tailler chaque semaine." },
+    { id: "b_labyrinthe_de_charmilles", name: "Labyrinthe de charmilles", emoji: "🌳", price: 6170000, prestige: 10, cat: "objets", desc: "Deux hectares. Les invités s'y perdent vraiment." },
+    { id: "b_court_de_petanque_eclaire_et_buvet", name: "Court de pétanque éclairé et buvette", emoji: "🔵", price: 693000, prestige: 3, cat: "objets", desc: "La chose la moins chère du domaine. La plus utilisée." },
+    { id: "b_cinema_de_plein_air_et_ecran_gonfl", name: "Cinéma de plein air et écran gonflable", emoji: "🌙", price: 1050000, prestige: 5, cat: "objets", desc: "Projections l'été, draps sur la pelouse." },
+    { id: "b_pont_prive_enjambant_la_riviere_du", name: "Pont privé enjambant la rivière du domaine", emoji: "🌉", price: 4230000, prestige: 10, cat: "objets", desc: "Pierre et acier. Il porte ton nom sur une plaque." },
+    { id: "b_phare_restaure_sur_la_propriete", name: "Phare restauré sur la propriété", emoji: "🗼", price: 10900000, prestige: 13, cat: "objets", desc: "Il ne guide plus personne. Il éclaire quand même." },
+    { id: "b_moulin_a_eau_restaure_en_pavillon_", name: "Moulin à eau restauré en pavillon d'invités", emoji: "🏚️", price: 5740000, prestige: 10, cat: "objets", desc: "La roue tourne encore." },
+    { id: "b_tour_de_guet_medievale_restauree", name: "Tour de guet médiévale restaurée", emoji: "🏰", price: 8620000, prestige: 13, cat: "objets", desc: "Trois niveaux, escalier à vis, vue à dix kilomètres." },
+    { id: "b_grotte_amenagee_en_salle_de_degust", name: "Grotte aménagée en salle de dégustation", emoji: "🕳️", price: 5040000, prestige: 10, cat: "objets", desc: "Température constante, douze degrés, toute l'année." },
+    { id: "b_plage_privee_amenagee_et_paillote", name: "Plage privée aménagée et paillote", emoji: "🏖️", price: 7820000, prestige: 10, cat: "objets", desc: "Sable rapporté, transats, et personne d'autre." },
+    { id: "b_ponton_flottant_et_cabane_de_peche", name: "Ponton flottant et cabane de pêche", emoji: "🎣", price: 2390000, prestige: 7, cat: "objets", desc: "Pour les matins où tu ne veux voir personne." },
+    { id: "b_telesiege_prive_reliant_le_chalet_", name: "Télésiège privé reliant le chalet aux pistes", emoji: "🚡", price: 16000000, prestige: 13, cat: "objets", desc: "Quatre places. Il part de ton salon." },
+    { id: "b_patinoire_exterieure_refrigeree", name: "Patinoire extérieure réfrigérée", emoji: "⛸️", price: 3670000, prestige: 7, cat: "objets", desc: "Elle tient de novembre à mars, même sans gel." },
+    { id: "b_piste_de_luge_d_ete_en_beton", name: "Piste de luge d'été en béton", emoji: "🛷", price: 3090000, prestige: 7, cat: "objets", desc: "Douze cents mètres de descente." },
+    { id: "b_lac_artificiel_de_ski_nautique", name: "Lac artificiel de ski nautique", emoji: "🌊", price: 12400000, prestige: 13, cat: "objets", desc: "Huit cents mètres, eau plate garantie." },
+    { id: "b_mur_de_squash_et_salle_de_raquette", name: "Mur de squash et salle de raquettes", emoji: "🎾", price: 1860000, prestige: 5, cat: "objets", desc: "Verre trempé sur trois côtés." },
+    { id: "b_salle_de_danse_avec_barre_et_miroi", name: "Salle de danse avec barre et miroirs", emoji: "🩰", price: 1350000, prestige: 5, cat: "objets", desc: "Parquet flottant sur ressorts." },
+    { id: "b_atelier_de_peinture_avec_verriere_", name: "Atelier de peinture avec verrière nord", emoji: "🎨", price: 2590000, prestige: 7, cat: "objets", desc: "La lumière ne change pas de la journée." },
+    { id: "b_atelier_de_lutherie_equipe", name: "Atelier de lutherie équipé", emoji: "🪵", price: 2180000, prestige: 7, cat: "objets", desc: "Bois en séchage depuis vingt ans." },
+    { id: "b_imprimerie_typographique_ancienne", name: "Imprimerie typographique ancienne", emoji: "🖨️", price: 1750000, prestige: 5, cat: "objets", desc: "Presse à platine, casses de plomb complètes." },
+    { id: "b_laboratoire_photo_argentique", name: "Laboratoire photo argentique", emoji: "📷", price: 1290000, prestige: 5, cat: "objets", desc: "Agrandisseur grand format, bains, séchoir." },
+    { id: "b_cave_de_maturation_de_fromages", name: "Cave de maturation de fromages", emoji: "🧀", price: 1110000, prestige: 5, cat: "objets", desc: "Un affineur passe les retourner." },
+    { id: "b_fumoir_a_poissons_et_viandes", name: "Fumoir à poissons et viandes", emoji: "🐟", price: 760000, prestige: 3, cat: "objets", desc: "Bois de hêtre, méthode scandinave." },
+    { id: "b_boulangerie_privee_avec_four_a_pai", name: "Boulangerie privée avec four à pain", emoji: "🥖", price: 1460000, prestige: 5, cat: "objets", desc: "Levain entretenu depuis trente ans." },
+    { id: "b_torrefacteur_de_cafe_professionnel", name: "Torréfacteur de café professionnel", emoji: "☕", price: 922000, prestige: 3, cat: "objets", desc: "Vingt kilos par fournée. Sacs verts livrés chaque mois." },
+    { id: "b_distillerie_privee_alambic_en_cuiv", name: "Distillerie privée, alambic en cuivre", emoji: "⚗️", price: 3860000, prestige: 7, cat: "objets", desc: "Licence incluse. La première cuvée est dans dix ans." },
+    { id: "b_chai_de_vieillissement_en_futs_de_", name: "Chai de vieillissement en fûts de chêne", emoji: "🛢️", price: 7010000, prestige: 10, cat: "objets", desc: "Deux cents barriques. Le temps fait le reste." },
+];
+// L'article qui ouvre une porte : le hangar pour les avions, l'anneau pour les
+// bateaux. On cherche par sa clé, pas par son identifiant.
+function possedeCle(gs, cle) {
+    const achetes = new Set((gs && gs.boutique) || []);
+    return BOUTIQUE_CAT.some(a => a.cle === cle && achetes.has(a.id));
+}
+function manqueCle(gs, v) {
+    if (!v)
+        return null;
+    if (v.cat === "plane" && !possedeCle(gs, "hangar"))
+        return "hangar";
+    if (v.cat === "boat" && !possedeCle(gs, "port"))
+        return "port";
+    return null;
+}
 const QUICK_ACTIONS = {
     vie: [
         { label: "Se lever", emoji: "☀️", ctx: "Fisco se lève à la Villa Tarka", energy: 20, money: 0, rep: 0, hours: 1 },
@@ -20660,6 +21324,7 @@ const INIT = {
         san_jose: { id: "san_jose", name: "San Jose Earthquakes", emoji: "⚽", revenue: -80000, growth: 5 },
     },
     properties: PROPS_CAT.map(p => ({ ...p })),
+    boutique: [],
     vehicles: VEHI_CAT.map(v => ({ ...v })),
     discography: [
         mkProj("tecktonik_single", "La Tecktonik Mamene", "single", 2019, 11, 20, [
@@ -20925,7 +21590,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "135";
+const VERSION_JEU = "136";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -20974,7 +21639,7 @@ function capStreams(next) {
 // Le plafond de streams, le plafond de célébrité, le palier du cercle et la
 // réparation des couples s'appliquent d'eux-mêmes à chaque geste du joueur.
 // Reste une correction rétroactive, qui n'a de sens qu'une seule fois.
-const VERSION_EQUILIBRE = 7;
+const VERSION_EQUILIBRE = 8;
 // Où se trouve réellement un morceau : on cherche dans toute la discographie.
 function projetDuMorceau(titre, disco) {
     if (!titre || !Array.isArray(disco))
@@ -21103,6 +21768,21 @@ function reprendrePartie(next) {
         repris.scene = {};
     if (!Array.isArray(repris.talentsNes))
         repris.talentsNes = [];
+    // Si tu as déjà un avion qui vole et un bateau à flot, c'est qu'ils sont bien
+    // rangés quelque part : on ne va pas te faire payer un hangar après coup. On
+    // te donne la clé correspondante, sans prestige ni facture.
+    if (!Array.isArray(repris.boutique))
+        repris.boutique = [];
+    // Un jet ski part sur une remorque : ce n'est pas une place de port. On ne
+    // donne la clé que pour un engin qui demande vraiment une infrastructure.
+    const aDeja = (cat) => (repris.vehicles || []).some(v => v && v.owned && v.cat === cat && v.price >= 3000000);
+    [["plane", "hangar"], ["boat", "port"]].forEach(([cat, cle]) => {
+        if (!aDeja(cat) || possedeCle(repris, cle))
+            return;
+        const art = BOUTIQUE_CAT.find(a => a.cle === cle);
+        if (art)
+            repris.boutique = [...repris.boutique, art.id];
+    });
     // Le cercle t'avait fait signer quelqu'un, et personne n'était jamais arrivé.
     // Tu as payé : on te livre l'artiste, même avec du retard.
     if (!Array.isArray(repris.starsCercle))
@@ -22876,7 +23556,7 @@ function gameReducerInner(state, action) {
                 money: -(280000000 + Math.floor(Math.random() * 220000000)),
                 rep: 3, fame: Math.max(5, Math.round(state.fame * 0.15)), stress: 100,
                 properties: state.properties.map(p => p.id === "villa_tarka" ? p : { ...p, owned: false }),
-                vehicles: state.vehicles.map(v => ({ ...v, owned: false })),
+                vehicles: state.vehicles.map(v => ({ ...v, owned: false })), boutique: [],
                 social: Object.fromEntries(Object.entries(state.social).map(([k, s]) => [k, { ...s, followers: Math.round(s.followers * 0.08) }])),
             };
         }
@@ -23172,7 +23852,7 @@ function gameReducerInner(state, action) {
         case "SEIZE_ASSETS":
             return { ...state,
                 properties: state.properties.map(p => ({ ...p, owned: p.id === "villa_tarka" ? false : false })),
-                vehicles: state.vehicles.map(v => ({ ...v, owned: false })),
+                vehicles: state.vehicles.map(v => ({ ...v, owned: false })), boutique: [],
             };
         case "SET_PROTECTION":
             return { ...state, politicalProtection: action.value };
@@ -23367,11 +24047,37 @@ function gameReducerInner(state, action) {
                 return state;
             return { ...state, money: state.money - action.price, rep: Math.min(100, state.rep + (action.prestige || 0)),
                 properties: state.properties.map(p => p.id === action.id ? { ...p, owned: true } : p) };
-        case "BUY_VEHICLE":
+        case "BUY_VEHICLE": {
             if (state.money < action.price)
                 return state;
+            const v = (state.vehicles || []).find(x => x && x.id === action.id);
+            // Un avion ne se livre pas sans hangar, un bateau ne s'amarre pas sans
+            // anneau : on refuse l'achat plutôt que de faire semblant.
+            if (v && manqueCle(state, v))
+                return state;
             return { ...state, money: state.money - action.price, rep: Math.min(100, state.rep + (action.prestige || 0)),
-                vehicles: state.vehicles.map(v => v.id === action.id ? { ...v, owned: true } : v) };
+                vehicles: state.vehicles.map(x => x.id === action.id ? { ...x, owned: true } : x) };
+        }
+        case "BUY_ITEM": {
+            if (state.money < action.price)
+                return state;
+            if (((state.boutique) || []).indexOf(action.id) >= 0)
+                return state;
+            return { ...state, money: state.money - action.price,
+                rep: Math.min(100, state.rep + (action.prestige || 0)),
+                boutique: [...(state.boutique || []), action.id] };
+        }
+        case "SELL_ITEM": {
+            const a = BOUTIQUE_CAT.find(x => x.id === action.id);
+            if (!a || ((state.boutique) || []).indexOf(action.id) < 0)
+                return state;
+            // On revend toujours moins cher qu'on a acheté. Sauf les pièces de
+            // collection, qui prennent de la valeur pendant que tu dors.
+            const taux = a.cat === "collection" ? 1.15 : a.cat === "objets" ? 0.55 : 0.65;
+            return { ...state, money: state.money + Math.round(a.price * taux),
+                rep: Math.max(0, state.rep - Math.round((a.prestige || 0) / 2)),
+                boutique: (state.boutique || []).filter(x => x !== action.id) };
+        }
         case "ADD_DISCO":
             return { ...state, discography: [action.entry, ...state.discography] };
         case "FANBASE_SHIFT": {
@@ -24228,6 +24934,7 @@ const INFO_TABS = [
     { id: "recherche", label: "Recherche", emoji: "🔎", fam: "monde" },
     { id: "properties", label: "Propriétés", emoji: "🏠", fam: "avoirs" },
     { id: "vehicles", label: "Garage", emoji: "🚗", fam: "avoirs" },
+    { id: "boutique", label: "Boutique", emoji: "🛍️", fam: "avoirs" },
     { id: "voyage", label: "Voyage", emoji: "✈️", fam: "avoirs" },
     { id: "journal", label: "Alertes", emoji: "🔔", fam: "suivi" },
     { id: "log", label: "Historique", emoji: "📋", fam: "suivi" },
@@ -29039,6 +29746,17 @@ function FiscoGame() {
     const [artistFilter, setArtistFilter] = (0, react_1.useState)("");
     const [artistTerm, setArtistTerm] = (0, react_1.useState)({ years: 3, label: "3 ans", mult: 1.2 });
     const [talentFamille, setTalentFamille] = (0, react_1.useState)("tous");
+    const [vehFiltre, setVehFiltre] = (0, react_1.useState)("tous");
+    const [vehTexte, setVehTexte] = (0, react_1.useState)("");
+    const [vehBudget, setVehBudget] = (0, react_1.useState)(false);
+    const [vehPlus, setVehPlus] = (0, react_1.useState)(false);
+    const [propTexte, setPropTexte] = (0, react_1.useState)("");
+    const [propBudget, setPropBudget] = (0, react_1.useState)(false);
+    const [propPlus, setPropPlus] = (0, react_1.useState)(false);
+    const [rayon, setRayon] = (0, react_1.useState)("collection");
+    const [boutTexte, setBoutTexte] = (0, react_1.useState)("");
+    const [boutBudget, setBoutBudget] = (0, react_1.useState)(false);
+    const [boutPlus, setBoutPlus] = (0, react_1.useState)(false);
     const [talentZone, setTalentZone] = (0, react_1.useState)("toutes");
     const [talentBudget, setTalentBudget] = (0, react_1.useState)(false);
     const [talentsPlus, setTalentsPlus] = (0, react_1.useState)(false);
@@ -36696,93 +37414,226 @@ function FiscoGame() {
                 }))),
             infoTab === "properties" && (react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } },
                 react_1.default.createElement("div", { style: { fontFamily: "'Bebas Neue',cursive", fontSize: 16, letterSpacing: 2, color: "#f2c379" } }, "\uD83C\uDFE0 PROPRI\u00C9T\u00C9S"),
-                (gs.properties || []).map(p => (react_1.default.createElement("div", { key: p.id, className: "shop-card", style: { background: p.owned ? "rgba(124,224,164,.04)" : "rgba(255,255,255,.03)", border: p.owned ? "1px solid rgba(124,224,164,.25)" : "1px solid rgba(255,255,255,.08)", borderRadius: 10, padding: 11 } },
-                    react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" } },
-                        react_1.default.createElement("div", { style: { flex: 1 } },
-                            react_1.default.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: p.owned ? "#7ce0a4" : "rgba(255,255,255,.85)" } },
-                                p.emoji,
-                                " ",
-                                p.name),
-                            react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(230,180,99,.6)", marginTop: 1 } }, p.loc),
-                            react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.5)", marginTop: 3, lineHeight: "1.4" } }, p.desc)),
-                        p.owned && react_1.default.createElement("span", { style: { fontSize: 9, background: p.damaged ? "rgba(240,117,106,.15)" : "rgba(124,224,164,.15)", border: p.damaged ? "1px solid rgba(240,117,106,.35)" : "1px solid rgba(124,224,164,.3)", color: p.damaged ? "#f09a93" : "#7ce0a4", padding: "2px 7px", borderRadius: 10, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", marginLeft: 8, whiteSpace: "nowrap" } }, p.damaged ? "SINISTRÉ" : "OWNED")),
-                    !p.owned && p.price > 0 && (react_1.default.createElement("div", { style: { marginTop: 9, display: "flex", justifyContent: "space-between", alignItems: "center" } },
-                        react_1.default.createElement("span", { style: { fontSize: 11, color: "#f2c379", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, fmtMoney(propertyMarketPrice(p, gs))),
-                        react_1.default.createElement("button", { onClick: () => { const mkt = propertyMarketPrice(p, gs); if (gs.money >= mkt) {
-                                dispatch({ type: "BUY_PROPERTY", id: p.id, price: mkt, prestige: p.prestige });
-                                addLog(`[ACHAT] ${p.name}`);
-                                toast(`🏠 ${p.name} achetée !`, "#7ce0a4");
-                            }
-                            else
-                                toast("💸 Cash insuffisant", "#f0756a"); }, style: { background: "rgba(230,172,86,.15)", border: "1px solid rgba(230,172,86,.35)", color: "#f2c379", padding: "5px 12px", borderRadius: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 10, cursor: "pointer" } }, "ACHETER"))),
-                    p.owned && p.damaged && (react_1.default.createElement("div", { style: { marginTop: 8, background: "rgba(232,92,82,.07)", border: "1px solid rgba(232,92,82,.28)", borderRadius: 8, padding: 9 } },
-                        react_1.default.createElement("div", { style: { fontSize: 11, color: "#f09a93", lineHeight: 1.5 } },
-                            "Le bien est inhabitable depuis le ",
-                            formatDate(p.damaged.since),
-                            ". Il ne rapporte plus rien, et les charges continuent de courir."),
-                        react_1.default.createElement("button", { onClick: () => {
-                                if (gs.money < p.damaged.cost) {
-                                    toast("💸 Cash insuffisant pour les travaux", "#f0756a");
-                                    return;
-                                }
-                                dispatch({ type: "REPAIR_PROPERTY", id: p.id });
-                                addLog(`[TRAVAUX] ${p.name} remise en état`);
-                                toast(`🔨 ${p.name} est remise en état`, "#7ce0a4");
-                            }, style: { width: "100%", marginTop: 8, padding: "8px", background: "rgba(242,195,121,.12)", border: "1px solid rgba(242,195,121,.35)", color: "#f2c379", borderRadius: 7, fontSize: 11, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
-                            "\uD83D\uDD28 LANCER LES TRAVAUX \u2014 ",
-                            fmtMoney(p.damaged.cost)))),
-                    p.owned && p.rent > 0 && !p.damaged && react_1.default.createElement("div", { style: { marginTop: 5, fontSize: 10, color: "#7ce0a4", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
-                        "+",
-                        fmtMoney(p.rent),
-                        "/mois"),
-                    p.owned && p.id !== "villa_tarka" && (react_1.default.createElement("div", { style: { marginTop: 8, display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255,255,255,.06)", paddingTop: 7 } },
-                        react_1.default.createElement("span", { style: { fontSize: 10, color: "#7fb3cc", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
-                            "Valeur actuelle : ",
-                            fmtMoney(propertyResaleValue(p, gs))),
-                        react_1.default.createElement("button", { onClick: () => {
-                                const val = propertyResaleValue(p, gs);
-                                setConfirmModal({ message: `Vendre ${p.name} pour ${fmtMoney(val)} ?`, onConfirm: () => {
-                                        dispatch({ type: "SELL_PROPERTY", id: p.id, value: val });
-                                        addLog(`[VENTE] ${p.name} vendue ${fmtMoney(val)}`);
-                                        toast(`🏠 ${p.name} vendue pour ${fmtMoney(val)}`, "#7ce0a4");
-                                    } });
-                            }, style: { background: "rgba(240,117,106,.1)", border: "1px solid rgba(240,117,106,.3)", color: "rgba(240,145,138,.9)", padding: "4px 10px", borderRadius: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 10, cursor: "pointer" } }, "VENDRE")))))))),
+                (() => {
+                    const q = propTexte.trim().toLowerCase();
+                    const liste = (gs.properties || [])
+                        .filter(x => !propBudget || x.owned || propertyMarketPrice(x, gs) <= gs.money)
+                        .filter(x => !q || `${x.name} ${x.loc || ""} ${x.desc || ""}`.toLowerCase().includes(q))
+                        .sort((a, b) => (b.owned ? 1 : 0) - (a.owned ? 1 : 0) || b.price - a.price);
+                    const abordables = (gs.properties || []).filter(x => !x.owned && propertyMarketPrice(x, gs) <= gs.money).length;
+                    return (react_1.default.createElement(react_1.default.Fragment, null,
+                        react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 } },
+                            react_1.default.createElement("span", { style: { fontSize: 9, color: "rgba(255,255,255,.35)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                (gs.properties || []).filter(x => x.owned).length,
+                                " poss\u00E9d\u00E9es \u00B7 ",
+                                (gs.properties || []).length,
+                                " au catalogue"),
+                            react_1.default.createElement("span", { style: { fontSize: 9, color: "rgba(124,224,164,.7)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" } },
+                                abordables,
+                                " dans tes moyens")),
+                        react_1.default.createElement("input", { value: propTexte, onChange: e => { setPropTexte(e.target.value); setPropPlus(false); }, placeholder: "\uD83D\uDD0D Une ville, un type de bien\u2026", style: { ...inputStyle } }),
+                        react_1.default.createElement("button", { onClick: () => { setPropBudget(v => !v); setPropPlus(false); }, style: { width: "100%", padding: "6px", background: propBudget ? "rgba(124,224,164,.14)" : "rgba(255,255,255,.04)", border: propBudget ? "1px solid rgba(124,224,164,.4)" : "1px solid rgba(255,255,255,.1)", color: propBudget ? "#7ce0a4" : "rgba(255,255,255,.5)", borderRadius: 6, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace" } },
+                            propBudget ? "☑" : "☐",
+                            " Seulement ce que je peux payer"),
+                        !liste.length && react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.45)", fontStyle: "italic", padding: "8px 2px" } }, "Rien ne correspond. \u00C9largis la recherche."),
+                        (propPlus ? liste.slice(0, 120) : liste.slice(0, 8)).map(p => (react_1.default.createElement("div", { key: p.id, className: "shop-card", style: { background: p.owned ? "rgba(124,224,164,.04)" : "rgba(255,255,255,.03)", border: p.owned ? "1px solid rgba(124,224,164,.25)" : "1px solid rgba(255,255,255,.08)", borderRadius: 10, padding: 11 } },
+                            react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" } },
+                                react_1.default.createElement("div", { style: { flex: 1 } },
+                                    react_1.default.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: p.owned ? "#7ce0a4" : "rgba(255,255,255,.85)" } },
+                                        p.emoji,
+                                        " ",
+                                        p.name),
+                                    react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(230,180,99,.6)", marginTop: 1 } }, p.loc),
+                                    react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.5)", marginTop: 3, lineHeight: "1.4" } }, p.desc)),
+                                p.owned && react_1.default.createElement("span", { style: { fontSize: 9, background: p.damaged ? "rgba(240,117,106,.15)" : "rgba(124,224,164,.15)", border: p.damaged ? "1px solid rgba(240,117,106,.35)" : "1px solid rgba(124,224,164,.3)", color: p.damaged ? "#f09a93" : "#7ce0a4", padding: "2px 7px", borderRadius: 10, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", marginLeft: 8, whiteSpace: "nowrap" } }, p.damaged ? "SINISTRÉ" : "OWNED")),
+                            !p.owned && p.price > 0 && (react_1.default.createElement("div", { style: { marginTop: 9, display: "flex", justifyContent: "space-between", alignItems: "center" } },
+                                react_1.default.createElement("span", { style: { fontSize: 11, color: "#f2c379", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, fmtMoney(propertyMarketPrice(p, gs))),
+                                react_1.default.createElement("button", { onClick: () => { const mkt = propertyMarketPrice(p, gs); if (gs.money >= mkt) {
+                                        dispatch({ type: "BUY_PROPERTY", id: p.id, price: mkt, prestige: p.prestige });
+                                        addLog(`[ACHAT] ${p.name}`);
+                                        toast(`🏠 ${p.name} achetée !`, "#7ce0a4");
+                                    }
+                                    else
+                                        toast("💸 Cash insuffisant", "#f0756a"); }, style: { background: "rgba(230,172,86,.15)", border: "1px solid rgba(230,172,86,.35)", color: "#f2c379", padding: "5px 12px", borderRadius: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 10, cursor: "pointer" } }, "ACHETER"))),
+                            p.owned && p.damaged && (react_1.default.createElement("div", { style: { marginTop: 8, background: "rgba(232,92,82,.07)", border: "1px solid rgba(232,92,82,.28)", borderRadius: 8, padding: 9 } },
+                                react_1.default.createElement("div", { style: { fontSize: 11, color: "#f09a93", lineHeight: 1.5 } },
+                                    "Le bien est inhabitable depuis le ",
+                                    formatDate(p.damaged.since),
+                                    ". Il ne rapporte plus rien, et les charges continuent de courir."),
+                                react_1.default.createElement("button", { onClick: () => {
+                                        if (gs.money < p.damaged.cost) {
+                                            toast("💸 Cash insuffisant pour les travaux", "#f0756a");
+                                            return;
+                                        }
+                                        dispatch({ type: "REPAIR_PROPERTY", id: p.id });
+                                        addLog(`[TRAVAUX] ${p.name} remise en état`);
+                                        toast(`🔨 ${p.name} est remise en état`, "#7ce0a4");
+                                    }, style: { width: "100%", marginTop: 8, padding: "8px", background: "rgba(242,195,121,.12)", border: "1px solid rgba(242,195,121,.35)", color: "#f2c379", borderRadius: 7, fontSize: 11, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                    "\uD83D\uDD28 LANCER LES TRAVAUX \u2014 ",
+                                    fmtMoney(p.damaged.cost)))),
+                            p.owned && p.rent > 0 && !p.damaged && react_1.default.createElement("div", { style: { marginTop: 5, fontSize: 10, color: "#7ce0a4", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                "+",
+                                fmtMoney(p.rent),
+                                "/mois"),
+                            p.owned && p.id !== "villa_tarka" && (react_1.default.createElement("div", { style: { marginTop: 8, display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255,255,255,.06)", paddingTop: 7 } },
+                                react_1.default.createElement("span", { style: { fontSize: 10, color: "#7fb3cc", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                    "Valeur actuelle : ",
+                                    fmtMoney(propertyResaleValue(p, gs))),
+                                react_1.default.createElement("button", { onClick: () => {
+                                        const val = propertyResaleValue(p, gs);
+                                        setConfirmModal({ message: `Vendre ${p.name} pour ${fmtMoney(val)} ?`, onConfirm: () => {
+                                                dispatch({ type: "SELL_PROPERTY", id: p.id, value: val });
+                                                addLog(`[VENTE] ${p.name} vendue ${fmtMoney(val)}`);
+                                                toast(`🏠 ${p.name} vendue pour ${fmtMoney(val)}`, "#7ce0a4");
+                                            } });
+                                    }, style: { background: "rgba(240,117,106,.1)", border: "1px solid rgba(240,117,106,.3)", color: "rgba(240,145,138,.9)", padding: "4px 10px", borderRadius: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 10, cursor: "pointer" } }, "VENDRE")))))),
+                        liste.length > (propPlus ? 120 : 8) && (react_1.default.createElement("button", { onClick: () => setPropPlus(true), style: { width: "100%", padding: "7px", background: "rgba(255,255,255,.04)", border: "1px dashed rgba(255,255,255,.18)", color: "rgba(255,255,255,.55)", borderRadius: 8, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                            "\u25BE Voir les ",
+                            liste.length - 8,
+                            " autres"))));
+                })())),
+            infoTab === "boutique" && (react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } },
+                react_1.default.createElement("div", { style: { fontFamily: "'Bebas Neue',cursive", fontSize: 16, letterSpacing: 2, color: "#f2c379" } }, "\uD83D\uDECD\uFE0F BOUTIQUE"),
+                (() => {
+                    const achetes = new Set(gs.boutique || []);
+                    const r = RAYONS_BOUTIQUE.find(x => x.id === rayon) || RAYONS_BOUTIQUE[0];
+                    const q = boutTexte.trim().toLowerCase();
+                    const tout = BOUTIQUE_CAT.filter(a => a.cat === rayon);
+                    const liste = tout
+                        .filter(a => !boutBudget || achetes.has(a.id) || a.price <= gs.money)
+                        .filter(a => !q || `${a.name} ${a.desc || ""}`.toLowerCase().includes(q))
+                        .sort((a, b) => (achetes.has(b.id) ? 1 : 0) - (achetes.has(a.id) ? 1 : 0) || b.price - a.price);
+                    const abordables = tout.filter(a => !achetes.has(a.id) && a.price <= gs.money).length;
+                    return (react_1.default.createElement(react_1.default.Fragment, null,
+                        react_1.default.createElement("div", { style: { display: "flex", gap: 4, flexWrap: "wrap" } }, RAYONS_BOUTIQUE.map(x => (react_1.default.createElement("button", { key: x.id, onClick: () => { setRayon(x.id); setBoutPlus(false); setBoutTexte(""); }, style: { flex: "1 1 auto", padding: "6px 8px", background: rayon === x.id ? "rgba(242,195,121,.2)" : "rgba(255,255,255,.04)", border: rayon === x.id ? "1px solid rgba(242,195,121,.45)" : "1px solid rgba(255,255,255,.1)", color: rayon === x.id ? "#f2c379" : "rgba(255,255,255,.5)", borderRadius: 6, fontSize: 10, cursor: "pointer", whiteSpace: "nowrap", fontFamily: "'Space Mono',monospace" } }, x.label)))),
+                        react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.5)", fontStyle: "italic", lineHeight: 1.5 } }, r.intro),
+                        react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 } },
+                            react_1.default.createElement("span", { style: { fontSize: 9, color: "rgba(255,255,255,.35)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                tout.filter(a => achetes.has(a.id)).length,
+                                " acquis \u00B7 ",
+                                tout.length,
+                                " en rayon"),
+                            react_1.default.createElement("span", { style: { fontSize: 9, color: "rgba(124,224,164,.7)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" } },
+                                abordables,
+                                " dans tes moyens")),
+                        react_1.default.createElement("input", { value: boutTexte, onChange: e => { setBoutTexte(e.target.value); setBoutPlus(false); }, placeholder: "\uD83D\uDD0D Un nom, une mati\u00E8re\u2026", style: { ...inputStyle } }),
+                        react_1.default.createElement("button", { onClick: () => { setBoutBudget(v => !v); setBoutPlus(false); }, style: { width: "100%", padding: "6px", background: boutBudget ? "rgba(124,224,164,.14)" : "rgba(255,255,255,.04)", border: boutBudget ? "1px solid rgba(124,224,164,.4)" : "1px solid rgba(255,255,255,.1)", color: boutBudget ? "#7ce0a4" : "rgba(255,255,255,.5)", borderRadius: 6, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace" } },
+                            boutBudget ? "☑" : "☐",
+                            " Seulement ce que je peux payer"),
+                        !liste.length && react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.45)", fontStyle: "italic", padding: "8px 2px" } }, "Rien ne correspond dans ce rayon."),
+                        (boutPlus ? liste.slice(0, 200) : liste.slice(0, 10)).map(a => {
+                            const mien = achetes.has(a.id);
+                            const cher = a.price > gs.money;
+                            return (react_1.default.createElement("div", { key: a.id, className: "shop-card", style: { background: mien ? "rgba(124,224,164,.04)" : "rgba(255,255,255,.03)", border: mien ? "1px solid rgba(124,224,164,.25)" : "1px solid rgba(255,255,255,.08)", borderRadius: 10, padding: 11, boxShadow: RELIEF } },
+                                react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 } },
+                                    react_1.default.createElement("div", { style: { flex: 1, minWidth: 0 } },
+                                        react_1.default.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: mien ? "#7ce0a4" : "rgba(255,255,255,.85)" } },
+                                            a.emoji,
+                                            " ",
+                                            a.name),
+                                        react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.5)", marginTop: 3, lineHeight: 1.45 } }, a.desc),
+                                        !!a.cle && (react_1.default.createElement("div", { style: { fontSize: 10, color: "#9fc0ff", marginTop: 4 } }, a.cle === "hangar" ? "🛫 Débloque l'achat des avions" : "⚓ Débloque l'achat des bateaux")),
+                                        react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(230,180,99,.6)", marginTop: 4, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                            fmtMoney(a.price),
+                                            " \u00B7 prestige +",
+                                            a.prestige)),
+                                    mien ? (react_1.default.createElement("button", { onClick: () => {
+                                            const taux = a.cat === "collection" ? 1.15 : a.cat === "objets" ? 0.55 : 0.65;
+                                            const val = Math.round(a.price * taux);
+                                            setConfirmModal({ message: `Revendre ${a.name} pour ${fmtMoney(val)} ?`, onConfirm: () => {
+                                                    dispatch({ type: "SELL_ITEM", id: a.id });
+                                                    addLog(`[VENTE] ${a.name} — ${fmtMoney(val)}`);
+                                                    toast(`${a.emoji} Revendu ${fmtMoney(val)}`, "#7ce0a4");
+                                                } });
+                                        }, style: { background: "rgba(240,117,106,.1)", border: "1px solid rgba(240,117,106,.3)", color: "rgba(240,145,138,.9)", padding: "5px 12px", borderRadius: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 10, cursor: "pointer", whiteSpace: "nowrap" } }, "REVENDRE")) : (react_1.default.createElement("button", { disabled: cher, onClick: () => {
+                                            if (gs.money < a.price) {
+                                                toast("💸 Cash insuffisant", "#f0756a");
+                                                return;
+                                            }
+                                            dispatch({ type: "BUY_ITEM", id: a.id, price: a.price, prestige: a.prestige });
+                                            addLog(`[ACHAT] ${a.name}`);
+                                            toast(`${a.emoji} ${a.name}`, "#7ce0a4");
+                                        }, style: { opacity: cher ? .45 : 1, background: "rgba(230,172,86,.15)", border: "1px solid rgba(230,172,86,.35)", color: "#f2c379", padding: "5px 12px", borderRadius: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 10, cursor: cher ? "not-allowed" : "pointer", whiteSpace: "nowrap" } }, "ACHETER")))));
+                        }),
+                        liste.length > (boutPlus ? 200 : 10) && (react_1.default.createElement("button", { onClick: () => setBoutPlus(true), style: { width: "100%", padding: "7px", background: "rgba(255,255,255,.04)", border: "1px dashed rgba(255,255,255,.18)", color: "rgba(255,255,255,.55)", borderRadius: 8, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                            "\u25BE Voir les ",
+                            liste.length - 10,
+                            " autres"))));
+                })())),
             infoTab === "vehicles" && (react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } },
                 react_1.default.createElement("div", { style: { fontFamily: "'Bebas Neue',cursive", fontSize: 16, letterSpacing: 2, color: "#f2c379" } }, "\uD83D\uDE97 GARAGE"),
-                (gs.vehicles || []).map(v => (react_1.default.createElement("div", { key: v.id, className: "shop-card", style: { background: v.owned ? "rgba(124,224,164,.04)" : "rgba(255,255,255,.03)", border: v.owned ? "1px solid rgba(124,224,164,.25)" : "1px solid rgba(255,255,255,.08)", borderRadius: 10, padding: 11 } },
-                    react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" } },
-                        react_1.default.createElement("div", null,
-                            react_1.default.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: v.owned ? "#7ce0a4" : "rgba(255,255,255,.85)" } },
-                                v.emoji,
-                                " ",
-                                v.name),
-                            react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(230,180,99,.6)", marginTop: 1, textTransform: "uppercase", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, v.cat),
-                            react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.5)", marginTop: 3 } }, v.desc)),
-                        v.owned && react_1.default.createElement("span", { style: { fontSize: 9, background: "rgba(124,224,164,.15)", border: "1px solid rgba(124,224,164,.3)", color: "#7ce0a4", padding: "2px 7px", borderRadius: 10, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", marginLeft: 8, whiteSpace: "nowrap" } }, "OWNED")),
-                    !v.owned && (react_1.default.createElement("div", { style: { marginTop: 9, display: "flex", justifyContent: "space-between", alignItems: "center" } },
-                        react_1.default.createElement("span", { style: { fontSize: 11, color: "#f2c379", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
-                            fmtMoney(v.price),
-                            " \u00B7 \u2B50+",
-                            v.prestige),
-                        react_1.default.createElement("button", { onClick: () => { if (gs.money >= v.price) {
-                                dispatch({ type: "BUY_VEHICLE", id: v.id, price: v.price, prestige: v.prestige });
-                                addLog(`[ACHAT] ${v.name}`);
-                                toast(`${v.emoji} Acheté !`, "#7ce0a4");
-                            }
-                            else
-                                toast("💸 Cash insuffisant", "#f0756a"); }, style: { background: "rgba(230,172,86,.15)", border: "1px solid rgba(230,172,86,.35)", color: "#f2c379", padding: "5px 12px", borderRadius: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 10, cursor: "pointer" } }, "ACHETER"))),
-                    v.owned && v.id !== "jetski" && (react_1.default.createElement("div", { style: { marginTop: 9, display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255,255,255,.06)", paddingTop: 7 } },
-                        react_1.default.createElement("span", { style: { fontSize: 10, color: "#e8963c", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
-                            "Cote actuelle : ",
-                            fmtMoney(vehicleResaleValue(v, gs))),
-                        react_1.default.createElement("button", { onClick: () => {
-                                const val = vehicleResaleValue(v, gs);
-                                setConfirmModal({ message: `Vendre ${v.name} pour ${fmtMoney(val)} ? (les véhicules perdent de la valeur avec le temps)`, onConfirm: () => {
-                                        dispatch({ type: "SELL_VEHICLE", id: v.id, value: val });
-                                        addLog(`[VENTE] ${v.name} vendu ${fmtMoney(val)}`);
-                                        toast(`${v.emoji} Vendu pour ${fmtMoney(val)}`, "#7ce0a4");
-                                    } });
-                            }, style: { background: "rgba(240,117,106,.1)", border: "1px solid rgba(240,117,106,.3)", color: "rgba(240,145,138,.9)", padding: "4px 10px", borderRadius: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 10, cursor: "pointer" } }, "VENDRE")))))))),
+                (() => {
+                    const fams = [{ id: "tous", label: "Tout" }, { id: "possede", label: "✅ À moi" },
+                        { id: "car", label: "🚗 Routes" }, { id: "boat", label: "⛵ Mer" }, { id: "plane", label: "✈️ Air" }];
+                    const q = vehTexte.trim().toLowerCase();
+                    const liste = (gs.vehicles || [])
+                        .filter(v => vehFiltre === "tous" || (vehFiltre === "possede" ? v.owned : v.cat === vehFiltre))
+                        .filter(v => !vehBudget || v.owned || v.price <= gs.money)
+                        .filter(v => !q || `${v.name} ${v.desc || ""}`.toLowerCase().includes(q))
+                        .sort((a, b) => (b.owned ? 1 : 0) - (a.owned ? 1 : 0) || b.price - a.price);
+                    const abordables = (gs.vehicles || []).filter(v => !v.owned && v.price <= gs.money).length;
+                    return (react_1.default.createElement(react_1.default.Fragment, null,
+                        react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 } },
+                            react_1.default.createElement("span", { style: { fontSize: 9, color: "rgba(255,255,255,.35)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                (gs.vehicles || []).filter(v => v.owned).length,
+                                " poss\u00E9d\u00E9s \u00B7 ",
+                                (gs.vehicles || []).length,
+                                " au catalogue"),
+                            react_1.default.createElement("span", { style: { fontSize: 9, color: "rgba(124,224,164,.7)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" } },
+                                abordables,
+                                " dans tes moyens")),
+                        react_1.default.createElement("input", { value: vehTexte, onChange: e => { setVehTexte(e.target.value); setVehPlus(false); }, placeholder: "\uD83D\uDD0D Une marque, un mod\u00E8le\u2026", style: { ...inputStyle } }),
+                        react_1.default.createElement("div", { style: { display: "flex", gap: 4, flexWrap: "wrap" } }, fams.map(f => (react_1.default.createElement("button", { key: f.id, onClick: () => { setVehFiltre(f.id); setVehPlus(false); }, style: { flex: "1 1 auto", padding: "5px 7px", background: vehFiltre === f.id ? "rgba(242,195,121,.2)" : "rgba(255,255,255,.04)", border: vehFiltre === f.id ? "1px solid rgba(242,195,121,.45)" : "1px solid rgba(255,255,255,.1)", color: vehFiltre === f.id ? "#f2c379" : "rgba(255,255,255,.5)", borderRadius: 6, fontSize: 10, cursor: "pointer", whiteSpace: "nowrap", fontFamily: "'Space Mono',monospace" } }, f.label)))),
+                        react_1.default.createElement("button", { onClick: () => { setVehBudget(v => !v); setVehPlus(false); }, style: { width: "100%", padding: "6px", background: vehBudget ? "rgba(124,224,164,.14)" : "rgba(255,255,255,.04)", border: vehBudget ? "1px solid rgba(124,224,164,.4)" : "1px solid rgba(255,255,255,.1)", color: vehBudget ? "#7ce0a4" : "rgba(255,255,255,.5)", borderRadius: 6, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace" } },
+                            vehBudget ? "☑" : "☐",
+                            " Seulement ce que je peux payer"),
+                        !liste.length && react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.45)", fontStyle: "italic", padding: "8px 2px" } }, "Rien ne correspond. \u00C9largis la recherche."),
+                        (vehPlus ? liste.slice(0, 260) : liste.slice(0, 10)).map(v => (react_1.default.createElement("div", { key: v.id, className: "shop-card", style: { background: v.owned ? "rgba(124,224,164,.04)" : "rgba(255,255,255,.03)", border: v.owned ? "1px solid rgba(124,224,164,.25)" : "1px solid rgba(255,255,255,.08)", borderRadius: 10, padding: 11 } },
+                            react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" } },
+                                react_1.default.createElement("div", null,
+                                    react_1.default.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: v.owned ? "#7ce0a4" : "rgba(255,255,255,.85)" } },
+                                        v.emoji,
+                                        " ",
+                                        v.name),
+                                    react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(230,180,99,.6)", marginTop: 1, textTransform: "uppercase", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } }, v.cat === "car" ? "route" : v.cat === "boat" ? "mer" : v.cat === "plane" ? "air" : v.cat),
+                                    react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.5)", marginTop: 3 } }, v.desc)),
+                                v.owned && react_1.default.createElement("span", { style: { fontSize: 9, background: "rgba(124,224,164,.15)", border: "1px solid rgba(124,224,164,.3)", color: "#7ce0a4", padding: "2px 7px", borderRadius: 10, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", marginLeft: 8, whiteSpace: "nowrap" } }, "OWNED")),
+                            !v.owned && (react_1.default.createElement("div", { style: { marginTop: 9, display: "flex", justifyContent: "space-between", alignItems: "center" } },
+                                react_1.default.createElement("span", { style: { fontSize: 11, color: "#f2c379", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                    fmtMoney(v.price),
+                                    " \u00B7 \u2B50+",
+                                    v.prestige),
+                                (() => {
+                                    const cle = manqueCle(gs, v);
+                                    return (react_1.default.createElement("button", { disabled: !!cle, onClick: () => {
+                                            if (cle)
+                                                return;
+                                            if (gs.money >= v.price) {
+                                                dispatch({ type: "BUY_VEHICLE", id: v.id, price: v.price, prestige: v.prestige });
+                                                addLog(`[ACHAT] ${v.name}`);
+                                                toast(`${v.emoji} Acheté !`, "#7ce0a4");
+                                            }
+                                            else
+                                                toast("💸 Cash insuffisant", "#f0756a");
+                                        }, title: cle === "hangar" ? "Il te faut un hangar privé (Boutique → Objets & lieux)" : cle === "port" ? "Il te faut un anneau de port (Boutique → Objets & lieux)" : "", style: { opacity: cle ? .45 : 1, background: "rgba(230,172,86,.15)", border: "1px solid rgba(230,172,86,.35)", color: "#f2c379", padding: "5px 12px", borderRadius: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 10, cursor: cle ? "not-allowed" : "pointer", whiteSpace: "nowrap" } }, cle === "hangar" ? "🛫 HANGAR REQUIS" : cle === "port" ? "⚓ PORT REQUIS" : "ACHETER"));
+                                })())),
+                            v.owned && v.id !== "jetski" && (react_1.default.createElement("div", { style: { marginTop: 9, display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255,255,255,.06)", paddingTop: 7 } },
+                                react_1.default.createElement("span", { style: { fontSize: 10, color: "#e8963c", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                    "Cote actuelle : ",
+                                    fmtMoney(vehicleResaleValue(v, gs))),
+                                react_1.default.createElement("button", { onClick: () => {
+                                        const val = vehicleResaleValue(v, gs);
+                                        setConfirmModal({ message: `Vendre ${v.name} pour ${fmtMoney(val)} ? (les véhicules perdent de la valeur avec le temps)`, onConfirm: () => {
+                                                dispatch({ type: "SELL_VEHICLE", id: v.id, value: val });
+                                                addLog(`[VENTE] ${v.name} vendu ${fmtMoney(val)}`);
+                                                toast(`${v.emoji} Vendu pour ${fmtMoney(val)}`, "#7ce0a4");
+                                            } });
+                                    }, style: { background: "rgba(240,117,106,.1)", border: "1px solid rgba(240,117,106,.3)", color: "rgba(240,145,138,.9)", padding: "4px 10px", borderRadius: 6, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", fontSize: 10, cursor: "pointer" } }, "VENDRE")))))),
+                        liste.length > (vehPlus ? 260 : 10) && (react_1.default.createElement("button", { onClick: () => setVehPlus(true), style: { width: "100%", padding: "7px", background: "rgba(255,255,255,.04)", border: "1px dashed rgba(255,255,255,.18)", color: "rgba(255,255,255,.55)", borderRadius: 8, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                            "\u25BE Voir les ",
+                            liste.length - 10,
+                            " autres"))));
+                })())),
             infoTab === "music" && (react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } },
                 react_1.default.createElement("div", { style: { fontFamily: "'Bebas Neue',cursive", fontSize: 16, letterSpacing: 2, color: "#f2c379" } }, "\uD83C\uDFB5 DISCOGRAPHIE"),
                 react_1.default.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 4 } },
