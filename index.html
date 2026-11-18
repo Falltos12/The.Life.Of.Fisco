@@ -19855,6 +19855,26 @@ function garnirCeremonie(results, annee, gs) {
 // Séparé de la cérémonie : les nominations se calculent une fois, vingt jours
 // avant, et la soirée joue exactement celles-là. Sans ça l'annonce aurait pu
 // promettre une chose et la cérémonie en servir une autre.
+// Ce qui fait une tournée dont l'académie parle : le nombre de dates, le
+// remplissage, la portée géographique et la recette.
+function scoreTournee(t) {
+    if (!t)
+        return 0;
+    const dates = Math.min(1, (t.dates || 0) / 80);
+    const salles = Math.max(0, Math.min(1, t.soldOutRatio || 0));
+    const portee = /mondial|world|monde|global/i.test(t.region || "") ? 1
+        : /europ|amériqu|america|asie|afriqu/i.test(t.region || "") ? 0.72 : 0.45;
+    const recette = Math.max(0, Math.min(1, (t.revenue || 0) / 250000000));
+    return Math.round(dates * 30 + salles * 28 + portee * 22 + recette * 20);
+}
+// La meilleure tournée terminée dans la fenêtre d'éligibilité. Pas de tournée,
+// pas de nomination : on ne se fait pas nommer pour une scène qu'on n'a pas faite.
+function tourneeEligible(gs, depuis) {
+    const faites = (gs.tourHistory || []).filter(t => t && (t.date || 0) >= depuis);
+    if (!faites.length)
+        return null;
+    return faites.reduce((a, b) => scoreTournee(a) >= scoreTournee(b) ? a : b);
+}
 function nominerGrammy(gs) {
     const year = new Date(gs.currentDate).getFullYear();
     const oneYearAgo = gs.currentDate - 365 * 86400000;
@@ -19874,6 +19894,16 @@ function nominerGrammy(gs) {
             return { category: cat, nominated: true, projectTitle: GRAMMY_2024_SCRIPT[cat], score: 999, scripte: true };
         if (cat === REVELATION_CAT && alreadyRevelation)
             return { category: cat, nominated: false, projectTitle: null, score: 0 };
+        // La scène se juge sur la scène : une tournée de l'année, ou rien.
+        if (cat === CAT_LIVE) {
+            const tournee = tourneeEligible(gs, oneYearAgo);
+            const noteT = scoreTournee(tournee);
+            const seuilT = year === 2024 ? 0.3 : 0.55;
+            const prise = !!(tournee && noteT >= 74 && Math.random() < seuilT);
+            return { category: cat, nominated: prise,
+                projectTitle: prise ? (tournee.name || null) : null,
+                score: prise ? noteT : 0, live: true };
+        }
         const isArtistCat = cat === GRAMMY_ARTIST_CAT || cat === REVELATION_CAT;
         const isAlbumCat = GRAMMY_ALBUM_CATS.has(cat);
         const isSongCat = GRAMMY_SONG_CATS.has(cat);
@@ -19907,9 +19937,14 @@ function runGrammyCeremony(gs, opts) {
         ...GRAMMY_CATEGORIES.filter(c => !connues.has(c))
             .map(c => ({ category: c, nominated: false, projectTitle: null, score: 0 }))];
     // Spectateur : on garde la liste des catégories, on retire ton nom de toutes.
+    // Dernier garde-fou : on ne monte pas sur scène pour une tournée qui n'a pas
+    // eu lieu, quelle que soit la liste figée dans la sauvegarde.
+    const liveOk = nominationLiveValide(gs, { ...brut, cats: completes });
+    const tenues = liveOk ? completes : completes.map(c => (c && c.category === CAT_LIVE && c.nominated && !c.scripte)
+        ? { ...c, nominated: false, projectTitle: null, score: 0 } : c);
     const annonce = (opts && opts.spectateur)
-        ? { ...brut, project: null, cats: completes.map(c => ({ ...c, nominated: false, projectTitle: null, scripte: false })) }
-        : { ...brut, cats: completes };
+        ? { ...brut, project: null, cats: tenues.map(c => ({ ...c, nominated: false, projectTitle: null, scripte: false })) }
+        : { ...brut, cats: tenues };
     let results = annonce.cats.map(n => {
         if (!n.nominated)
             return { category: n.category, nominated: false, projectTitle: null, youWon: false };
@@ -21847,7 +21882,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "151";
+const VERSION_JEU = "152";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -21999,6 +22034,36 @@ function fondreCatalogue(garde, catalogue) {
 //     déplace pas l'histoire dans le temps.
 //   — face à une borne inconnue, on affirme le moins possible. Une relation dont
 //     on ignore le début commence l'année où elle s'est terminée, pas en 2023.
+// Une nomination « Live » ne tient que si une tournée la porte, et que son
+// intitulé est bien celui de cette tournée.
+function nominationLiveValide(etat, noms) {
+    if (!noms || !Array.isArray(noms.cats))
+        return false;
+    const c = noms.cats.find(x => x && x.category === CAT_LIVE);
+    if (!c || !c.nominated)
+        return true; // rien à valider
+    if (c.scripte)
+        return true; // la soirée écrite fait foi
+    const debut = new Date(noms.year || new Date(etat.currentDate).getFullYear(), 0, 1).getTime()
+        - 365 * 86400000;
+    const tournee = tourneeEligible(etat, debut);
+    if (!tournee)
+        return false;
+    // L'intitulé doit être le nom de la tournée, pas celui d'un album.
+    return !c.projectTitle || c.projectTitle === tournee.name;
+}
+function assainirNominations(etat) {
+    if (!etat || typeof etat !== "object")
+        return etat;
+    const noms = etat.grammyNoms;
+    if (!noms || !Array.isArray(noms.cats))
+        return etat;
+    if (nominationLiveValide(etat, noms))
+        return etat;
+    return { ...etat, grammyNoms: { ...noms,
+            cats: noms.cats.map(c => (c && c.category === CAT_LIVE && c.nominated && !c.scripte)
+                ? { ...c, nominated: false, projectTitle: null, score: 0 } : c) } };
+}
 function consoliderHistoires(etat) {
     if (!etat || typeof etat !== "object")
         return etat;
@@ -24577,7 +24642,7 @@ function gameReducerInner(state, action) {
             merged.hits = (merged.hits || []).map(h => ({ ...h, title: fixT(h.title) }));
             // Une partie rouverte après coup retrouve Damon au niveau de son époque,
             // et le catalogue complet du garage et de l'agence immobilière.
-            return rattraperDamon(consoliderHistoires(rafraichirCatalogues(merged)));
+            return rattraperDamon(assainirNominations(consoliderHistoires(rafraichirCatalogues(merged))));
         }
         case "RESET": return JSON.parse(JSON.stringify(INIT));
         default: return state;
