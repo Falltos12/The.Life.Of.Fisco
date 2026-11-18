@@ -17370,6 +17370,10 @@ function sortPeople(list, gs, mode) {
                 // Acteurs connus, puis relations
                 if ((c.cat || "").includes("cinema"))
                     v += 500;
+                // Les acteurs nés dans la partie passent après ceux que tout le monde
+                // connaît : sinon ils occupent le haut de la liste par ordre alphabétique.
+                if (c.gen)
+                    v -= 260;
                 if (known)
                     v += s * 5;
                 if (INNER.includes(id))
@@ -19793,8 +19797,24 @@ function garnirCeremonie(results, annee, gs) {
                 cote: r.cote === undefined ? 0.12 : r.cote };
         }
         // ── Années libres : le générateur, comme avant ──
-        if (!r.nominated)
-            return r;
+        if (!r.nominated) {
+            // Tu n'es pas en lice, mais la catégorie se joue devant toi : il lui faut
+            // donc de vrais nommés et un vrai vainqueur.
+            const horsJeu = new Set(Object.keys(sacres).filter(x => sacres[x] >= 2));
+            let rv = autresNommes(r.category, horsJeu, gs);
+            const dm = damonNomme(gs, annee, r.category);
+            if (dm)
+                rv = [{ nom: "Damon", titre: dm.t || null }, ...rv.slice(0, Math.max(0, rv.length - 1))];
+            if (dm && dm.g) {
+                sacres["Damon"] = (sacres["Damon"] || 0) + 1;
+                return { ...r, rivaux: rv, gagnant: "Damon", gagnantTitre: dm.t || null };
+            }
+            const dits = rv.filter(x => typeof x === "string");
+            const vainq = dits.length ? dits[Math.floor(Math.random() * dits.length)] : null;
+            if (vainq)
+                vainq.split(" & ").forEach(x => { sacres[x] = (sacres[x] || 0) + 1; });
+            return { ...r, rivaux: rv, gagnant: vainq };
+        }
         const bloques = new Set(Object.keys(sacres).filter(n => sacres[n] >= 2));
         let rivaux = autresNommes(r.category, bloques, gs);
         const dam = damonNomme(gs, annee, r.category);
@@ -19860,10 +19880,21 @@ function nominerGrammy(gs) {
     return { year, cats,
         project: bestAlbum ? bestAlbum.title : (bestTrack ? bestTrack.title : null) };
 }
-function runGrammyCeremony(gs) {
+function runGrammyCeremony(gs, opts) {
     const year = new Date(gs.currentDate).getFullYear();
     // Les nominations annoncées vingt jours plus tôt font foi.
-    const annonce = (gs.grammyNoms && gs.grammyNoms.year === year) ? gs.grammyNoms : nominerGrammy(gs);
+    const brut = (gs.grammyNoms && gs.grammyNoms.year === year) ? gs.grammyNoms : nominerGrammy(gs);
+    // Une sauvegarde d'une version antérieure peut avoir figé une liste plus
+    // courte : la soirée doit quand même se jouer en entier.
+    const figees = Array.isArray(brut.cats) ? brut.cats : [];
+    const connues = new Set(figees.map(c => c && c.category));
+    const completes = [...figees,
+        ...GRAMMY_CATEGORIES.filter(c => !connues.has(c))
+            .map(c => ({ category: c, nominated: false, projectTitle: null, score: 0 }))];
+    // Spectateur : on garde la liste des catégories, on retire ton nom de toutes.
+    const annonce = (opts && opts.spectateur)
+        ? { ...brut, project: null, cats: completes.map(c => ({ ...c, nominated: false, projectTitle: null, scripte: false })) }
+        : { ...brut, cats: completes };
     let results = annonce.cats.map(n => {
         if (!n.nominated)
             return { category: n.category, nominated: false, projectTitle: null, youWon: false };
@@ -19895,7 +19926,8 @@ function runGrammyCeremony(gs) {
     }
     results = garnirCeremonie(results, year, gs);
     const winsCount = results.filter(r => r.youWon).length;
-    return { year, results, project: annonce.project, winsCount };
+    return { year, results, project: annonce.project, winsCount,
+        spectateur: !!(opts && opts.spectateur) };
 }
 // ─── VOYAGE / TOURNÉE MONDIALE ─────────────────────────────────────────────
 const CITIES = [
@@ -21800,7 +21832,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "139";
+const VERSION_JEU = "141";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -25437,6 +25469,20 @@ function FiscoGame() {
         return grammyResult.results.filter(r => r.nominated)
             .slice().sort((a, b) => (GRAMMY_RANG[a.category] || 0) - (GRAMMY_RANG[b.category] || 0));
     }, [grammyResult]);
+    // La soirée entière : les neuf catégories, dans l'ordre où elles passent.
+    const grammyDeroule = (0, react_1.useMemo)(() => {
+        if (!grammyResult)
+            return [];
+        return grammyResult.results.slice()
+            .sort((a, b) => (GRAMMY_RANG[a.category] || 99) - (GRAMMY_RANG[b.category] || 99));
+    }, [grammyResult]);
+    // La prochaine catégorie où ton nom est appelé, à partir d'un rang donné.
+    const prochaineMienne = (0, react_1.useCallback)((depuis) => {
+        for (let i = depuis + 1; i < grammyDeroule.length; i++)
+            if (grammyDeroule[i].nominated)
+                return i;
+        return -1;
+    }, [grammyDeroule]);
     const finirGrammy = (0, react_1.useCallback)(() => {
         setGrammyEtape("intro");
         setGrammyIdx(0);
@@ -25870,10 +25916,15 @@ function FiscoGame() {
         else if (cal) {
             if (cal.id === "grammy" && gs.lastGrammyYear !== d.getFullYear()) {
                 if (gs.awardsBanned || (intensiteBoycott(gs) >= 0.45 && !gs.elite)) {
-                    setCalAlert({ emoji: "🚫", title: "Grammy Awards — écarté",
-                        desc: "En pleine période de boycott, l'académie ne retient ta candidature dans aucune catégorie cette année. Tu regardes la cérémonie de loin." });
-                    dispatch({ type: "RECORD_GRAMMY", result: { year: d.getFullYear(), results: [], winsCount: 0, project: null, boycotted: true }, repGain: 0, moneyGain: 0 });
+                    // Écarté des nominations — mais la soirée a lieu, et on peut s'y asseoir.
+                    const result = runGrammyCeremony(gs, { spectateur: true });
+                    dispatch({ type: "RECORD_GRAMMY", result, repGain: 0, moneyGain: 0 });
                     dispatch({ type: "SET_GRAMMY_NOMS", noms: null });
+                    setGrammyEtape("intro");
+                    setGrammyIdx(0);
+                    setGrammyOuvert(false);
+                    setGrammyResult(result);
+                    addLog(`[GRAMMY ${result.year}] Écarté des nominations.`);
                 }
                 else {
                     const result = runGrammyCeremony(gs);
@@ -29997,6 +30048,8 @@ function FiscoGame() {
     const [boutBudget, setBoutBudget] = (0, react_1.useState)(false);
     const [boutPlus, setBoutPlus] = (0, react_1.useState)(false);
     const [weTexte, setWeTexte] = (0, react_1.useState)("");
+    const [castPlusFilm, setCastPlusFilm] = (0, react_1.useState)(false);
+    const [castPlusSerie, setCastPlusSerie] = (0, react_1.useState)(false);
     const [wePlus, setWePlus] = (0, react_1.useState)(false);
     const [talentZone, setTalentZone] = (0, react_1.useState)("toutes");
     const [talentBudget, setTalentBudget] = (0, react_1.useState)(false);
@@ -30975,6 +31028,9 @@ function FiscoGame() {
             // Une pique sur « ta compagne » n'a de sens que s'il y a quelqu'un
             const badPool = gs.romance.partner ? HANGOUT_BAD : HANGOUT_BAD.filter(x => !/ta compagne/.test(x));
             tale = pick(badPool).replace(/\{who\}/g, who);
+            // La soirée a mal tourné, mais tu y es allé : l'historique doit dire où.
+            if (choice && choice.name)
+                detail = `${choice.emoji || ""} ${choice.name}`.trim();
         }
         else if (activity.sub === "match" && choice) {
             const club = choice;
@@ -32290,11 +32346,15 @@ function FiscoGame() {
                             background: "linear-gradient(90deg,transparent,rgba(245,204,92,.45),transparent)" } }),
                     grammyNommes.length === 0 ? (react_1.default.createElement(react_1.default.Fragment, null,
                         react_1.default.createElement("div", { style: { fontSize: 13, lineHeight: 1.7, color: "rgba(242,234,218,.72)" } },
-                            "Le carton d'invitation est arriv\u00E9. Ton nom n'est sur aucune liste de nomm\u00E9s.",
+                            grammyResult.spectateur
+                                ? "L'académie ne retient ton nom dans aucune catégorie cette année. Le carton d'invitation, lui, est quand même arrivé."
+                                : "Le carton d'invitation est arrivé. Ton nom n'est sur aucune liste de nommés.",
                             react_1.default.createElement("br", null),
                             react_1.default.createElement("br", null),
-                            "Tu peux y aller quand m\u00EAme. Beaucoup y vont pour \u00E7a."),
-                        react_1.default.createElement("button", { className: "qa-btn", onClick: finirGrammy, style: { ...studioBtnStyle, width: "100%", marginTop: 20 } }, "PASSER LA SOIR\u00C9E"))) : (react_1.default.createElement(react_1.default.Fragment, null,
+                            "Tu peux y aller quand m\u00EAme. Beaucoup y vont pour \u00E7a : pour \u00EAtre vu dans la salle, et pour savoir qui gagne avant les autres."),
+                        react_1.default.createElement("button", { className: "qa-btn", onClick: () => { setGrammyEtape("salle"); setGrammyIdx(0); setGrammyOuvert(false); }, style: { ...studioBtnStyle, width: "100%", marginTop: 20, fontSize: 15, padding: "13px 14px" } }, "ASSISTER \u00C0 LA C\u00C9R\u00C9MONIE"),
+                        react_1.default.createElement("button", { onClick: finirGrammy, style: { background: "none", border: "none", cursor: "pointer",
+                                color: "rgba(242,234,218,.32)", fontSize: 10, fontFamily: "'Space Mono',monospace", marginTop: 10 } }, "rester chez soi"))) : (react_1.default.createElement(react_1.default.Fragment, null,
                         react_1.default.createElement("div", { style: { fontFamily: "'Bebas Neue',cursive", fontSize: 19, letterSpacing: 1.6, color: orClair } }, grammyNommes.length === 1 ? "TU ES NOMMÉ DANS UNE CATÉGORIE" : `TU ES NOMMÉ DANS ${grammyNommes.length} CATÉGORIES`),
                         react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 6, marginTop: 13, textAlign: "left" } }, grammyNommes.map((r, i) => (react_1.default.createElement("div", { key: i, style: { padding: "9px 12px", borderRadius: 10,
                                 background: "linear-gradient(90deg,rgba(245,204,92,.11),rgba(245,204,92,.03))",
@@ -32305,7 +32365,12 @@ function FiscoGame() {
                                 "pour \u00AB ",
                                 r.projectTitle,
                                 " \u00BB"))))),
-                        react_1.default.createElement("div", { style: { fontSize: 10.5, color: "rgba(242,234,218,.4)", marginTop: 13, fontStyle: "italic" } }, "Les r\u00E9sultats ne sont connus de personne. Pas m\u00EAme de toi."),
+                        react_1.default.createElement("div", { style: { fontSize: 10.5, color: "rgba(242,234,218,.4)", marginTop: 13, fontStyle: "italic" } },
+                            "Les r\u00E9sultats ne sont connus de personne. Pas m\u00EAme de toi.",
+                            react_1.default.createElement("br", null),
+                            "Les ",
+                            grammyDeroule.length,
+                            " cat\u00E9gories de la soir\u00E9e passeront dans l'ordre \u2014 tu assistes aussi aux autres."),
                         react_1.default.createElement("button", { className: "qa-btn", onClick: () => { setGrammyEtape("salle"); setGrammyIdx(0); setGrammyOuvert(false); }, style: { ...studioBtnStyle, width: "100%", marginTop: 18, fontSize: 15, padding: "13px 14px" } }, "Y ALLER"),
                         react_1.default.createElement("button", { onClick: () => setGrammyEtape("liste"), style: { background: "none", border: "none", cursor: "pointer",
                                 color: "rgba(242,234,218,.32)", fontSize: 10, fontFamily: "'Space Mono',monospace", marginTop: 9 } }, "tout voir d'un coup"))))));
@@ -32320,11 +32385,13 @@ function FiscoGame() {
                             grammyResult.year),
                         react_1.default.createElement("div", { style: { fontSize: 13, marginTop: 5, fontFamily: "'Bebas Neue',cursive", letterSpacing: 1,
                                 color: grammyResult.winsCount > 0 ? "#7ce0a4" : "rgba(242,234,218,.5)" } }, grammyResult.winsCount > 0 ? `${grammyResult.winsCount} GRAMMY REMPORTÉ${grammyResult.winsCount > 1 ? "S" : ""}` : "AUCUN TROPHÉE CETTE ANNÉE")),
-                    react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 7 } }, grammyResult.results.map((r, i) => (react_1.default.createElement("div", { key: i, style: { padding: "9px 11px", borderRadius: 10,
+                    react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 7 } }, grammyDeroule.map((r, i) => (react_1.default.createElement("div", { key: i, style: { padding: "9px 11px", borderRadius: 10,
                             background: r.youWon ? "rgba(245,204,92,.1)" : "rgba(255,255,255,.03)",
                             border: r.youWon ? "1px solid rgba(245,204,92,.35)" : "1px solid rgba(255,255,255,.08)" } },
                         react_1.default.createElement("div", { style: { fontSize: 10.5, color: "rgba(245,204,92,.65)", fontFamily: "'Space Mono',monospace" } }, r.category),
-                        !r.nominated ? (react_1.default.createElement("div", { style: { fontSize: 11.5, color: "rgba(242,234,218,.35)", marginTop: 2, fontStyle: "italic" } }, "Non nomm\u00E9")) : r.youWon ? (react_1.default.createElement("div", { style: { fontSize: 13, fontWeight: 700, marginTop: 3, color: or } }, "\uD83C\uDFC6 Fisco")) : (react_1.default.createElement("div", { style: { fontSize: 12.5, marginTop: 3, color: "rgba(242,234,218,.75)" } }, r.gagnant || "—")))))),
+                        !r.nominated ? (react_1.default.createElement("div", { style: { fontSize: 12.5, marginTop: 3, color: "rgba(242,234,218,.6)" } },
+                            r.gagnant || "—",
+                            react_1.default.createElement("span", { style: { fontSize: 9.5, color: "rgba(242,234,218,.3)", fontStyle: "italic", marginLeft: 6 } }, "tu n'\u00E9tais pas en lice"))) : r.youWon ? (react_1.default.createElement("div", { style: { fontSize: 13, fontWeight: 700, marginTop: 3, color: or } }, "\uD83C\uDFC6 Fisco")) : (react_1.default.createElement("div", { style: { fontSize: 12.5, marginTop: 3, color: "rgba(242,234,218,.75)" } }, r.gagnant || "—")))))),
                     react_1.default.createElement("button", { className: "qa-btn", onClick: finirGrammy, style: { ...studioBtnStyle, width: "100%", marginTop: 16 } }, "FERMER"))));
         }
         // ── LE BILAN DE LA NUIT ────────────────────────────────────────────────
@@ -32335,13 +32402,16 @@ function FiscoGame() {
                 react_1.default.createElement("div", { style: { ...cadre, padding: "28px 22px", textAlign: "center", animation: "rise .6s cubic-bezier(.2,.9,.3,1) both" } },
                     poussiere,
                     react_1.default.createElement("div", { style: { fontSize: 46, marginBottom: 4 } }, g > 0 ? "🏆" : "🌙"),
-                    react_1.default.createElement("div", { style: { ...titreOr, fontSize: 30, lineHeight: 1.05 } }, g >= 3 ? "UNE NUIT HISTORIQUE" : g === 2 ? "DEUX TROPHÉES" : g === 1 ? "UN GRAMMY" : "RIEN CE SOIR"),
+                    react_1.default.createElement("div", { style: { ...titreOr, fontSize: 30, lineHeight: 1.05 } }, g >= 3 ? "UNE NUIT HISTORIQUE" : g === 2 ? "DEUX TROPHÉES" : g === 1 ? "UN GRAMMY"
+                        : grammyNommes.length ? "RIEN CE SOIR" : "TU ÉTAIS DANS LA SALLE"),
                     react_1.default.createElement("div", { style: { height: 1, margin: "15px auto", width: "50%",
                             background: "linear-gradient(90deg,transparent,rgba(245,204,92,.45),transparent)" } }),
                     react_1.default.createElement("div", { style: { fontSize: 13, lineHeight: 1.72, color: "rgba(242,234,218,.78)" } }, g > 0
                         ? `Tu repars avec ${g === 1 ? "un trophée" : `${g} trophées`}. Demain matin, ton nom sera dans tous les titres, et ce que tu feras ensuite sera comparé à cette nuit pendant des années.`
-                        : "Tu repars les mains vides. Les caméras t'ont filmé en train d'applaudir quelqu'un d'autre, et cette image-là tournera demain.\n\nIl y aura d'autres années."),
-                    grammyNommes.length > 0 && (react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 5, marginTop: 16, textAlign: "left" } }, grammyNommes.map((r, i) => (react_1.default.createElement("div", { key: i, style: { display: "flex", justifyContent: "space-between", gap: 10, padding: "7px 10px", borderRadius: 8,
+                        : grammyNommes.length
+                            ? "Tu repars les mains vides. Les caméras t'ont filmé en train d'applaudir quelqu'un d'autre, et cette image-là tournera demain.\n\nIl y aura d'autres années."
+                            : "Tu n'étais nommé nulle part, et tu es venu quand même. Tu as vu les neuf enveloppes s'ouvrir d'où il faut les voir : depuis la salle.\n\nL'an prochain, c'est peut-être ton nom qu'on lira dedans."),
+                    (grammyNommes.length ? grammyNommes : grammyDeroule).length > 0 && (react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 5, marginTop: 16, textAlign: "left" } }, (grammyNommes.length ? grammyNommes : grammyDeroule).map((r, i) => (react_1.default.createElement("div", { key: i, style: { display: "flex", justifyContent: "space-between", gap: 10, padding: "7px 10px", borderRadius: 8,
                             background: r.youWon ? "rgba(245,204,92,.1)" : "rgba(255,255,255,.025)",
                             border: r.youWon ? "1px solid rgba(245,204,92,.3)" : "1px solid rgba(255,255,255,.06)" } },
                         react_1.default.createElement("span", { style: { fontSize: 10.5, color: "rgba(242,234,218,.5)", fontFamily: "'Space Mono',monospace", minWidth: 0,
@@ -32433,16 +32503,19 @@ function FiscoGame() {
                                 a.marche))))))))));
         }
         // ── UNE CATÉGORIE ──────────────────────────────────────────────────────
-        const r = grammyNommes[grammyIdx];
+        const r = grammyDeroule[grammyIdx];
         if (!r)
             return null;
+        const enLice = !!r.nominated;
         const amb = ambianceGrammy(r.cote || 0.1);
-        const derniere = grammyIdx >= grammyNommes.length - 1;
-        const moi = { nom: "FISCO", toi: true };
-        const liste = [{ ...moi, titre: r.projectTitle || null },
-            ...(r.rivaux || []).map(n => typeof n === "string"
-                ? { nom: n, titre: titreProjet(n, r.category, grammyResult.year) }
-                : { nom: n.nom, titre: n.titre })];
+        const derniere = grammyIdx >= grammyDeroule.length - 1;
+        const suivanteMienne = prochaineMienne(grammyIdx);
+        const rivaux = (r.rivaux || []).map(x => typeof x === "string"
+            ? { nom: x, titre: titreProjet(x, r.category, grammyResult.year) }
+            : { nom: x.nom, titre: x.titre });
+        const liste = enLice
+            ? [{ nom: "FISCO", toi: true, titre: r.projectTitle || null }, ...rivaux]
+            : rivaux;
         return (react_1.default.createElement("div", { style: { position: "fixed", inset: 0, zIndex: 260, background: "radial-gradient(ellipse 70% 60% at 50% 38%, rgba(48,34,6,.93), rgba(4,6,12,.98))",
                 backdropFilter: "blur(14px)", overflowY: "auto", padding: "24px 14px" } },
             react_1.default.createElement("div", { style: { ...cadre, padding: "26px 20px", animation: "rise .5s cubic-bezier(.2,.9,.3,1) both" }, key: grammyIdx },
@@ -32453,10 +32526,11 @@ function FiscoGame() {
                         "Cat\u00E9gorie ",
                         grammyIdx + 1,
                         " sur ",
-                        grammyNommes.length),
+                        grammyDeroule.length),
                     react_1.default.createElement("div", { style: { ...titreOr, fontSize: 24, lineHeight: 1.1, marginTop: 6 } }, r.category),
                     typeTitre(r.category) && (react_1.default.createElement("div", { style: { fontSize: 9.5, color: "rgba(242,234,218,.38)", marginTop: 4,
-                            fontFamily: "'Space Mono',monospace", letterSpacing: 1, textTransform: "uppercase" } }, typeTitre(r.category) === "album" ? "les projets en lice" : "les titres en lice"))),
+                            fontFamily: "'Space Mono',monospace", letterSpacing: 1, textTransform: "uppercase" } }, typeTitre(r.category) === "album" ? "les projets en lice" : "les titres en lice")),
+                    !enLice && (react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(242,234,218,.32)", marginTop: 5, fontStyle: "italic" } }, "Tu n'es pas nomm\u00E9 dans cette cat\u00E9gorie. Tu es dans la salle."))),
                 react_1.default.createElement("div", { style: { height: 1, margin: "16px 0",
                         background: "linear-gradient(90deg,transparent,rgba(245,204,92,.4),transparent)" } }),
                 react_1.default.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 5 } }, liste.map((n, i) => {
@@ -32485,19 +32559,25 @@ function FiscoGame() {
                                 " \u00BB")))));
                 })),
                 !grammyOuvert ? (react_1.default.createElement(react_1.default.Fragment, null,
-                    react_1.default.createElement("div", { style: { textAlign: "center", fontSize: 11.5, marginTop: 15, color: amb.c, fontStyle: "italic" } }, amb.t),
+                    enLice && react_1.default.createElement("div", { style: { textAlign: "center", fontSize: 11.5, marginTop: 15, color: amb.c, fontStyle: "italic" } }, amb.t),
                     react_1.default.createElement("div", { style: { textAlign: "center", marginTop: 14 } },
                         react_1.default.createElement("div", { style: { fontFamily: "'Bebas Neue',cursive", fontSize: 16, letterSpacing: 2,
                                 color: "rgba(242,234,218,.72)" } }, "AND THE GRAMMY GOES TO\u2026"),
-                        react_1.default.createElement("button", { className: "qa-btn", onClick: () => { setGrammyOuvert(true); sfx(r.youWon ? "success" : "error"); }, "aria-label": "Ouvrir l'enveloppe", style: { margin: "12px auto 0", width: 132, height: 88, borderRadius: 12, cursor: "pointer",
+                        react_1.default.createElement("button", { className: "qa-btn", onClick: () => { setGrammyOuvert(true); if (enLice)
+                                sfx(r.youWon ? "success" : "error"); }, "aria-label": "Ouvrir l'enveloppe", style: { margin: "12px auto 0", width: 132, height: 88, borderRadius: 12, cursor: "pointer",
                                 background: "linear-gradient(165deg,#f7e3ac,#e0c27a 48%,#b9923f)",
                                 border: "1px solid rgba(255,233,168,.75)", display: "grid", placeItems: "center",
                                 boxShadow: "0 1px 0 rgba(255,255,255,.5) inset, 0 22px 46px -18px rgba(0,0,0,.95), 0 0 34px -8px rgba(245,204,92,.6)",
                                 animation: "braise 1.9s ease-in-out infinite" } },
                             react_1.default.createElement("span", { style: { fontSize: 30, filter: "drop-shadow(0 2px 3px rgba(0,0,0,.35))" } }, "\u2709\uFE0F")),
                         react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(242,234,218,.4)", marginTop: 9,
-                                fontFamily: "'Space Mono',monospace" } }, "touche l'enveloppe quand tu es pr\u00EAt")))) : (react_1.default.createElement(react_1.default.Fragment, null,
-                    react_1.default.createElement("div", { style: { textAlign: "center", marginTop: 17 } }, r.youWon ? (react_1.default.createElement(react_1.default.Fragment, null,
+                                fontFamily: "'Space Mono',monospace" } }, "touche l'enveloppe quand tu es pr\u00EAt"),
+                        !enLice && suivanteMienne >= 0 && (react_1.default.createElement("button", { onClick: () => { setGrammyIdx(suivanteMienne); setGrammyOuvert(false); }, style: { background: "none", border: "none", cursor: "pointer", marginTop: 11,
+                                color: "rgba(242,234,218,.32)", fontSize: 10, fontFamily: "'Space Mono',monospace" } }, "\u25B8 aller directement \u00E0 ma prochaine cat\u00E9gorie"))))) : (react_1.default.createElement(react_1.default.Fragment, null,
+                    react_1.default.createElement("div", { style: { textAlign: "center", marginTop: 17 } }, !enLice ? (react_1.default.createElement(react_1.default.Fragment, null,
+                        react_1.default.createElement("div", { style: { fontFamily: "'Bebas Neue',cursive", fontSize: 26, letterSpacing: 2,
+                                color: "rgba(242,234,218,.88)" } }, r.gagnant || "—"),
+                        react_1.default.createElement("div", { style: { fontSize: 12.5, lineHeight: 1.65, color: "rgba(242,234,218,.55)", marginTop: 9 } }, "Tu applaudis comme tout le monde. Ce soir, cette cat\u00E9gorie ne te concernait pas."))) : r.youWon ? (react_1.default.createElement(react_1.default.Fragment, null,
                         react_1.default.createElement("div", { style: { ...titreOr, fontSize: 30, animation: "glow 2s ease-in-out infinite" } }, "C'EST TOI"),
                         react_1.default.createElement("div", { style: { fontSize: 12.5, lineHeight: 1.65, color: "rgba(242,234,218,.78)", marginTop: 9 } }, r.bought
                             ? "La salle se lève. Tu souris, tu remercies, tu montes chercher le trophée.\n\nTu es le seul ici à savoir que ce vote était décidé avant la soirée."
@@ -32515,7 +32595,9 @@ function FiscoGame() {
                                 setGrammyIdx(i => i + 1);
                                 setGrammyOuvert(false);
                             }
-                        }, style: { ...studioBtnStyle, width: "100%", marginTop: 18 } }, derniere ? "FIN DE LA CÉRÉMONIE" : "CATÉGORIE SUIVANTE"))))));
+                        }, style: { ...studioBtnStyle, width: "100%", marginTop: 18 } }, derniere ? "FIN DE LA CÉRÉMONIE" : "CATÉGORIE SUIVANTE"),
+                    !derniere && !enLice && suivanteMienne >= 0 && (react_1.default.createElement("button", { onClick: () => { setGrammyIdx(suivanteMienne); setGrammyOuvert(false); }, style: { background: "none", border: "none", cursor: "pointer", width: "100%", marginTop: 9,
+                            color: "rgba(242,234,218,.32)", fontSize: 10, fontFamily: "'Space Mono',monospace" } }, "\u25B8 aller directement \u00E0 ma prochaine cat\u00E9gorie")))))));
     })() : null;
     const PendOv = pendingAlert && !activeEvent && !calAlert && !grammyResult ? (react_1.default.createElement("div", { style: { position: "fixed", inset: 0, zIndex: 240, background: "rgba(4,9,26,.65)", backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "16px", overflowY: "auto" } },
         react_1.default.createElement("div", { style: { position: "relative", margin: "auto", background: "linear-gradient(135deg,#1a0d35,#2a1f4a)", border: "1px solid rgba(200,119,255,.4)", borderRadius: 14, padding: "24px 22px", maxWidth: 360, width: "92%", animation: "pendingPop .3s ease", textAlign: "center" } },
@@ -36877,11 +36959,32 @@ function FiscoGame() {
                     z.emoji,
                     " ",
                     z.label))))),
-                seriesPick.cast.length < seriesPick.platform.capRoles && (react_1.default.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 14, maxHeight: 150, overflowY: "auto" } }, sortPeople(getActingPool(seriesCastFilter.trim().length > 0, gs.newCast, gs).filter(c => c.name.toLowerCase().includes(seriesCastFilter.toLowerCase()) && !seriesPick.cast.some(x => x.id === c.id) && (seriesCastZone === "all" || actorZone(c) === seriesCastZone)), gs, "cast").slice(0, 80).map(c => (react_1.default.createElement("button", { key: c.id, onClick: () => setSeriesPick(p => ({ ...p, cast: [...p.cast, { id: c.id, role: "support", characterName: "" }] })), style: { padding: "5px 9px", background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", color: "rgba(255,255,255,.6)", borderRadius: 20, fontSize: 10, cursor: "pointer", boxShadow: RELIEF } },
-                    c.emoji,
-                    " ",
-                    c.name,
-                    c.cat.includes("music") ? " 🎵" : ""))))),
+                seriesPick.cast.length < seriesPick.platform.capRoles && (react_1.default.createElement("div", { style: { marginBottom: 14 } }, (() => {
+                    const tout = sortPeople(getActingPool(seriesCastFilter.trim().length > 0, gs.newCast, gs)
+                        .filter(c => c.name.toLowerCase().includes(seriesCastFilter.toLowerCase())
+                        && !seriesPick.cast.some(x => x.id === c.id)
+                        && (seriesCastZone === "all" || actorZone(c) === seriesCastZone)), gs, "cast");
+                    const vus = castPlusSerie ? tout : tout.slice(0, 40);
+                    return (react_1.default.createElement(react_1.default.Fragment, null,
+                        react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(255,255,255,.35)", marginBottom: 5,
+                                fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                            tout.length,
+                            " acteur",
+                            tout.length > 1 ? "s" : "",
+                            " disponible",
+                            tout.length > 1 ? "s" : "",
+                            !castPlusSerie && tout.length > 40 ? ` · ${vus.length} affichés` : ""),
+                        react_1.default.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 5, maxHeight: castPlusSerie ? 260 : 150, overflowY: "auto" } }, vus.map(c => (react_1.default.createElement("button", { key: c.id, onClick: () => setSeriesPick(p => ({ ...p, cast: [...p.cast, { id: c.id, role: "support", characterName: "" }] })), style: { padding: "5px 9px", background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", color: "rgba(255,255,255,.6)", borderRadius: 20, fontSize: 10, cursor: "pointer", boxShadow: RELIEF } },
+                            c.emoji,
+                            " ",
+                            c.name,
+                            c.cat.includes("music") ? " 🎵" : "")))),
+                        !tout.length && (react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.45)", fontStyle: "italic", padding: "6px 2px" } }, "Personne ne correspond. Essaie un autre nom, ou change de filtre.")),
+                        tout.length > vus.length && (react_1.default.createElement("button", { onClick: () => setCastPlusSerie(true), style: { width: "100%", marginTop: 7, padding: "6px", background: "rgba(255,255,255,.04)", border: "1px dashed rgba(255,255,255,.18)", color: "rgba(255,255,255,.55)", borderRadius: 8, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                            "\u25BE Voir les ",
+                            tout.length - vus.length,
+                            " autres acteurs"))));
+                })())),
                 react_1.default.createElement("button", { disabled: !seriesPick.title.trim() || !seriesPick.genre || !seriesPick.cast.length, onClick: () => releaseSeason(seriesPick), style: { width: "100%", padding: "12px", background: (!seriesPick.title.trim() || !seriesPick.genre || !seriesPick.cast.length) ? "rgba(255,255,255,.05)" : "linear-gradient(135deg,rgba(127,179,204,.35),rgba(0,150,200,.3))", border: "1px solid rgba(127,179,204,.5)", color: (!seriesPick.title.trim() || !seriesPick.genre || !seriesPick.cast.length) ? "rgba(255,255,255,.25)" : "white", borderRadius: 8, fontFamily: "'Bebas Neue',cursive", fontSize: 15, letterSpacing: 2, cursor: "pointer" } },
                     "\uD83D\uDCFA TOURNER LA SAISON (",
                     fmtMoney(seriesPick.platform.costPerEp * seriesPick.episodes),
@@ -36977,11 +37080,32 @@ function FiscoGame() {
                     z.emoji,
                     " ",
                     z.label))))),
-                moviePick.cast.length < moviePick.budget.capRoles && (react_1.default.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 14, maxHeight: 160, overflowY: "auto" } }, sortPeople(getActingPool(movieCastFilter.trim().length > 0, gs.newCast, gs).filter(c => c.name.toLowerCase().includes(movieCastFilter.toLowerCase()) && !moviePick.cast.some(x => x.id === c.id) && (movieCastZone === "all" || actorZone(c) === movieCastZone)), gs, "cast").slice(0, 80).map(c => (react_1.default.createElement("button", { key: c.id, onClick: () => setMoviePick(p => ({ ...p, cast: [...p.cast, { id: c.id, role: "support", characterName: "" }] })), style: { padding: "5px 9px", background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", color: "rgba(255,255,255,.6)", borderRadius: 20, fontSize: 10, cursor: "pointer", boxShadow: RELIEF } },
-                    c.emoji,
-                    " ",
-                    c.name,
-                    c.cat.includes("music") ? " 🎵" : ""))))),
+                moviePick.cast.length < moviePick.budget.capRoles && (react_1.default.createElement("div", { style: { marginBottom: 14 } }, (() => {
+                    const tout = sortPeople(getActingPool(movieCastFilter.trim().length > 0, gs.newCast, gs)
+                        .filter(c => c.name.toLowerCase().includes(movieCastFilter.toLowerCase())
+                        && !moviePick.cast.some(x => x.id === c.id)
+                        && (movieCastZone === "all" || actorZone(c) === movieCastZone)), gs, "cast");
+                    const vus = castPlusFilm ? tout : tout.slice(0, 40);
+                    return (react_1.default.createElement(react_1.default.Fragment, null,
+                        react_1.default.createElement("div", { style: { fontSize: 9, color: "rgba(255,255,255,.35)", marginBottom: 5,
+                                fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                            tout.length,
+                            " acteur",
+                            tout.length > 1 ? "s" : "",
+                            " disponible",
+                            tout.length > 1 ? "s" : "",
+                            !castPlusFilm && tout.length > 40 ? ` · ${vus.length} affichés` : ""),
+                        react_1.default.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 5, maxHeight: castPlusFilm ? 260 : 160, overflowY: "auto" } }, vus.map(c => (react_1.default.createElement("button", { key: c.id, onClick: () => setMoviePick(p => ({ ...p, cast: [...p.cast, { id: c.id, role: "support", characterName: "" }] })), style: { padding: "5px 9px", background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", color: "rgba(255,255,255,.6)", borderRadius: 20, fontSize: 10, cursor: "pointer", boxShadow: RELIEF } },
+                            c.emoji,
+                            " ",
+                            c.name,
+                            c.cat.includes("music") ? " 🎵" : "")))),
+                        !tout.length && (react_1.default.createElement("div", { style: { fontSize: 11, color: "rgba(255,255,255,.45)", fontStyle: "italic", padding: "6px 2px" } }, "Personne ne correspond. Essaie un autre nom, ou change de filtre.")),
+                        tout.length > vus.length && (react_1.default.createElement("button", { onClick: () => setCastPlusFilm(true), style: { width: "100%", marginTop: 7, padding: "6px", background: "rgba(255,255,255,.04)", border: "1px dashed rgba(255,255,255,.18)", color: "rgba(255,255,255,.55)", borderRadius: 8, fontSize: 10, cursor: "pointer", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                            "\u25BE Voir les ",
+                            tout.length - vus.length,
+                            " autres acteurs"))));
+                })())),
                 react_1.default.createElement("button", { disabled: !moviePick.title.trim() || !moviePick.genre || !moviePick.cast.length, onClick: () => releaseMovie(moviePick), style: { width: "100%", padding: "12px", background: (!moviePick.title.trim() || !moviePick.genre || !moviePick.cast.length) ? "rgba(255,255,255,.05)" : "linear-gradient(135deg,rgba(180,140,224,.35),rgba(255,70,150,.3))", border: "1px solid rgba(180,140,224,.5)", color: (!moviePick.title.trim() || !moviePick.genre || !moviePick.cast.length) ? "rgba(255,255,255,.25)" : "white", borderRadius: 8, fontFamily: "'Bebas Neue',cursive", fontSize: 15, letterSpacing: 2, cursor: "pointer" } },
                     "\uD83C\uDFAC TOURNER LE FILM (",
                     fmtMoney(moviePick.budget.cost),
