@@ -21847,7 +21847,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "146";
+const VERSION_JEU = "147";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -21896,7 +21896,7 @@ function capStreams(next) {
 // Le plafond de streams, le plafond de célébrité, le palier du cercle et la
 // réparation des couples s'appliquent d'eux-mêmes à chaque geste du joueur.
 // Reste une correction rétroactive, qui n'a de sens qu'une seule fois.
-const VERSION_EQUILIBRE = 11;
+const VERSION_EQUILIBRE = 12;
 // Où se trouve réellement un morceau : on cherche dans toute la discographie.
 function projetDuMorceau(titre, disco) {
     if (!titre || !Array.isArray(disco))
@@ -22055,17 +22055,34 @@ function reprendrePartie(next) {
         repris.boutique = [];
     if (!Array.isArray(repris.romanceHistory))
         repris.romanceHistory = [];
-    // Rien n'était noté avant : on reconstitue avec ce que la sauvegarde sait
-    // réellement, et on marque d'un « au moins » tout ce qui n'est qu'une borne.
+    // Rien n'était noté avant : on reconstitue la chaîne des histoires avec ce
+    // que la sauvegarde sait réellement — le début du récit, les derniers
+    // contacts, la date de rupture. Deux histoires ne se chevauchent pas : la fin
+    // de l'une ouvre la suivante.
     if (!repris.romanceHistory.length && ((repris.romance || {}).pastPartners || []).length) {
-        const r = repris.romance;
-        repris.romanceHistory = [...new Set(r.pastPartners)].filter(Boolean).map(id => {
-            const premiere = (id === ROMANCE_INITIALE);
-            const fin = (id === r.exPartner && r.breakupDate) ? r.breakupDate : null;
-            return { id,
-                from: premiere ? GAME_START_DATE : null,
-                fromApprox: premiere, // l'histoire avait déjà commencé
-                to: fin, statut: null };
+        const r = repris.romance, rel = repris.relations || {};
+        const quand = id => ((rel[id] || {}).lastContact) || null;
+        const anciennes = [...new Set(r.pastPartners)].filter(Boolean);
+        const ordre = anciennes.slice().sort((a, b) => {
+            const da = quand(a), db = quand(b);
+            if (da != null && db != null)
+                return da - db;
+            if (da != null)
+                return -1;
+            if (db != null)
+                return 1;
+            return anciennes.indexOf(a) - anciennes.indexOf(b);
+        });
+        let curseur = GAME_START_DATE;
+        repris.romanceHistory = ordre.map((id, i) => {
+            const dernier = (i === ordre.length - 1);
+            const fin = (id === r.exPartner && r.breakupDate) ? r.breakupDate
+                : (quand(id) || (dernier ? (r.since || r.breakupDate || repris.currentDate) : null));
+            const debut = curseur;
+            if (fin)
+                curseur = fin;
+            return { id, from: debut, fromApprox: (i === 0 && id === ROMANCE_INITIALE),
+                to: fin || null, statut: null, reconstitue: true };
         });
     }
     // La compagne actuelle n'a pas de date ? La rupture précédente en donne une
@@ -25325,12 +25342,10 @@ function bornesRelation(du, au) {
     const a = du == null ? null : new Date(du).getFullYear();
     const b = au == null ? null : new Date(au).getFullYear();
     if (a != null && b != null)
-        return a === b ? `${a}` : `${a}-${b}`;
+        return `${a}-${b}`;
     if (b != null)
         return `jusqu'en ${b}`;
-    if (a != null)
-        return `depuis ${a}`;
-    return null;
+    return null; // une histoire terminée ne se dit jamais « depuis »
 }
 function dureeRelation(du, au, qui, approx) {
     if (au == null)
@@ -25455,8 +25470,17 @@ function buildWiki(gs) {
         const tete = flou ? ` depuis au moins ${an}` : ` depuis ${an}`;
         return t ? `${tete} (${flou ? "au moins " : ""}${t})` : tete;
     })();
-    if (gs.romance.status === "marie" && partner)
-        priv = `Fisco est marié à ${partner}${depuis}.`;
+    if (gs.romance.status === "marie" && partner) {
+        const noce = gs.romance.marriedDate;
+        if (noce) {
+            const anNoce = new Date(noce).getFullYear();
+            const duree = direDuree(noce, gs.currentDate);
+            const ensemble = (gs.romance.since != null && gs.romance.since < noce) ? depuis : "";
+            priv = `Fisco est marié à ${partner} depuis ${anNoce}${duree ? ` (${duree})` : ""}${ensemble ? `, et en couple avec elle${ensemble}` : ""}.`;
+        }
+        else
+            priv = `Fisco est marié à ${partner}${depuis}.`;
+    }
     else if (gs.romance.status === "fiancee" && partner)
         priv = `Fisco entretient une relation avec ${partner}${depuis}, à qui il est fiancé.`;
     else if (gs.romance.status === "couple" && partner)
@@ -25487,9 +25511,7 @@ function buildWiki(gs) {
                 continue;
             vues.add(h.id);
             const bornes = bornesRelation(h.from, h.to);
-            const combien = direRelation(h.from, h.to, h.id, h.fromApprox);
-            const dedans = [bornes, combien].filter(Boolean).join(", ");
-            lignes.push(dedans ? `${nom} (${dedans})` : nom);
+            lignes.push(bornes ? `${nom} : ${bornes}` : nom);
             if (lignes.length >= 4)
                 break;
         }
@@ -25497,9 +25519,11 @@ function buildWiki(gs) {
         const sansDate = [...new Set(gs.romance.pastPartners || [])]
             .filter(id => id !== gs.romance.partner && id !== dejaNommee && !vues.has(id))
             .map(id => { var _a; return (_a = charAny(id)) === null || _a === void 0 ? void 0 : _a.name; }).filter(Boolean);
-        const toutes = [...lignes, ...sansDate.slice(0, 3)];
+        // Dans l'ordre où elles ont eu lieu : on a parcouru à l'envers pour garder
+        // les plus récentes, on remet à l'endroit pour les lire.
+        const toutes = [...lignes.reverse(), ...sansDate.slice(0, 3)];
         if (toutes.length)
-            priv += ` Il a précédemment été lié à ${toutes.join(", ")}.`;
+            priv += `\n\nRelations passées — ${toutes.join(" · ")}.`;
     }
     if ((gs.children || []).length) {
         priv += `\n\nIl est père de ${(gs.children || []).length} enfant${(gs.children || []).length > 1 ? "s" : ""} : ${(gs.children || []).map(c => {
