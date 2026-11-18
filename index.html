@@ -15482,7 +15482,7 @@ const JOB_TABS = [
     { id: "sport", emoji: "⚽", label: "Sport", test: c => (c.cat || "").includes("sport") },
     { id: "mode", emoji: "👗", label: "Mode", test: c => (c.cat || "").includes("mode") || MODE_EXTRA.has(c.id) },
     { id: "influ", emoji: "📱", label: "Réseaux", test: c => ((c.cat || "").includes("influencer") || (c.cat || "").includes("media")) && !MODE_EXTRA.has(c.id) },
-    { id: "business", emoji: "💼", label: "Affaires", test: c => (c.cat || "").includes("business") },
+    { id: "business", emoji: "💼", label: "Affaires", test: c => (c.cat || "").includes("business") || (c.cat || "").includes("equipe") },
     { id: "politique", emoji: "🏛️", label: "Politique", test: c => (c.cat || "").includes("politique") },
 ];
 function jobFilter(list, tab) {
@@ -17568,6 +17568,9 @@ function isHostile(gs, id) {
 }
 function partyGuestUnlocked(c, legend, gs) {
     var _a;
+    // Younes n'est pas une star a debloquer : il repond toujours au telephone.
+    if (c && c.id === SOF.id)
+        return true;
     // Quand tu combats le cercle, ses membres ne viennent plus — sauf s'ils sont redevenus des amis
     if (gs && gs.inResistance && isElite(c)) {
         const r = (gs.relations || {})[c.id];
@@ -18385,6 +18388,29 @@ const MEDIA_YEARLY_LIMIT = 10;
 // Aucune question ne revient deux fois dans une carrière.
 const VOIX_MEDIA = { "akademiks": "tu", "bigboy": "tu", "booskap": "tu", "breakfast": "tu", "brut": "vous", "budden": "tu", "cko": "tu", "clique": "vous", "cliquetv": "vous", "colbert": "vous", "drinkchamps": "tu", "generations": "tu", "gqfr": "vous", "hot97": "tu", "kimmel": "tu", "konbini": "tu", "lecode": "vous", "m6_1945": "vous", "mouv": "tu", "planeterap": "tu", "quotidien": "vous", "rapelite": "tu", "rapunchline": "tu", "skyrock": "tu", "tf1jt": "vous", "thebridge": "tu", "tonight": "tu", "vladtv": "tu" };
 const REGISTRE_MEDIA = { "akademiks": "cash", "bigboy": "rapus", "booskap": "rapfr", "breakfast": "rapus", "brut": "culturefr", "budden": "rapus", "cko": "rapfr", "clique": "culturefr", "cliquetv": "culturefr", "colbert": "grandus", "drinkchamps": "cash", "generations": "rapfr", "gqfr": "culturefr", "hot97": "rapus", "kimmel": "grandus", "konbini": "culturefr", "lecode": "rapfr", "m6_1945": "infofr", "mouv": "culturefr", "planeterap": "rapfr", "quotidien": "infofr", "rapelite": "rapfr", "rapunchline": "rapfr", "skyrock": "rapfr", "tf1jt": "infofr", "thebridge": "rapfr", "tonight": "grandus", "vladtv": "cash" };
+// ─── OÙ TU EN ES DE TA CARRIÈRE ─────────────────────────────────────────────
+// Dix ans de métier, ce n'est pas un vétéran : c'est quelqu'un d'installé. Le
+// mot « vétéran » se mérite à vingt-cinq ans, et « légende » plus tard encore.
+const ETAPES_CARRIERE = [
+    { des: 35, label: "légende vivante", col: "#f0c98a" },
+    { des: 25, label: "vétéran", col: "#e8963c" },
+    { des: 18, label: "pilier du game", col: "#d9b65f" },
+    { des: 12, label: "artiste confirmé", col: "rgba(255,255,255,.78)" },
+    { des: 6, label: "installé", col: "rgba(255,255,255,.62)" },
+    { des: 0, label: "début de carrière", col: "rgba(255,255,255,.5)" },
+];
+function etapeCarriere(cy) {
+    const n = (cy || 0);
+    return ETAPES_CARRIERE.find(e => n >= e.des) || ETAPES_CARRIERE[ETAPES_CARRIERE.length - 1];
+}
+// L'usure suit la même horloge : le corps ne présente pas la facture au bout
+// de dix ans. Elle monte lentement à partir de huit ans et n'est pleine qu'à
+// vingt-huit ans de métier.
+const USURE_DEBUT = 8, USURE_PLEINE = 28;
+function usureCarriere(cy) {
+    const t = Math.max(0, Math.min(1, ((cy || 0) - USURE_DEBUT) / (USURE_PLEINE - USURE_DEBUT)));
+    return 1 + 0.6 * t; // 1,00 → 1,60
+}
 // Les conditions auxquelles une question peut être attachée.
 const QF = {
     enfants: g => (g.children || []).length > 0,
@@ -18406,7 +18432,8 @@ const QF = {
     sansGrammy: g => !(g.grammyHistory || []).some(h => (h.winsCount || 0) > 0),
     riche: g => (g.money || 0) >= 50000000,
     fauche: g => (g.money || 0) < 1000000,
-    veteran: g => (g.careerYears || 0) >= 10,
+    veteran: g => (g.careerYears || 0) >= 25,
+    confirme: g => (g.careerYears || 0) >= 12,
     jeune: g => (g.careerYears || 0) < 6,
     label: g => (g.unuhuRoster || []).length > 0,
     addict: g => (g.addictions || []).length > 0,
@@ -18449,7 +18476,7 @@ const BANQUE_QUESTIONS = [
     { i: "q_musique_tu_30", q: "Tu te remets en question après une mauvaise critique ?", t: "musique", v: "tu" },
     { i: "q_musique_tu_31", q: "Tu travailles avec un carnet ou tout est dans le téléphone ?", t: "musique", v: "tu" },
     { i: "q_musique_tu_32", q: "T'as déjà écrit un morceau entier et jamais osé l'enregistrer ?", t: "musique", v: "tu" },
-    { i: "q_musique_tu_33", q: "Après toutes ces années, t'as encore peur avant de sortir un projet ?", t: "musique", v: "tu", s: "veteran" },
+    { i: "q_musique_tu_33", q: "Après toutes ces années, t'as encore peur avant de sortir un projet ?", t: "musique", v: "tu", s: "confirme" },
     { i: "q_musique_tu_34", q: "T'as déjà l'impression de savoir ce que tu fais ou tu improvises ?", t: "musique", v: "tu", s: "jeune" },
     { i: "q_musique_tu_35", q: "Tu produis les autres pareil que tu te produis toi ?", t: "musique", v: "tu", s: "label" },
     { i: "q_musique_tu_36", q: "Les morceaux, tu les écris différemment quand tu sais que tu vas les jouer ?", t: "musique", v: "tu", s: "tournee" },
@@ -18664,7 +18691,7 @@ const BANQUE_QUESTIONS = [
     { i: "q_origines_tu_22", q: "Ta famille a réagi comment à ta conversion ?", t: "origines", v: "tu", s: "foi" },
     { i: "q_origines_tu_23", q: "Tu élèves tes enfants comme on t'a élevé ?", t: "origines", v: "tu", s: "enfants" },
     { i: "q_origines_tu_24", q: "Tu penses à ceux qui sont plus là ?", t: "origines", v: "tu", s: "deuil" },
-    { i: "q_origines_tu_25", q: "T'as commencé il y a longtemps. Le milieu a changé comment ?", t: "origines", v: "tu", s: "veteran" },
+    { i: "q_origines_tu_25", q: "T'as commencé il y a longtemps. Le milieu a changé comment ?", t: "origines", v: "tu", s: "confirme" },
     { i: "q_origines_tu_26", q: "T'avais combien sur toi quand t'es arrivé dans ce game ?", t: "origines", v: "tu", r: ["cash"] },
     { i: "q_origines_tu_27", q: "T'as fait des trucs que tu racontes pas ?", t: "origines", v: "tu", r: ["cash"] },
     { i: "q_origines_tu_28", q: "T'écoutais quoi comme rap français quand t'étais petit ?", t: "origines", v: "tu", r: ["rapfr"] },
@@ -18782,7 +18809,7 @@ const BANQUE_QUESTIONS = [
     { i: "q_musique_vous_16", q: "Écrivez-vous pour être compris ou pour être ressenti ?", t: "musique", v: "vous" },
     { i: "q_musique_vous_17", q: "Est-ce que vous vous imposez des règles quand vous écrivez ?", t: "musique", v: "vous" },
     { i: "q_musique_vous_18", q: "Qu'avez-vous appris en studio que personne ne vous avait appris avant ?", t: "musique", v: "vous" },
-    { i: "q_musique_vous_19", q: "Après tout ce temps, le trac existe encore ?", t: "musique", v: "vous", s: "veteran" },
+    { i: "q_musique_vous_19", q: "Après tout ce temps, le trac existe encore ?", t: "musique", v: "vous", s: "confirme" },
     { i: "q_musique_vous_20", q: "Une récompense change-t-elle la manière de travailler ensuite ?", t: "musique", v: "vous", s: "grammy" },
     { i: "q_musique_vous_21", q: "La scène vous apprend-elle des choses sur vos propres chansons ?", t: "musique", v: "vous", s: "tournee" },
     { i: "q_musique_vous_22", q: "Écrit-on une chanson comme on écrit un film ?", t: "musique", v: "vous", s: "film" },
@@ -18831,7 +18858,7 @@ const BANQUE_QUESTIONS = [
     { i: "q_business_vous_27", q: "Comment décide-t-on d'arrêter quelque chose qui ne marche pas ?", t: "business", v: "vous" },
     { i: "q_business_vous_28", q: "Le succès commercial abîme-t-il la crédibilité ?", t: "business", v: "vous", r: ["culturefr"] },
     { i: "q_business_vous_29", q: "Combien de personnes vivent de vos activités ?", t: "business", v: "vous", r: ["infofr"] },
-    { i: "q_business_vous_30", q: "Après tant d'années, déléguez-vous enfin ?", t: "business", v: "vous", s: "veteran" },
+    { i: "q_business_vous_30", q: "Après tant d'années, déléguez-vous enfin ?", t: "business", v: "vous", s: "confirme" },
     { i: "q_business_vous_31", q: "Un label indépendant peut-il encore exister aujourd'hui ?", t: "business", v: "vous", s: "label" },
     { i: "q_clash_vous_0", q: "Que répondez-vous à vos détracteurs ?", t: "clash", v: "vous" },
     { i: "q_clash_vous_1", q: "Les critiques vous atteignent-elles encore ?", t: "clash", v: "vous" },
@@ -19013,7 +19040,7 @@ const BANQUE_QUESTIONS = [
     { i: "q_crise_vous_26", q: "Présentez-vous des excuses ce soir, oui ou non ?", t: "crise", v: "vous", r: ["infofr"] },
     { i: "q_crise_vous_27", q: "Qu'est-ce que les gens n'ont pas compris ?", t: "crise", v: "vous", r: ["grandus"] },
     { i: "q_crise_vous_28", q: "Comment l'avez-vous expliqué à vos enfants ?", t: "crise", v: "vous", s: "enfants" },
-    { i: "q_crise_vous_29", q: "Une carrière survit-elle à ce genre de chose ?", t: "crise", v: "vous", s: "veteran" },
+    { i: "q_crise_vous_29", q: "Une carrière survit-elle à ce genre de chose ?", t: "crise", v: "vous", s: "confirme" },
     { i: "q_annonce_vous_0", q: "Vous avez une annonce à faire. Nous vous écoutons.", t: "annonce", v: "vous" },
     { i: "q_annonce_vous_1", q: "Pourquoi avoir choisi ce moment ?", t: "annonce", v: "vous" },
     { i: "q_annonce_vous_2", q: "Qu'est-ce que cela change pour votre public ?", t: "annonce", v: "vous" },
@@ -22026,7 +22053,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "162";
+const VERSION_JEU = "164";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -29621,7 +29648,7 @@ function FiscoGame() {
             return;
         dispatch({ type: "YOUNES_PART" });
         setCalAlert({ emoji: "💼", title: `${SOF.name} — « Je m'arrête là »`,
-            desc: "Il n'a pas haussé le ton. Il a juste dit qu'il ne servait plus à rien, et que continuer à être payé pour ça ne l'intéressait pas.\n\nIl avait raison depuis un moment, et tu le savais.\n\n**Tu n'as plus de manager.** Les gens qui t'approchent désormais te parleront directement.\n\nRien n'est définitif : tu peux engager quelqu'un d'autre dans Business → Équipe, ou le rappeler un jour depuis l'onglet Vie — mais il faudra d'abord que vous vous reparliez, et il reviendra plus cher." });
+            desc: "Il n'a pas haussé le ton. Il a juste dit qu'il ne servait plus à rien, et que continuer à être payé pour ça ne l'intéressait pas.\n\nIl avait raison depuis un moment, et tu le savais.\n\n**Tu n'as plus de manager.** Les gens qui t'approchent désormais te parleront directement.\n\nRien n'est définitif : tu peux engager quelqu'un d'autre dans Business → Équipe, ou le rappeler un jour depuis l'onglet Vie.\n\nMais il faudra d'abord que vous vous reparliez : il est dans **Passer du temps**, comme n'importe qui d'autre. Remonte le lien à 55, et il décrochera — plus cher qu'avant." });
     }, [phase, ending, gs.sofFini, gs.younesParti, gs.relations, dispatch]);
     // Younes commente ce que tu viens de faire. Une fois chacun, et jamais
     // pendant qu'autre chose est ouvert : on garde le message sous le coude.
@@ -29738,12 +29765,12 @@ function FiscoGame() {
             toast("😴 Trop épuisé ! Dors d'abord.", "#f0756a");
             return;
         }
-        const agingFactor = Math.min(1.6, 1 + Math.max(0, (gs.careerYears - 4)) * 0.08); // aging: stress creeps up faster late-career
+        const agingFactor = usureCarriere(gs.careerYears); // pleine à 28 ans de métier, pas à 11
         // Travailler (musique / business) use toujours un peu, même sur les actions "légères"
         const workStress = (mainTab === "musique" || mainTab === "business") ? 3 + Math.round((action.hours || 2) * 0.8) : 0;
         const rawStress = (action.stress || 0) + workStress;
         const effects = { rep: action.rep || 0, money: action.money || 0,
-            energy: (action.energy || 0) < 0 ? Math.round((action.energy || 0) * Math.min(1.3, agingFactor)) : Math.round((action.energy || 0) / Math.min(1.15, 1 + Math.max(0, (gs.careerYears - 4)) * 0.03)),
+            energy: (action.energy || 0) < 0 ? Math.round((action.energy || 0) * Math.min(1.3, agingFactor)) : Math.round((action.energy || 0) / (1 + (agingFactor - 1) * 0.25)),
             health: action.health || 0, stress: Math.round(rawStress * (rawStress > 0 ? agingFactor : 1)) };
         if (action.rel)
             effects.rel = { [action.rel]: 3 };
@@ -37060,7 +37087,7 @@ function FiscoGame() {
                 " ",
                 g.name,
                 " \u2715"))))),
-            react_1.default.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 12, maxHeight: 130, overflowY: "auto" } }, sortPeople(jobFilter([...Object.values(CHARS), ...Object.values(gs.newCast || {})]
+            react_1.default.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 12, maxHeight: 130, overflowY: "auto" } }, sortPeople(jobFilter([{ ...SOF, name: gs.younesParti ? `${SOF.name} (ancien manager)` : SOF.name }, ...Object.values(CHARS), ...Object.values(gs.newCast || {})]
                 .filter(c => partyGuestUnlocked(c, gs.partyLegend || 0, gs))
                 .filter(c => !isGroup(c))
                 .filter(c => !(gs.deceased || []).includes(c.id) && !(gs.erased || []).includes(c.id))
@@ -37949,13 +37976,13 @@ function FiscoGame() {
                                 texte: "Il a écouté jusqu'au bout, et il a dit non sans élever la voix.\n\nIl n'a pas dit jamais. Il a dit pas maintenant.\n\nRappelle quand il y aura autre chose à montrer qu'un chèque." });
                         }
                     } });
-            }, title: chance <= 0 ? (lien < YOUNES_RETOUR_LIEN ? `Il ne décrochera pas tant que votre lien n'est pas remonté (${Math.round(lien)}/${YOUNES_RETOUR_LIEN})` : "Il ne veut plus entendre parler de toi") : (!assez ? "Tu n'as pas de quoi le payer" : ""), style: { ...studioBtnStyle, width: "100%", opacity: pret ? 1 : .45,
+            }, title: chance <= 0 ? (lien < YOUNES_RETOUR_LIEN ? `Il ne décrochera pas tant que votre lien n'est pas remonté (${Math.round(lien)}/${YOUNES_RETOUR_LIEN}) — invite-le dans « Passer du temps »` : "Il ne veut plus entendre parler de toi") : (!assez ? "Tu n'as pas de quoi le payer" : ""), style: { ...studioBtnStyle, width: "100%", opacity: pret ? 1 : .45,
                 background: "linear-gradient(180deg,rgba(230,180,99,.10),rgba(230,180,99,.03))",
                 border: "1px dashed rgba(230,180,99,.3)", color: "#ffd79b",
                 cursor: pret ? "pointer" : "not-allowed" } },
             "\uD83D\uDCDE RAPPELER YOUNES",
             react_1.default.createElement("div", { style: { fontSize: 9, opacity: .75, marginTop: 3, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", letterSpacing: 0 } }, chance <= 0
-                ? (lien < YOUNES_RETOUR_LIEN ? `lien ${Math.round(lien)}/${YOUNES_RETOUR_LIEN} — il ne décroche pas encore` : "il ne veut plus te parler")
+                ? (lien < YOUNES_RETOUR_LIEN ? `lien ${Math.round(lien)}/${YOUNES_RETOUR_LIEN} — repasse du temps avec lui` : "il ne veut plus te parler")
                 : `${fmtMoney(prime)} · ${Math.round(YOUNES_RETOUR_CUT * 100)}% · ${Math.round(chance * 100)}% qu'il accepte`)));
     })() : null;
     const FreeTextOv = freeTextModal ? (react_1.default.createElement("div", { style: { position: "fixed", inset: 0, zIndex: 275, background: "rgba(4,9,26,.85)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" } },
@@ -38425,10 +38452,15 @@ function FiscoGame() {
                             " ans")),
                     react_1.default.createElement("div", { style: { marginTop: 6, display: "flex", justifyContent: "space-between" } },
                         react_1.default.createElement("span", { style: { fontSize: 11, color: "rgba(255,255,255,.5)" } }, "\uD83D\uDCC5 Carri\u00E8re"),
-                        react_1.default.createElement("span", { style: { fontSize: 11, color: gs.careerYears >= 9 ? "#e8963c" : "rgba(255,255,255,.6)", fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
-                            gs.careerYears,
-                            " an(s)",
-                            gs.careerYears >= 9 ? " · vétéran, gère bien ton stress" : ""))),
+                        (() => {
+                            const et = etapeCarriere(gs.careerYears);
+                            const us = usureCarriere(gs.careerYears);
+                            return (react_1.default.createElement("span", { style: { fontSize: 11, color: et.col, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums" } },
+                                gs.careerYears,
+                                " an(s) \u00B7 ",
+                                et.label,
+                                us >= 1.25 ? " — gère bien ton stress" : ""));
+                        })())),
                 react_1.default.createElement("div", { style: { background: "rgba(255,255,255,.03)", border: "1px solid rgba(124,224,164,.1)", borderRadius: 10, padding: 12 } },
                     react_1.default.createElement("div", { style: { fontSize: 10, color: "rgba(124,224,164,.5)", letterSpacing: 2, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", marginBottom: 8 } }, "ENTREPRISES \u2014 VALEUR MARCHANDE"),
                     Object.values(gs.businesses).map(b => {
