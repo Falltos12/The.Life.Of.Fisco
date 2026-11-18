@@ -8869,6 +8869,8 @@ const SOUS_AGENCE = new Set(["twice", "newjeans", "aespa", "jennie", "babymonste
 const HORS_LISTE = new Set(["clara_luciani", "lorenzo", "north_west"]);
 // Jusqu'où l'oubli peut faire descendre une relation, et pas plus bas.
 const SILENCE_PLANCHER = -20;
+// La fiancée du tout début : son histoire précède le récit.
+const ROMANCE_INITIALE = "jenna_ortega";
 function enFroidAvec(gs, id) {
     if (!id)
         return false;
@@ -21637,7 +21639,7 @@ const INIT = {
         mkProj("single_encore", "Encore", "single", 2023, 9, 22, [{ title: "Encore", featId: "drake", streams: 215000000 }]),
         mkProj("single_eool", "End Of One Life", "single", 2023, 11, 3, [{ title: "End Of One Life", featIds: ["kanye_west", "the_weeknd"], streams: 58000000 }]),
     ].sort((a, b) => b.releaseDate - a.releaseDate),
-    romance: { partner: "jenna_ortega", status: "fiancee", fidelity: 100, suspicion: 0, exPartner: null, pastPartners: [] },
+    romance: { partner: ROMANCE_INITIALE, status: "fiancee", fidelity: 100, suspicion: 0, exPartner: null, pastPartners: [] },
     pendingEvents: [],
     log: [], totalActions: 0,
     currentCity: "Nassau", visitedCities: ["Nassau"],
@@ -21845,7 +21847,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "143";
+const VERSION_JEU = "146";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -21894,7 +21896,7 @@ function capStreams(next) {
 // Le plafond de streams, le plafond de célébrité, le palier du cercle et la
 // réparation des couples s'appliquent d'eux-mêmes à chaque geste du joueur.
 // Reste une correction rétroactive, qui n'a de sens qu'une seule fois.
-const VERSION_EQUILIBRE = 10;
+const VERSION_EQUILIBRE = 11;
 // Où se trouve réellement un morceau : on cherche dans toute la discographie.
 function projetDuMorceau(titre, disco) {
     if (!titre || !Array.isArray(disco))
@@ -22051,6 +22053,29 @@ function reprendrePartie(next) {
     // te donne la clé correspondante, sans prestige ni facture.
     if (!Array.isArray(repris.boutique))
         repris.boutique = [];
+    if (!Array.isArray(repris.romanceHistory))
+        repris.romanceHistory = [];
+    // Rien n'était noté avant : on reconstitue avec ce que la sauvegarde sait
+    // réellement, et on marque d'un « au moins » tout ce qui n'est qu'une borne.
+    if (!repris.romanceHistory.length && ((repris.romance || {}).pastPartners || []).length) {
+        const r = repris.romance;
+        repris.romanceHistory = [...new Set(r.pastPartners)].filter(Boolean).map(id => {
+            const premiere = (id === ROMANCE_INITIALE);
+            const fin = (id === r.exPartner && r.breakupDate) ? r.breakupDate : null;
+            return { id,
+                from: premiere ? GAME_START_DATE : null,
+                fromApprox: premiere, // l'histoire avait déjà commencé
+                to: fin, statut: null };
+        });
+    }
+    // La compagne actuelle n'a pas de date ? La rupture précédente en donne une
+    // borne basse : la nouvelle histoire n'a pas pu commencer avant.
+    if (repris.romance && repris.romance.partner && repris.romance.since == null
+        && repris.romance.partner !== ROMANCE_INITIALE && repris.romance.breakupDate
+        && repris.romance.breakupDate <= repris.currentDate) {
+        repris.romance = { ...repris.romance,
+            since: repris.romance.breakupDate, sinceApprox: true };
+    }
     // L'érosion du silence descendait sans limite : des centaines de gens avec
     // qui il ne s'était rien passé étaient devenus « hostiles », et disparaissaient
     // du casting, des soirées et des signatures. On les remet au plancher.
@@ -22663,6 +22688,21 @@ function gameReducerInner(state, action) {
                 if (!next.exPartner)
                     next.exPartner = prev.partner;
             }
+            // Le registre des histoires. Une relation qui change de statut (couple,
+            // fiançailles, mariage) garde sa date de départ : c'est la même histoire.
+            // Une nouvelle personne ouvre une nouvelle date.
+            if (next.partner && next.partner !== prev.partner)
+                next.since = state.currentDate;
+            else if (next.partner && prev.partner === next.partner && prev.since != null)
+                next.since = prev.since;
+            let archives = state.romanceHistory || [];
+            if (prev.partner && prev.partner !== next.partner) {
+                const debut = (prev.since == null ? null : prev.since);
+                const fin = (action.romance && action.romance.breakupDate) || state.currentDate;
+                const dedans = archives.some(h => h && h.id === prev.partner && h.from === debut && h.to === fin);
+                if (!dedans)
+                    archives = [...archives, { id: prev.partner, from: debut, to: fin, statut: prev.status || null }];
+            }
             // Le statut stocké sur chaque relation doit refléter la situation réelle
             const rels = { ...state.relations };
             Object.keys(rels).forEach(k => {
@@ -22674,7 +22714,7 @@ function gameReducerInner(state, action) {
                     rels[k] = { ...rels[k], status: "ex" };
                 }
             });
-            return { ...state, romance: next, relations: rels };
+            return { ...state, romance: next, relations: rels, romanceHistory: archives };
         }
         case "ADD_CHILD":
             return { ...state, children: [...state.children, { name: action.name, sex: action.sex, born: state.currentDate, seen: [] }] };
@@ -25260,9 +25300,59 @@ const INFO_FAMILLES = [
     { id: "toi", titre: "Toi" }, { id: "musique", titre: "Musique" }, { id: "monde", titre: "Le monde" },
     { id: "avoirs", titre: "Ce que tu possèdes" }, { id: "suivi", titre: "Ce qui s'est passé" },
 ];
+// Une durée écrite comme on la dirait : « trois ans et deux mois ».
+const MOIS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre"];
+function moisEtAnnee(t) {
+    const d = new Date(t);
+    return `${MOIS_FR[d.getMonth()]} ${d.getFullYear()}`;
+}
+function direDuree(du, au) {
+    if (du == null || au == null || au <= du)
+        return null;
+    const mois = Math.max(0, Math.round((au - du) / (30.44 * 86400000)));
+    if (mois < 1)
+        return "quelques semaines";
+    if (mois < 12)
+        return `${mois} mois`;
+    const ans = Math.floor(mois / 12), reste = mois % 12;
+    const a = `${ans} an${ans > 1 ? "s" : ""}`;
+    return reste ? `${a} et ${reste} mois` : a;
+}
+// Les bornes d'une histoire, à la manière d'une encyclopédie : « 2023-2026 ».
+// Quand le début est inconnu, on ne le fabrique pas — on écrit « jusqu'en ».
+function bornesRelation(du, au) {
+    const a = du == null ? null : new Date(du).getFullYear();
+    const b = au == null ? null : new Date(au).getFullYear();
+    if (a != null && b != null)
+        return a === b ? `${a}` : `${a}-${b}`;
+    if (b != null)
+        return `jusqu'en ${b}`;
+    if (a != null)
+        return `depuis ${a}`;
+    return null;
+}
+function dureeRelation(du, au, qui, approx) {
+    if (au == null)
+        return null;
+    if (du != null) {
+        const t = direDuree(du, au);
+        return t ? { t, aumoins: !!approx } : null;
+    }
+    // Début inconnu. Pour l'histoire d'avant le récit, on sait au moins qu'elle
+    // durait déjà quand tout commence ; pour les autres, on se taira.
+    if (qui !== ROMANCE_INITIALE)
+        return null;
+    const t = direDuree(GAME_START_DATE, au);
+    return t ? { t, aumoins: true } : null;
+}
+function direRelation(du, au, qui, approx) {
+    const d = dureeRelation(du, au, qui, approx);
+    return d ? `${d.aumoins ? "au moins " : ""}${d.t}` : null;
+}
 // ─── FICHE WIKIPÉDIA DYNAMIQUE ──────────────────────────────────────────────
 function buildWiki(gs) {
-    var _a;
+    var _a, _b, _c;
     const fmtN = n => n >= 1000000000 ? `${(n / 1000000000).toFixed(2)} milliard${n >= 2000000000 ? "s" : ""}` : n >= 1000000 ? `${Math.round(n / 1000000)} millions` : `${Math.round(n / 1000)} mille`;
     const age = yearsElapsed(gs.currentDate, FISCO_BIRTHDATE);
     const year = new Date(gs.currentDate).getFullYear();
@@ -25273,22 +25363,45 @@ function buildWiki(gs) {
     const grammys = (gs.grammyHistory || []).reduce((a, g) => a + g.winsCount, 0);
     const feats = [...new Set((gs.discography || []).filter(d => d.releaseDate > GAME_START_DATE).flatMap(d => (d.trackBreakdown || []).flatMap(t => getFeatNames(t))))];
     const charted = (gs.discography || []).flatMap(d => d.trackBreakdown || []).filter(t => t.peakPosition);
-    const partner = gs.romance.partner ? (_a = CHARS_BY_ID[gs.romance.partner]) === null || _a === void 0 ? void 0 : _a.name : null;
+    const partner = gs.romance.partner ? (_a = charAny(gs.romance.partner)) === null || _a === void 0 ? void 0 : _a.name : null;
     const S = [];
     S.push({ h: null, p: `**Fisco**, de son vrai nom **Federico Sco**, né le 27 septembre 2002 à Bourg-en-Bresse, est un rappeur, chanteur et entrepreneur français${age ? ` âgé de ${age} ans` : ""}.\n\nIl se fait connaître en 2019 avec « La Tecktonik Mamene », qui dépasse le milliard de streams et devient l'un des plus grands succès du rap français.${total > 2000000000 ? ` Sa discographie totalise aujourd'hui plus de ${fmtN(total)} de streams.` : ""}` });
     S.push({ h: "Enfance et jeunesse", p: `Federico Sco naît à Bourg-en-Bresse. Abandonné par ses parents peu après sa naissance, il grandit isolé dans une forêt, où il survit pendant plusieurs années dans une maison abandonnée.\n\nÀ 17 ans, il est retrouvé à la suite d'un incendie. Les autorités découvrent alors son histoire familiale et lui apprennent l'existence de son cousin éloigné, le rappeur Falltos.\n\nFisco part vivre à Nice auprès de lui et découvre progressivement la musique et le rap. N'ayant jamais fréquenté l'école, il ne suit aucune étude formelle.` });
     S.push({ h: "Les débuts", p: `En 2019, Fisco connaît un succès viral avec « La Tecktonik Mamene ». Après plusieurs années de carrière, il sort l'EP *Tecktonik* en 2021, puis son premier album studio, *UNUHU*, le 31 décembre 2021.\n\nL'album connaît un important succès commercial et permet à Fisco de s'imposer comme l'une des figures montantes du rap français.` });
     S.push({ h: "Pseudocide et retour", p: `Le 20 février 2022, Fisco simule sa propre mort dans un pseudocide qui provoque de nombreuses réactions et théories sur internet.\n\nDurant cette période, il fonde discrètement son propre label, UNUHU Records.\n\nLe 22 février 2023, il réapparaît publiquement lors d'une performance sur COLORS et annonce son deuxième album, *#0000ff*. Le projet réalise 184 392 ventes en première semaine et confirme son retour au premier plan.` });
-    if (newAlbums.length || newSingles.length || (gs.tourHistory || []).length) {
-        let p = "";
-        if (newAlbums.length) {
-            p += `Depuis 2023, Fisco a publié ${newAlbums.length} nouvel${newAlbums.length > 1 ? "s albums" : " album"} studio : ${newAlbums.map(a => `*${a.title}* (${new Date(a.releaseDate).getFullYear()})`).join(", ")}.`;
-            const best = [...newAlbums].sort((a, b) => b.streams - a.streams)[0];
-            if (best)
-                p += ` *${best.title}* s'impose comme son projet le plus écouté de cette période avec ${fmtN(best.streams)} de streams.`;
+    {
+        // La carrière entière, pas seulement ce qui est sorti depuis le début du jeu.
+        const tousProjets = (gs.discography || []).filter(d => d.type !== "single");
+        const tousSingles = (gs.discography || []).filter(d => d.type === "single");
+        const premier = [...(gs.discography || [])].sort((a, b) => a.releaseDate - b.releaseDate)[0];
+        const anneeDebut = premier ? new Date(premier.releaseDate).getFullYear() : 2019;
+        const anneesDeCarriere = Math.max(0, year - anneeDebut);
+        const tousTitres = (gs.discography || []).flatMap(d => (d.trackBreakdown || []).map(t => ({ ...t, projet: d.title })));
+        const titrePhare = [...tousTitres].sort((a, b) => (b.streams || 0) - (a.streams || 0))[0];
+        const projetPhare = [...tousProjets].sort((a, b) => b.streams - a.streams)[0];
+        const disquesOr = tousTitres.filter(t => (t.streams || 0) >= 100000000).length;
+        let p = `En ${anneesDeCarriere} ans de carrière, Fisco a publié ${tousProjets.length} projet${tousProjets.length > 1 ? "s" : ""} et ${tousSingles.length} single${tousSingles.length > 1 ? "s" : ""}, pour un total de ${fmtN(total)} de streams.`;
+        if (projetPhare)
+            p += ` *${projetPhare.title}* (${new Date(projetPhare.releaseDate).getFullYear()}) reste son projet le plus écouté, avec ${fmtN(projetPhare.streams)} de streams.`;
+        if (titrePhare)
+            p += ` Son titre le plus joué est « ${titrePhare.title} »${titrePhare.projet && titrePhare.projet !== titrePhare.title ? ` (*${titrePhare.projet}*)` : ""}, avec ${fmtN(titrePhare.streams || 0)} d'écoutes.`;
+        if (disquesOr > 3)
+            p += ` ${disquesOr} de ses morceaux ont franchi les cent millions d'écoutes.`;
+        // Ce qui s'est ajouté depuis le retour de 2023.
+        if (newAlbums.length || newSingles.length) {
+            p += "\n\n";
+            if (newAlbums.length) {
+                p += `Depuis 2023, il a publié ${newAlbums.length} nouvel${newAlbums.length > 1 ? "s albums" : " album"} studio : ${newAlbums.map(a => `*${a.title}* (${new Date(a.releaseDate).getFullYear()})`).join(", ")}.`;
+                const best = [...newAlbums].sort((a, b) => b.streams - a.streams)[0];
+                if (best)
+                    p += ` *${best.title}* s'impose comme son projet le plus écouté de cette période avec ${fmtN(best.streams)} de streams.`;
+            }
+            if (newSingles.length)
+                p += `${newAlbums.length ? " " : ""}Il a également sorti ${newSingles.length} single${newSingles.length > 1 ? "s" : ""}, dont ${newSingles.slice(0, 3).map(s => `« ${s.title} »`).join(", ")}.`;
         }
-        if (newSingles.length)
-            p += `${p ? " " : ""}Il a également sorti ${newSingles.length} single${newSingles.length > 1 ? "s" : ""}, dont ${newSingles.slice(0, 3).map(s => `« ${s.title} »`).join(", ")}.`;
+        else {
+            p += `\n\nDepuis son retour en 2023, il n'a pas publié de nouveau projet studio.`;
+        }
         if (charted.length)
             p += ` ${charted.length} de ses titres se sont classés au Billboard${charted.some(t => t.peakPosition === 1) ? ", dont au moins un à la première place" : ""}.`;
         if (feats.length)
@@ -25328,20 +25441,65 @@ function buildWiki(gs) {
         biz += `\n\nIl s'est séparé de certaines de ses sociétés au fil des années.`;
     S.push({ h: "Entrepreneuriat", p: biz });
     let priv = "";
+    // Depuis combien de temps. Une relation déjà en cours au début du récit n'a
+    // pas de date de départ connue : on dit « au moins », on n'invente rien.
+    const depuis = (() => {
+        const d = gs.romance.since;
+        // Sans date de départ, on ne l'affirme que pour l'histoire d'avant le récit.
+        if (d == null)
+            return (partner && gs.romance.partner === ROMANCE_INITIALE)
+                ? ` depuis au moins ${moisEtAnnee(GAME_START_DATE)}` : "";
+        const an = new Date(d).getFullYear();
+        const t = direDuree(d, gs.currentDate);
+        const flou = !!gs.romance.sinceApprox;
+        const tete = flou ? ` depuis au moins ${an}` : ` depuis ${an}`;
+        return t ? `${tete} (${flou ? "au moins " : ""}${t})` : tete;
+    })();
     if (gs.romance.status === "marie" && partner)
-        priv = `Fisco est marié à ${partner}.`;
+        priv = `Fisco est marié à ${partner}${depuis}.`;
     else if (gs.romance.status === "fiancee" && partner)
-        priv = `Fisco entretient une relation avec ${partner}, à qui il est fiancé.`;
+        priv = `Fisco entretient une relation avec ${partner}${depuis}, à qui il est fiancé.`;
     else if (gs.romance.status === "couple" && partner)
-        priv = `Fisco est en couple avec ${partner}.`;
-    else if (gs.romance.status === "deuil")
-        priv = `Fisco traverse actuellement une période de séparation, largement commentée par la presse people.`;
+        priv = `Fisco est en couple avec ${partner}${depuis}.`;
+    else if (gs.romance.status === "deuil") {
+        const r = (gs.romanceHistory || [])[(gs.romanceHistory || []).length - 1];
+        const nom = r ? (_b = charAny(r.id)) === null || _b === void 0 ? void 0 : _b.name : null;
+        const combien = r ? direRelation(r.from, r.to, r.id, r.fromApprox) : null;
+        const bornes = r ? bornesRelation(r.from, r.to) : null;
+        priv = nom
+            ? `Fisco traverse une période de séparation après sa rupture avec ${nom}${bornes ? ` (${bornes})` : ""}${combien ? `, au terme d'une relation ${/^au moins/.test(combien) ? "d'" : "de "}${combien}` : ""}, largement commentée par la presse people.`
+            : `Fisco traverse actuellement une période de séparation, largement commentée par la presse people.`;
+    }
     else
         priv = `Fisco est actuellement célibataire.`;
-    if ((gs.romance.pastPartners || []).length) {
-        const exs = [...new Set(gs.romance.pastPartners)].map(id => { var _a; return (_a = CHARS_BY_ID[id]) === null || _a === void 0 ? void 0 : _a.name; }).filter(Boolean);
-        if (exs.length)
-            priv += ` Il a précédemment été lié à ${exs.slice(0, 3).join(", ")}.`;
+    // Les ex, avec la durée de chaque histoire quand elle est connue.
+    {
+        const dejaNommee = gs.romance.status === "deuil"
+            ? ((gs.romanceHistory || [])[(gs.romanceHistory || []).length - 1] || {}).id : null;
+        const hist = (gs.romanceHistory || []).filter(h => h && h.id
+            && h.id !== gs.romance.partner && h.id !== dejaNommee);
+        const vues = new Set();
+        const lignes = [];
+        for (let i = hist.length - 1; i >= 0; i--) {
+            const h = hist[i];
+            const nom = (_c = charAny(h.id)) === null || _c === void 0 ? void 0 : _c.name;
+            if (!nom || vues.has(h.id))
+                continue;
+            vues.add(h.id);
+            const bornes = bornesRelation(h.from, h.to);
+            const combien = direRelation(h.from, h.to, h.id, h.fromApprox);
+            const dedans = [bornes, combien].filter(Boolean).join(", ");
+            lignes.push(dedans ? `${nom} (${dedans})` : nom);
+            if (lignes.length >= 4)
+                break;
+        }
+        // Les histoires antérieures au registre : on a le nom, pas les dates.
+        const sansDate = [...new Set(gs.romance.pastPartners || [])]
+            .filter(id => id !== gs.romance.partner && id !== dejaNommee && !vues.has(id))
+            .map(id => { var _a; return (_a = charAny(id)) === null || _a === void 0 ? void 0 : _a.name; }).filter(Boolean);
+        const toutes = [...lignes, ...sansDate.slice(0, 3)];
+        if (toutes.length)
+            priv += ` Il a précédemment été lié à ${toutes.join(", ")}.`;
     }
     if ((gs.children || []).length) {
         priv += `\n\nIl est père de ${(gs.children || []).length} enfant${(gs.children || []).length > 1 ? "s" : ""} : ${(gs.children || []).map(c => {
