@@ -21847,7 +21847,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "149";
+const VERSION_JEU = "151";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -22020,14 +22020,19 @@ function consoliderHistoires(etat) {
         ordre.unshift(...ordre.splice(i0, 1));
     if (!ordre.length)
         return { ...etat, romanceHistory: [] };
-    // Ce que la sauvegarde sait vraiment de chacune.
+    // Ce que la sauvegarde sait VRAIMENT de chacune. Une histoire vécue sous le
+    // registre porte le statut qu'elle avait (« couple », « fiancee », « marie ») :
+    // ses dates sont de première main, on n'y touche pas. Une entrée sans statut
+    // vient d'une reconstitution antérieure — ses dates ne valent rien et on les
+    // recalcule, sinon une mauvaise valeur se recopie de version en version.
     const bornes = ordre.map((id, k) => {
         const h = parId.get(id) || {};
-        const fin = (h.to != null) ? h.to : ((id === r.exPartner && r.breakupDate) ? r.breakupDate : null);
-        const debut = (h.from != null) ? h.from
+        const vecue = !!h.statut;
+        const fin = vecue && h.to != null ? h.to
+            : ((id === r.exPartner && r.breakupDate) ? r.breakupDate : (vecue ? h.to : null));
+        const debut = vecue && h.from != null ? h.from
             : ((k === 0 && id === ROMANCE_INITIALE) ? GAME_START_DATE : null);
-        return { h, id, from: debut, to: fin,
-            exact: { from: h.from != null, to: h.to != null } };
+        return { h, id, from: debut, to: (fin != null ? fin : null) };
     });
     // La borne qui ferme la dernière : la compagne actuelle, sinon la dernière
     // rupture, sinon aujourd'hui.
@@ -22051,10 +22056,18 @@ function consoliderHistoires(etat) {
     bornes.forEach(b => { if (b.to == null)
         b.to = finale; if (b.from == null)
         b.from = b.to; });
-    return { ...etat, romanceHistory: bornes.map((b, k) => ({ ...b.h, id: b.id,
-            from: b.from, to: b.to,
-            fromApprox: (b.h.fromApprox !== undefined) ? b.h.fromApprox
-                : (k === 0 && b.id === ROMANCE_INITIALE) })) };
+    // Le mariage : une seule date est gardée dans la sauvegarde, elle appartient
+    // à l'histoire dans laquelle elle tombe.
+    const noce = r.marriedDate || null;
+    return { ...etat, romanceHistory: bornes.map((b, k) => {
+            const marieAlors = (b.h.statut === "marie")
+                || (noce != null && b.from != null && b.to != null && noce >= b.from && noce <= b.to);
+            return { ...b.h, id: b.id, from: b.from, to: b.to,
+                marie: marieAlors || undefined,
+                marieDepuis: (marieAlors && noce != null && noce >= b.from && noce <= b.to) ? noce : undefined,
+                fromApprox: (b.h.fromApprox !== undefined) ? b.h.fromApprox
+                    : (k === 0 && b.id === ROMANCE_INITIALE) };
+        }) };
 }
 function rafraichirCatalogues(etat) {
     if (!etat || typeof etat !== "object")
@@ -25545,7 +25558,13 @@ function buildWiki(gs) {
                 continue;
             vues.add(h.id);
             const bornes = bornesRelation(h.from, h.to);
-            lignes.push(bornes ? `${nom} : ${bornes}` : nom);
+            // Si l'histoire est allée jusqu'au mariage, ça se dit.
+            const noces = h.marie
+                ? (h.marieDepuis != null && h.to != null
+                    ? ` (mariés ${new Date(h.marieDepuis).getFullYear()}-${new Date(h.to).getFullYear()})`
+                    : " (mariés)")
+                : "";
+            lignes.push(bornes ? `${nom} : ${bornes}${noces}` : `${nom}${noces}`);
             if (lignes.length >= 4)
                 break;
         }
