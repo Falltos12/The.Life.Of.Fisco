@@ -10541,6 +10541,35 @@ const ELITE_BUSINESS_TIER = new Set(["e_larry_fink", "e_jamie_dimon", "e_ray_dal
     "e_gautam_adani", "e_jorge_paulo_lemann", "e_ari_emanuel", "e_nasser_al_khela_fi", "e_todd_boehly",
     "elon_musk", "jeff_bezos", "bernard_arnault", "mark_zuckerberg", "investisseur_roth", "xavier_niel"]);
 // Qualité du service pour un poste donné (0 si personne n'est employé)
+// ─── CE QUE COÛTE UNE FORTUNE ──────────────────────────────────────────────
+// Au-delà du milliard, garder l'argent devient un métier à plein temps, et ce
+// métier se paie. Par tranches : plus la pile est haute, plus elle fuit.
+const SEUIL_FORTUNE = 1000000000;
+const TRANCHES_FORTUNE = [
+    { jusqu: 3000000000, taux: 0.09 }, //  1 à  3 Md :  9 % par an
+    { jusqu: 10000000000, taux: 0.14 }, //  3 à 10 Md : 14 % par an
+    { jusqu: Infinity, taux: 0.20 }, // au-delà    : 20 % par an
+];
+function coutAnnuelFortune(gs) {
+    const m = (gs && gs.money) || 0;
+    if (m <= SEUIL_FORTUNE)
+        return 0;
+    let reste = m - SEUIL_FORTUNE, bas = SEUIL_FORTUNE, total = 0;
+    for (const t of TRANCHES_FORTUNE) {
+        if (reste <= 0)
+            break;
+        const part = Math.min(reste, t.jusqu - bas);
+        total += part * t.taux;
+        reste -= part;
+        bas = t.jusqu;
+    }
+    // Un bon directeur financier limite la casse, sans l'annuler.
+    const cfo = ((gs && gs.staff) || []).find(x => x.role === "compta");
+    const remise = cfo ? (cfo.quality || 0) * 0.22 : 0;
+    // Le cercle sait où ranger l'argent de ses membres.
+    const cercle = (gs && gs.elite) ? 0.18 : 0;
+    return Math.round(total * (1 - remise - cercle));
+}
 function staffQ(gs, role) {
     const s = (gs.staff || []).find(x => x.role === role);
     return s ? (s.quality || 0.5) : 0;
@@ -11351,6 +11380,39 @@ const LECONS_YOUNES = [
 // ─── QUAND TU L'APPELLES ───────────────────────────────────────────────────
 // Younes n'est pas un manuel : il regarde ta situation, prend ce qui presse le
 // plus, et te dit quoi faire cette semaine-là. Le reste passe en « sinon ».
+// Le rappeler coûte un à-valoir, et il reprend davantage qu'avant : il a
+// d'autres artistes maintenant, et il sait ce que ça vaut.
+const YOUNES_RETOUR_LIEN = 55; // le lien minimum pour qu'il décroche
+const YOUNES_RETOUR_CUT = 0.20; // sa part, contre 0,15 pour un manager reconnu
+function primeDeRetour(gs) {
+    // Proportionnée à ce que tu es devenu, avec un plancher.
+    const base = Math.round(((gs && gs.money) || 0) * 0.012);
+    return Math.max(250000, Math.min(9000000, base));
+}
+function chanceDeRappelerYounes(gs) {
+    var _a;
+    if (!gs || !gs.younesParti)
+        return 0;
+    if (isHostile(gs, SOF.id))
+        return 0;
+    const sc = (_a = (gs.relations && gs.relations[SOF.id] || {}).score) !== null && _a !== void 0 ? _a : 0;
+    if (sc < YOUNES_RETOUR_LIEN)
+        return 0;
+    let p = 0.20 + ((sc - YOUNES_RETOUR_LIEN) / 100) * 1.6;
+    // Le temps apaise. Juste après son départ, c'est encore à vif.
+    const depuis = gs.younesPartiLe ? ((gs.currentDate - gs.younesPartiLe) / (30.44 * 86400000)) : 24;
+    if (depuis < 6)
+        p -= 0.25;
+    else if (depuis > 24)
+        p += 0.10;
+    if ((gs.younesRefus || 0) > 0)
+        p -= 0.12 * (gs.younesRefus || 0); // on n'insiste pas trois fois
+    if ((gs.rep || 0) >= 70)
+        p += 0.08;
+    if ((gs.rep || 0) < 35)
+        p -= 0.12;
+    return Math.max(0.05, Math.min(0.9, p));
+}
 const DIAGNOSTICS_YOUNES = [
     { id: "d_boycott", prio: 100, quand: g => !!g.boycott,
         court: "tu es encore boycotté",
@@ -21964,7 +22026,7 @@ function capFame(next) {
 // s'en approcher.
 // Affichée dans les paramètres : elle dit d'un coup d'œil si la partie tourne
 // bien sur la dernière version du jeu.
-const VERSION_JEU = "160";
+const VERSION_JEU = "162";
 // Le seuil à partir duquel une fortune commence à se défendre au lieu de croître
 const SEUIL_GRANDE_FORTUNE = 3000000000;
 const TAUX_FROTTEMENT = 0.34; // par an sur la part au-dessus du seuil, et ça s'accélère
@@ -22613,6 +22675,9 @@ function gameReducerInner(state, action) {
             const h = action.hours || 2;
             const newDate = addHours(state.currentDate, h);
             const dayChanged = new Date(state.currentDate).getDate() !== new Date(newDate).getDate();
+            // Combien de journées ont réellement passé. Avancer d'une semaine doit
+            // coûter sept jours, pas un.
+            const joursEcoules = Math.max(1, Math.round((newDate - state.currentDate) / 86400000));
             // ── LE BOYCOTT SE DÉLITE TOUT SEUL ──
             // Personne ne décrète la fin d'un boycott : il s'épuise. Chaque jour qui
             // passe en enlève un peu, et le cercle, lui, n'a jamais rien à subir.
@@ -22686,8 +22751,18 @@ function gameReducerInner(state, action) {
                     const exces = state.money - SEUIL_GRANDE_FORTUNE;
                     frottement = exces * (TAUX_FROTTEMENT / 365) * (1 + exces / SEUIL_GRANDE_FORTUNE);
                 }
-                const daily = gross - costs - frottement;
-                newMoney = state.money + Math.floor(daily);
+                // On déroule jour par jour : le frottement d'une grande fortune dépend
+                // du solde, qui bouge pendant la semaine.
+                newMoney = state.money;
+                for (let j = 0; j < joursEcoules; j++) {
+                    let fr = 0;
+                    if (newMoney > SEUIL_GRANDE_FORTUNE) {
+                        const ex = newMoney - SEUIL_GRANDE_FORTUNE;
+                        fr = ex * (TAUX_FROTTEMENT / 365) * (1 + ex / SEUIL_GRANDE_FORTUNE);
+                    }
+                    const fortune = coutAnnuelFortune({ ...state, money: newMoney }) / 365;
+                    newMoney = newMoney + Math.floor(gross - costs - fr - fortune);
+                }
                 // Découvert : intérêts quotidiens lourds + saisie des revenus, très difficile à remonter
                 if (newMoney < -10000000) {
                     deepOverdraft = true;
@@ -22702,8 +22777,10 @@ function gameReducerInner(state, action) {
                     const dettePortee = state.exElite && !state.eliteFallen;
                     if (!dettePortee)
                         newMoney -= Math.floor(Math.abs(newMoney) * 0.0012); // ~44%/an d'intérêts
-                    if (daily > 0)
-                        newMoney -= Math.floor(daily * 0.5); // la banque prélève la moitié de tes revenus
+                    // La banque prélève la moitié de tes revenus, pour chaque jour passé.
+                    const netJour = gross - costs;
+                    if (netJour > 0)
+                        newMoney -= Math.floor(netJour * 0.5 * joursEcoules);
                 }
             }
             const oldWeek = Math.floor(state.currentDate / 604800000);
@@ -23482,7 +23559,7 @@ function gameReducerInner(state, action) {
             return { ...state, conseilsVus: [...(state.conseilsVus || []), action.id],
                 younesDernier: action.minuteur ? state.currentDate : state.younesDernier };
         case "YOUNES_PART":
-            return { ...state, younesParti: true };
+            return { ...state, younesParti: true, younesPartiLe: state.currentDate };
         case "PROJET_SORTI":
             return { ...state, dernierProjet: state.currentDate };
         case "ONGLET_VU":
@@ -24428,6 +24505,29 @@ function gameReducerInner(state, action) {
                 return state;
             return { ...state, staff: [...others, action.member] };
         }
+        case "YOUNES_REVIENT": {
+            if (!state.younesParti)
+                return state;
+            const prime = action.prime || 0;
+            if (state.money < prime)
+                return state;
+            // Il reprend le poste de manager, au-dessus de tous les barèmes.
+            const autres = (state.staff || []).filter(x => x.role !== "manager");
+            return { ...state, younesParti: false, younesPartiLe: null, younesRefus: 0,
+                money: state.money - prime,
+                staff: [...autres, { role: "manager", id: "m_younes", name: SOF.name,
+                        salary: Math.round(420000 * 1.3), quality: 1, cut: YOUNES_RETOUR_CUT,
+                        tag: "Il est revenu. Ça se paie." }],
+                relations: { ...state.relations,
+                    [SOF.id]: { ...(state.relations || {})[SOF.id],
+                        score: Math.min(100, (((state.relations || {})[SOF.id] || {}).score || 0) + 12),
+                        status: "equipe" } } };
+        }
+        case "YOUNES_REFUSE":
+            return { ...state, younesRefus: ((state.younesRefus || 0) + 1),
+                relations: { ...state.relations,
+                    [SOF.id]: { ...(state.relations || {})[SOF.id],
+                        score: Math.max(-100, (((state.relations || {})[SOF.id] || {}).score || 0) - 4) } } };
         case "FIRE_STAFF":
             return { ...state, staff: state.staff.filter(s => s.role !== action.role) };
         case "SET_INFL_YEAR":
@@ -26666,7 +26766,21 @@ function FiscoGame() {
         if (phase === "game" && !ending && !anyOverlayOpen()) {
             // Un événement à choix par mois environ : ils pèsent plus quand ils sont rares
             const since = (gs.currentDate - lastEventTs.current) / 86400000;
-            if (since >= 26 && Math.random() < 0.34) {
+            // Une grande fortune attire les ennuis : au-dessus du milliard, un tirage
+            // supplémentaire, réservé à ce qui s'en prend à l'argent.
+            let ennuiTire = false;
+            if (gs.money >= SEUIL_FORTUNE && since >= 17 && Math.random() < 0.5) {
+                const ennuis = ALL_EVENTS.filter(ev => /^fo_/.test(ev.id)
+                    && (gs.seenEvents || {})[ev.id] === undefined
+                    && requiresMet(gs, ev));
+                if (ennuis.length) {
+                    const ev = ennuis[Math.floor(Math.random() * ennuis.length)];
+                    lastEventTs.current = gs.currentDate;
+                    setActiveEvent(resolvePartnerEvent(fitChoices(ev, gs), gs));
+                    ennuiTire = true;
+                }
+            }
+            if (!ennuiTire && since >= 26 && Math.random() < 0.34) {
                 if (Math.random() < 0.12) {
                     const p = generateFeatProposal(gs);
                     if (p) {
@@ -29507,7 +29621,7 @@ function FiscoGame() {
             return;
         dispatch({ type: "YOUNES_PART" });
         setCalAlert({ emoji: "💼", title: `${SOF.name} — « Je m'arrête là »`,
-            desc: "Il n'a pas haussé le ton. Il a juste dit qu'il ne servait plus à rien, et que continuer à être payé pour ça ne l'intéressait pas.\n\nIl avait raison depuis un moment, et tu le savais.\n\n**Tu n'as plus de manager.** Les gens qui t'approchent désormais te parleront directement." });
+            desc: "Il n'a pas haussé le ton. Il a juste dit qu'il ne servait plus à rien, et que continuer à être payé pour ça ne l'intéressait pas.\n\nIl avait raison depuis un moment, et tu le savais.\n\n**Tu n'as plus de manager.** Les gens qui t'approchent désormais te parleront directement.\n\nRien n'est définitif : tu peux engager quelqu'un d'autre dans Business → Équipe, ou le rappeler un jour depuis l'onglet Vie — mais il faudra d'abord que vous vous reparliez, et il reviendra plus cher." });
     }, [phase, ending, gs.sofFini, gs.younesParti, gs.relations, dispatch]);
     // Younes commente ce que tu viens de faire. Une fois chacun, et jamais
     // pendant qu'autre chose est ouvert : on garde le message sous le coude.
@@ -37804,7 +37918,46 @@ function FiscoGame() {
             setConseil({ id: "appel_" + gs.currentDate, genre: "tu l'as appelé", titre: a.titre, texte: a.texte });
         }, style: { ...studioBtnStyle, width: "100%",
             background: "linear-gradient(180deg,rgba(230,180,99,.14),rgba(230,180,99,.04))",
-            border: "1px solid rgba(230,180,99,.28)", color: "#ffd79b" } }, "\uD83D\uDCDE APPELER YOUNES \u2014 qu'est-ce que je fais ?")) : null;
+            border: "1px solid rgba(230,180,99,.28)", color: "#ffd79b" } }, "\uD83D\uDCDE APPELER YOUNES \u2014 qu'est-ce que je fais ?")) : (gs.sofFini && gs.younesParti) ? (() => {
+        var _a;
+        // Il est parti. On peut tenter de le rappeler : il se fait prier, il peut
+        // refuser, et il revient plus cher.
+        const lien = (_a = (gs.relations && gs.relations[SOF.id] || {}).score) !== null && _a !== void 0 ? _a : 0;
+        const chance = chanceDeRappelerYounes(gs);
+        const prime = primeDeRetour(gs);
+        const assez = gs.money >= prime;
+        const pret = chance > 0 && assez;
+        return (react_1.default.createElement("button", { className: "qa-btn", disabled: !pret, onClick: () => {
+                if (!pret)
+                    return;
+                setConfirmModal({ message: `Rappeler ${SOF.name} ?\n\nIl demande ${fmtMoney(prime)} pour reprendre, et ${Math.round(YOUNES_RETOUR_CUT * 100)}% de tes revenus bruts — plus que n'importe quel manager du marché.\n\nIl a ${Math.round(chance * 100)}% de chances d'accepter.`,
+                    onConfirm: () => {
+                        if (Math.random() < chanceDeRappelerYounes(gs)) {
+                            dispatch({ type: "YOUNES_REVIENT", prime });
+                            addLog(`[ÉQUIPE] ${SOF.name} reprend le poste de manager — ${fmtMoney(prime)}`);
+                            toast(`💼 ${SOF.name} est de retour`, "#7ce0a4");
+                            setConseil({ id: "retour_" + gs.currentDate, genre: "il a rappelé",
+                                titre: "« On reprend où on s'était arrêtés »",
+                                texte: `Il n'a pas fait de discours. Il a demandé où en étaient les dossiers, et il a noté.\n\nSa part est passée à ${Math.round(YOUNES_RETOUR_CUT * 100)}% — il a d'autres artistes maintenant, et il ne revient pas par nostalgie.\n\n**Tu as de nouveau un manager.**` });
+                        }
+                        else {
+                            dispatch({ type: "YOUNES_REFUSE" });
+                            addLog(`[ÉQUIPE] ${SOF.name} refuse de revenir`);
+                            toast(`💼 ${SOF.name} dit non`, "#f0756a");
+                            setConseil({ id: "refus_" + gs.currentDate, genre: "il a décliné",
+                                titre: "« Pas maintenant »",
+                                texte: "Il a écouté jusqu'au bout, et il a dit non sans élever la voix.\n\nIl n'a pas dit jamais. Il a dit pas maintenant.\n\nRappelle quand il y aura autre chose à montrer qu'un chèque." });
+                        }
+                    } });
+            }, title: chance <= 0 ? (lien < YOUNES_RETOUR_LIEN ? `Il ne décrochera pas tant que votre lien n'est pas remonté (${Math.round(lien)}/${YOUNES_RETOUR_LIEN})` : "Il ne veut plus entendre parler de toi") : (!assez ? "Tu n'as pas de quoi le payer" : ""), style: { ...studioBtnStyle, width: "100%", opacity: pret ? 1 : .45,
+                background: "linear-gradient(180deg,rgba(230,180,99,.10),rgba(230,180,99,.03))",
+                border: "1px dashed rgba(230,180,99,.3)", color: "#ffd79b",
+                cursor: pret ? "pointer" : "not-allowed" } },
+            "\uD83D\uDCDE RAPPELER YOUNES",
+            react_1.default.createElement("div", { style: { fontSize: 9, opacity: .75, marginTop: 3, fontFamily: "'Space Mono',monospace", fontVariantNumeric: "tabular-nums", letterSpacing: 0 } }, chance <= 0
+                ? (lien < YOUNES_RETOUR_LIEN ? `lien ${Math.round(lien)}/${YOUNES_RETOUR_LIEN} — il ne décroche pas encore` : "il ne veut plus te parler")
+                : `${fmtMoney(prime)} · ${Math.round(YOUNES_RETOUR_CUT * 100)}% · ${Math.round(chance * 100)}% qu'il accepte`)));
+    })() : null;
     const FreeTextOv = freeTextModal ? (react_1.default.createElement("div", { style: { position: "fixed", inset: 0, zIndex: 275, background: "rgba(4,9,26,.85)", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" } },
         react_1.default.createElement("div", { style: { maxWidth: 380, width: "100%", maxHeight: "88vh", overflowY: "auto", background: "linear-gradient(135deg,#0b1a2e,#132840)", border: "1px solid rgba(230,180,99,.3)", borderRadius: 14, padding: "16px 14px" } },
             react_1.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 } },
