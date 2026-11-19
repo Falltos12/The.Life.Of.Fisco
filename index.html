@@ -22413,7 +22413,7 @@ function consoliderHistoires(etat) {
                 || (noce != null && b.from != null && b.to != null && noce >= b.from && noce <= b.to);
             return { ...b.h, id: b.id, from: b.from, to: b.to,
                 marie: marieAlors || undefined,
-                marieDepuis: (marieAlors && noce != null && noce >= b.from && noce <= b.to) ? noce : undefined,
+                marieDepuis: (marieAlors && b.h.marieDepuis != null && b.h.marieDepuis >= b.from && b.h.marieDepuis <= b.to) ? b.h.marieDepuis : ((marieAlors && noce != null && noce >= b.from && noce <= b.to) ? noce : undefined),
                 fromApprox: (b.h.fromApprox !== undefined) ? b.h.fromApprox
                     : (k === 0 && b.id === ROMANCE_INITIALE) };
         }) };
